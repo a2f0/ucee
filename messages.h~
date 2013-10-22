@@ -154,8 +154,6 @@ extern "C" {
        unsigned long quantity;
      };
 
-#define MSGSIZ sizeof(struct OrderManagementMessage)
-
 #ifdef __cplusplus
 };
 #endif /* __cplusplus */
