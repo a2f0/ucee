@@ -5,6 +5,7 @@ ucee
 *.DS_Store
 *.swp
 *.out
+*.o
 connmgr
 matcheng
 md_receiver
