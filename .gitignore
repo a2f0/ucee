@@ -1,0 +1,11 @@
+#.gitignore, UCEE, created by Dan Sullivan 10/26/2013
+ucee
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+connmgr
+matcheng
+md_receiver
+tradeBot
