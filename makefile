@@ -1,4 +1,4 @@
-all: connmgr matcheng
+all: connmgr matcheng bookpub
 
 CC=g++
 
@@ -8,7 +8,7 @@ INSTDIR=/usr/local/bin
 INCLUDE=.
 
 # Options for development
-CFLAGS=-g -Wall -ansi
+CXXFLAGS=-g -Wall -ansi -std=c++0x
 
 connmgr: connmgr.o
 	$(CC) -o $@ $^ -lrt
@@ -16,8 +16,12 @@ connmgr: connmgr.o
 matcheng: matcheng.o
 	$(CC) -o $@ $^ -lrt
 
+bookpub: bookpub.o
+	$(CC) -o $@ $^ -lrt $(CXXFLAGS)
+
 connmgr.o: connmgr.cpp messages.h
 matcheng.o: matcheng.cpp messages.h
+bookpub.o: bookpub.cpp messages.h
 
 clean:
-	-rm -f *.o connmgr *~ matcheng 
+	-rm -f *.o connmgr *~ matcheng bookpub
