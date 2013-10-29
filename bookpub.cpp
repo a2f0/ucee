@@ -17,7 +17,8 @@
 
 int main(int argc, char* argv[]){
 
-//Kept getopt from lab3, not sure it is will end up being relevant
+//Kept getopt from lab3, not sure if it will end up being relevant
+//For now, to use this program you use ./bookpub -a 239.192.07.07 -p 1234
 //getopt to read command line arguments
 int c;
 char* arga = (char*) malloc (1000*sizeof(char));
@@ -37,25 +38,12 @@ while ( (c = getopt(argc, argv, "a:p:")) != -1 ){
 //
 struct BookMessage *msg = (struct BookMessage*) malloc (sizeof(struct BookMessage));
 //the following line sets price char array to be the float 100.01
-snprintf(msg->bid[0].price,10,"%f",100.01);
+snprintf(msg->bid[0].price,10,"%f",99.01);
 msg->bid[0].quantity=atoi("100");
 
-snprintf(msg->offer[0].price,10,"%f",99.01);
+snprintf(msg->offer[0].price,10,"%f",100.01);
 msg->offer[0].quantity=atoi("100");
 //printf("Price of 100.01: %s\nQuantity of 100: %llu\n",msg->bid[0].price,msg->bid[0].quantity);
-
-//snprintf(msg->bid[0].quantity,10,"%d",100);
-// = std::to_string(100); //note: price is a char array of size "PRICE_SIZE" (defined as 10 in messages.h)
-//msg->bid[0].quantity = std::to_string(100);
-/*
-msg->bid[1].price="104.00";
-msg->bid[2].price="103.00";
-msg->bid[3].price="102.00";
-msg->bid[4].price="101.00";
-*/
-
-
-//struct ip_mreq* myptr = (struct ip_mreq*) malloc (sizeof(struct ip_mreq));
 
 //1. SOCKET CREATION
 //
