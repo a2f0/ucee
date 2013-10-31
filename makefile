@@ -1,4 +1,4 @@
-all: connmgr matcheng bookpub sqlite_test
+all: connmgr matcheng bookpub sqlite_test loopthroughmessagequeue
 
 CC=gcc
 CXX=g++
@@ -14,6 +14,9 @@ CXXFLAGS=-g -Wall -ansi -std=c++0x
 connmgr: connmgr.o
 	$(CXX) -o $@ $^ -lrt
 
+loopthroughmessagequeue: loopthroughmessagequeue.o
+	$(CXX) -o $@ $^ -lrt
+
 matcheng: matcheng.o
 	$(CXX) -o $@ $^ -lrt
 
@@ -27,10 +30,11 @@ sqlite_test: sqlite_test.o sqlite3.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
 connmgr.o: connmgr.cpp messages.h
+loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
 matcheng.o: matcheng.cpp messages.h
 bookpub.o: bookpub.cpp messages.h
 sqlite3.o: sqlite3.c
 sqlite_test.o: sqlite3.o sqlite_test.cpp messages.h
 
 clean:
-	-rm -f *.o connmgr *~ matcheng bookpub sqlite_test
+	-rm -f *.o connmgr *~ matcheng bookpub sqlite_test loopthroughmessagequeue

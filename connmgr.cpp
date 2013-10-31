@@ -5,6 +5,7 @@
 #include "messages.h"
 #include <iostream>
 #include <string.h>
+#include <sys/msg.h>
 
 #define PORT            1337
 #define SOCKET_ERROR    -1
@@ -12,7 +13,20 @@
 
 using namespace std;
 
+//THis is used to send the message through a System V message queue
+struct message_msgbuf {
+    long mtype;  /* must be positive */
+    struct OrderManagementMessage omm;
+};
+
+
 int main(){
+    key_t key;
+    key = ftok("/etc/updatedb.conf", 'b');
+    int msqid;
+    msqid = msgget(key, 0666 | IPC_CREAT); 
+    printf("msgqid is equal to:%d\n",msqid); 
+    
     printf("Starting connection manager\n"); 
     int hServerSocket;
     hServerSocket=socket(AF_INET,SOCK_STREAM,0);
@@ -47,7 +61,7 @@ int main(){
              , Address.sin_addr.s_addr
              , ntohs(Address.sin_port)
     );
-    
+
     printf("Making a listen queue of %d elements\n",QUEUE_SIZE);
     if(listen(hServerSocket,QUEUE_SIZE) == SOCKET_ERROR)
     {
@@ -60,7 +74,7 @@ int main(){
     //Initialize the set of active sockets.
     FD_ZERO (&active_fd_set);
     FD_SET (hServerSocket, &active_fd_set);
-    struct sockaddr_in clientname;
+    //struct sockaddr_in clientname;
   
     //int ordernumber = 0; 
     for(;;) {
@@ -71,13 +85,13 @@ int main(){
             return -1; 
         }
         int i;
-        size_t size;
+        //size_t size;
 	for (i = 0; i < FD_SETSIZE; ++i) {
             if (FD_ISSET (i, &read_fd_set)) {
 		if (i == hServerSocket) {
                      /* Connection request on original socket. */
                      int nw;
-		     size = sizeof (clientname);
+		     //size = sizeof (clientname);
                      nw = hSocket=accept(hServerSocket,(struct sockaddr*)&Address,(socklen_t *)&nAddressSize);
                      //printf("\nReceived an inbound connection via select()...\n");
                      if (nw < 0) {
@@ -105,6 +119,11 @@ int main(){
                          printf("Account size: %d\n", accountsize);
                          printf("Quantity: %lu\n",  omm.payload.order.quantity );
                          printf("Timestamp: %llu\n", omm.payload.order.timestamp );
+                         printf("Account: %s\n",omm.payload.order.account);
+                         printf("Writing to SystemV message queue\n"); 
+                         //http://beej.us/guide/bgipc/output/html/multipage/mq.html
+                         struct message_msgbuf mmb = {2, omm};
+                         msgsnd(msqid, &mmb, sizeof(struct OrderManagementMessage ), 0);
                      //printf("Account: %s\n",omm.payload.order.account);
                      //printf("Account: %s\n",omm.payload.order.account[ACCOUNT_SIZE]);
                      //printf("Buysell: %d, Account: %s\n", omm.payload.order.buysell, omm.payload.order.account);
@@ -113,7 +132,4 @@ int main(){
             }
         }	
     }
-
-
-
 }
