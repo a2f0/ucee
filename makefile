@@ -1,4 +1,4 @@
-all: connmgr bookpub sqlite_test loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
+all: connmgr matcheng bookpub sqlite_test loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
 
 CC=gcc
 CXX=g++
@@ -18,8 +18,8 @@ connmgr: connmgr.o
 loopthroughmessagequeue: loopthroughmessagequeue.o
 	$(CXX) -o $@ $^ -lrt
 
-#matcheng/matcheng: matcheng/matcheng.o
-#	$(CXX) -o $@ $^ -lrt
+matcheng: matcheng.o
+	$(CXX) -o $@ $^ -lrt
 
 bookpub: bookpub.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS)
@@ -38,7 +38,7 @@ tradeBot/md_receiver: tradeBot/md_receiver.o
 
 connmgr.o: connmgr.cpp messages.h
 loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
-#matcheng/matcheng.o: matcheng.cpp messages.h
+matcheng.o: matcheng.cpp messages.h
 bookpub.o: bookpub.cpp messages.h
 sqlite3.o: sqlite3.c
 sqlite_test.o: sqlite3.o sqlite_test.cpp messages.h
@@ -46,4 +46,4 @@ tradeBot/tradeBot.o: tradeBot/tradeBot.c
 tradeBot/md_receiver.o: tradeBot/md_receiver.c
 
 clean:
-	-rm -f *.o connmgr *~ bookpub sqlite_test loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o
+	-rm -f *.o connmgr *~ bookpub matcheng sqlite_test loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o
