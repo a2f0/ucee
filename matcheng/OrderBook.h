@@ -1,13 +1,16 @@
 #ifndef ORDERBOOK_H
 #define ORDERBOOK_H
+#include "messages.h"
 
 class OrderBook
 {
  public: 
-  string instr_name;
+  char instr_name[SYMBOL_SIZE];
   list<OrderList> buybook;
   list<OrderList> sellbook;
  public:
+  OrderBook(){};
+  OrderBook(char* symb){strcpy(instr_name,symb);};
   int AddOrder(Order);
   pair<int,Order> RemoveOrder(char*);
 };
@@ -18,6 +21,7 @@ int OrderBook::AddOrder(Order myorder)
   if (strcmp(myorder.symbol,instr_name) !=0)
     {
       cout << "Adding order to wrong book" << endl;
+      return 0;
     };
   list<OrderList>::iterator it;
   int adj = (myorder.buysell == BUY? 1:-1);
@@ -35,7 +39,12 @@ int OrderBook::AddOrder(Order myorder)
 	}else{
 	OrderList OL;
 	OL.type = MARKET_ORDER;
-	insert(it,OL);
+  if(myorder.buysell==BUY)
+  {
+    buybook.insert(it,OL);
+  }else{
+    sellbook.insert(it,OL);
+  }
 	it--;
 	it->AddOrder(myorder);
       };
@@ -45,32 +54,28 @@ int OrderBook::AddOrder(Order myorder)
     {
       while(it != buybook.end() && it!= sellbook.end()  
 	    && adj*atof(it->pricelevel) > adj*atof(myorder.price))
-	it++;
+        it++;
     };
   // insert in book
-  if(myorder.buysell == BUY)
-    {
-      buybook.insert(it,myOrder);
-    }else{
-    sellbook.insert(it,myOrder);
-  };
+  it->AddOrder(myorder);
+  return 1;
 };
 
 pair<int,Order> OrderBook::RemoveOrder(char* orderid)
 {
   list<OrderList>::iterator it = buybook.begin();
   pair<int,Order> p;
-  p.first =1;
+  p.first = 0;
   while (it != buybook.end())
     {
-      p = it->RemoveOrder();
-      if (p.first==0){ return p;};
+      p = it->RemoveOrder(orderid);
+      if (p.first==1){ return p;};
     };
   it = sellbook.begin();
   while (it != sellbook.end())
     {
-      p = it->RemoveOrder();
-      if(p.first==0){ return p;};
+      p = it->RemoveOrder(orderid);
+      if(p.first==1){ return p;};
     };
   return p;
 };
