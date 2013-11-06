@@ -57,4 +57,4 @@ shm_cl.o: shm_cl.cpp messages.h
 shm_sv.o: shm_sv.cpp messages.h
 
 clean:
-	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db shm
+	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db shm_cl shm_sv
