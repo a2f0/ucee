@@ -13,7 +13,7 @@ CXXFLAGS=-g -Wall -ansi -std=c++0x -I/usr/bin/
 CFLAGS=-Wall -g2 -std=c99 -Wunused
 
 connmgr: connmgr.o
-	$(CXX) -o $@ $^ -lrt
+	$(CXX) -o $@ $^ -lpthread
 
 loopthroughmessagequeue: loopthroughmessagequeue.o
 	$(CXX) -o $@ $^ -lrt
