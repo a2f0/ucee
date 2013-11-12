@@ -16,8 +16,10 @@ using namespace std;
 typedef struct Order Order;
 typedef struct Modify Modify;
 typedef struct Cancel Cancel;
+typedef struct OrderAck OrderAck;
 typedef struct ModifyAck ModifyAck;
 typedef struct CancelAck CancelAck;
+typedef struct OrderNak OrderNak;
 typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
