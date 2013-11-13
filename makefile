@@ -24,8 +24,8 @@ matcheng: matcheng.o
 sqlite3: sqlite3.o
 	$(CC) -c $@ $^
 
-db: db.o sqlite3.o
-	$(CXX) -o $@ $^ $(CXXFLAGS) -lpthread -ldl
+#db: db.o sqlite3.o
+#	$(CXX) -o $@ $^ $(CXXFLAGS) -lpthread -ldl
 
 db: db.o sqlite3.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
