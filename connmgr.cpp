@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <thread>
+#include <time.h>
 
 #define PORT             1337
 #define SOCKET_ERROR     -1
@@ -38,6 +39,26 @@ void readfrommatchingengine() {
     key2 = ftok("/etc/usb_modeswitch.conf", 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
     */
+}
+//
+std::string isommvalid(struct OrderManagementMessage omm) {
+    printf("validating message of type: %d\n", omm.type);
+    if (omm.type == 0 || omm.type == 3) { //If this is a new order or a modify order verify the quantity is non-negative.
+        if (omm.payload.order.quantity > 0 ) {
+            char order_id[32];
+            strncpy(order_id, omm.payload.order.order_id, 32);
+            std::string ordr(order_id);
+            printf("negative quantity detected for order %s\n", order_id);
+            std::string error ("Negative quantity");
+            printf("returning error\n");
+            return error;
+        } else {
+
+        }
+    } 
+    printf("Quantity: %lu\n",  omm.payload.order.quantity );
+    //the default error message
+    return std::string();
 }
 
 int main(){
@@ -67,7 +88,6 @@ int main(){
     Address.sin_addr.s_addr=INADDR_ANY;
     Address.sin_port=htons(PORT);
     Address.sin_family=AF_INET;
-
 
     //Allow socket reuse
     int yes = 1;
@@ -114,7 +134,6 @@ int main(){
         printf("error on listen.");
         exit(-1);
     }
-
     
     fds[0].fd = hServerSocket;
     fds[0].events = POLLIN;
@@ -176,8 +195,41 @@ int main(){
                 printf("descriptor %d is readable\n", fds[i].fd);
                 struct OrderManagementMessage omm;
                 rc = recv(fds[i].fd, &omm, sizeof(omm), 0);
-                printf("read %d bytes through socket with file descripter %d, current size: %d\n",rc, fds[i].fd, current_size);
+                std::string error = isommvalid(omm);
+                printf("error returned: %s\n", error.c_str());
+                //char reason[64];
+                //strcpy(reason,error.c_str());
+                char order_id[32];
+                strncpy(order_id, omm.payload.order.order_id, 32);
+                printf("time: %lld\n", (long long) time(NULL));
+                if ( error.empty() ) {
+                    printf("This is a valid message.\n");
+                } else {  //then there was an error
+                    struct OrderManagementMessage romm;
+                    printf("This message is not valid. A nack needs to be sent.\n");
+                    if (omm.type == 3) { //this is a modify order
+                        romm.type = MODIFY_NAK; //MODIFY_NAK
+                        strcpy( romm.payload.modifyNak.reason , error.c_str());
+                        printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
+                        strcpy( romm.payload.modifyNak.order_id , order_id);
+                        romm.payload.modifyNak.timestamp = (long long) time(NULL);
+                        printf("timestamp set to: %llu",romm.payload.modifyNak.timestamp);
+                    } else if (omm.type ==0)  {
+                        romm.type = NEW_ORDER_NAK; //NEW_ORDER_NAK
+                        printf("configuring this as an order_nak\n");
+                        strcpy( romm.payload.orderNak.reason , error.c_str());
+                        printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
+                        strcpy( romm.payload.orderNak.order_id , order_id);
+                        romm.payload.orderNak.timestamp = (long long) time(NULL);
+                        printf("timestamp set to: %llu",romm.payload.orderNak.timestamp);
+                    } else {
+                        printf("Unknown order type failed validation\n");
+                    }
+                    rc = send(fds[i].fd, &romm, sizeof(romm), 0);
+                    printf("sent %d bytes through socket in NAK message\n", rc);
+                }
                 printf("======new order======\n");
+                printf("read %d bytes through socket with file descripter %d, current size: %d\n",rc, fds[i].fd, current_size);
                 printf("Message type: %d\n",omm.type);
                 printf("Order type: %d\n",omm.payload.order.order_type);
                 printf("Buysell: %d\n",omm.payload.order.buysell);
@@ -195,9 +247,7 @@ int main(){
                 strncpy(usr, omm.payload.order.user, 31);
                 printf("user: %s\n", usr);
                 
-                char order_id[32];
-                strncpy(order_id, omm.payload.order.order_id, 32);
-                printf("order_id: %s\n", order_id);
+                //printf("order_id: %s\n", order_id);
                 printf("i: %d\n", i);
                 std::string ordr(order_id);
                 //http://www.yolinux.com/TUTORIALS/CppStlMultiMap.html
