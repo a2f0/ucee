@@ -6,6 +6,7 @@
 #include "messages.h"
 using namespace std;
 */
+#include <algorithm>
 #include "db.h"
 
 sqlite3* create_db(){
@@ -24,11 +25,11 @@ sqlite3_open("OrderBook.db",&mydb);
 /*
 SELECT STATEMENT
 */
-//if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL )) != SQLITE_OK)
 if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL )) != SQLITE_OK)
         cout << "Did you run ./database.sh?" << endl <<sqlite3_errmsg(mydb);
+cout<<"t1key|account|user|ordertype|timestamp|side|symbol|price|quantity"<<endl;
 while ( (c=sqlite3_step(stmt3)) == 100 ){
-        for(int j=0; j<7; j++)
+        for(int j=0; j<8; j++)
                 cout << sqlite3_column_text(stmt3,j) << "|";
 	cout<<sqlite3_column_text(stmt3,8)<<endl;
 }
@@ -44,7 +45,7 @@ return 0;
 int add_row(Order myorder){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%f,%lu);",myorder.order_id,myorder.account,myorder.user,1,myorder.timestamp,myorder.buysell,myorder.symbol,atof(myorder.price),myorder.quantity);
+sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%f,%lu);",myorder.order_id,myorder.account,myorder.user,(int)myorder.order_type,myorder.timestamp,myorder.buysell,myorder.symbol,atof(myorder.price),myorder.quantity);
 
 //stmt represents a sql query
 sqlite3_stmt *stmt2;
@@ -62,20 +63,6 @@ while ( (c=sqlite3_step(stmt2)) == 100 ){
 	;
 }
 sqlite3_finalize(stmt2);
-
-/*
-SELECT STATEMENT
-*/
-/*
-if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL )) != SQLITE_OK)
-	throw string(sqlite3_errmsg(mydb));
-while ( (c=sqlite3_step(stmt3)) == 100 ){
-	for(int j=0; j<8; j++)
-		cout << sqlite3_column_text(stmt3,j) << "|";
-}
-
-sqlite3_finalize(stmt3);
-*/
 
 sqlite3_close(mydb);
 return 0;
@@ -100,19 +87,22 @@ if ( (rc = sqlite3_prepare_v2(mydb, query1,/* "INSERT INTO t1 VALUES ('mykey','m
 while ( (c=sqlite3_step(stmt)) == 100 ){
 	for(int j=0; j<8; j++) //there are 9 columns in the database as defined in database.sh
 
-//Next step:  convert this data
-/*
 
-		ooo.order_type=sqlite3_column_text(stmt,3);		
-		ooo.account=sqlite3_column_text(stmt,1);
-		ooo.user=sqlite3_column_text(stmt,2);
-		ooo.order_id=sqlite3_column_text(stmt,0);
-		ooo.timestamp=sqlite3_column_text(stmt,4);
-		ooo.buysell=sqlite3_column_text(stmt,5);
-		ooo.symbol=sqlite3_column_text(stmt,6);
-		ooo.price=sqlite3_column_text(stmt,7);
-		ooo.quantity=sqlite3_column_text(stmt,8);
-*/
+		//ooo.order_type=sqlite3_column_text(stmt,3);		
+		ooo.order_type = (ORDER_TYPE) atoi((const char*)sqlite3_column_text(stmt,3));		
+		sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
+		//ooo.user=sqlite3_column_text(stmt,2);
+		sprintf(ooo.user,"%s",sqlite3_column_text(stmt,2));
+		//ooo.order_id=sqlite3_column_text(stmt,0);
+		sprintf(ooo.order_id,"%s",sqlite3_column_text(stmt,0));
+		ooo.timestamp=strtoull((const char*)sqlite3_column_text(stmt,4),NULL,0);
+		ooo.buysell=(SIDE) atoi((const char*)sqlite3_column_text(stmt,5));
+		//ooo.symbol=sqlite3_column_text(stmt,6);
+		sprintf(ooo.symbol,"%s",sqlite3_column_text(stmt,6));
+		//ooo.price=sqlite3_column_text(stmt,7);
+		sprintf(ooo.price,"%s",sqlite3_column_text(stmt,7));
+		ooo.quantity=strtoul((const char*)sqlite3_column_text(stmt,8),NULL,0);
+
 		mylist.push_back(ooo);
 }
 
@@ -210,6 +200,22 @@ sqlite3_close(mydb);
 return 0;
 }
 
+/*
+Order generate_order(){
+Order *a = (Order*) malloc (100*sizeof(Order));
+a->order_type=LIMIT_ORDER;
+snprintf(a->account,32,"%d",5647);
+snprintf(a->user,32,"%s","Charlie");
+snprintf(a->order_id,32,"%s","4X54");
+a->timestamp=21345;
+a->buysell=BUY;
+snprintf(a->symbol,16,"%s","MSFT");
+snprintf(a->price,10,"%f",11.3);
+a->quantity=500;
+return *a;
+}
+*/
+
 
 
 int main(){
@@ -229,6 +235,24 @@ char* oid = (char*) malloc (sizeof(char));
 sprintf(oid,"%s","4X99");
 delete_row(oid);//takes order_id as parameter
 print_table();
+
+/*
+Order *a = (Order*) malloc (sizeof(Order));
+*a=generate_order();
+add_row(*a);
+print_table();
+*/
+//Example of pulling existing database state 
+//
+printf("\n%s\n","5. Pulling Database State to a list<Order>");
+list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
+printf("\n%s\n","6. Printing that list<Order>");
+for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it){
+//	Order *myorder = it;
+	printf("%s|%s|%s|%d|%llu|%d|%s|%f|%lu\n",it->order_id,it->account,it->user,(int)it->order_type,it->timestamp,it->buysell,it->symbol,atof(it->price),it->quantity);
+//	printf("'%s'|'%s'|'%s'|%d|%llu|%d|'%s'|%f|%lu);",myorder->order_id,myorder->account,myorder->user,1,myorder->timestamp,myorder->buysell,myorder->symbol,atof(myorder->price),myorder->quantity);
+}
+//printf("\nSymbol:  %s\n",(mylist.front()).symbol);
 
 
 
