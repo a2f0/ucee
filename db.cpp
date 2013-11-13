@@ -24,6 +24,7 @@ sqlite3_open("OrderBook.db",&mydb);
 /*
 SELECT STATEMENT
 */
+//if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL )) != SQLITE_OK)
 if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL )) != SQLITE_OK)
         throw string(sqlite3_errmsg(mydb));
 while ( (c=sqlite3_step(stmt3)) == 100 ){
