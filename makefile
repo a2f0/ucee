@@ -1,4 +1,4 @@
-all: connmgr matcheng bookpub db loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot shm_cl shm_sv
+all: connmgr matcheng bookpub db loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
 
 CC=gcc
 CXX=g++
@@ -25,10 +25,7 @@ sqlite3: sqlite3.o
 	$(CC) -c $@ $^
 
 db: db.o sqlite3.o
-	$(CXX) -o $@ $^ $(CXXFLAGS) -lpthread -ldl
-
-#db: db.o sqlite3.o
-#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
 bookpub: bookpub.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
@@ -39,11 +36,14 @@ tradeBot/tradeBot: tradeBot/tradeBot.o
 tradeBot/md_receiver: tradeBot/md_receiver.o
 	$(CC) -o $@ $^ -lrt $(CFLAGS)
 
-shm_cl: shm_cl.o
-	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+#shm_cl: shm_cl.o
+#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
-shm_sv: shm_sv.o
-	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+#shm_sv: shm_sv.o
+#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+
+#shm-boost: shm-boost.o
+#	g++ -I/usr/include/boost shm-boost.cpp -o shm-boost -lpthread -lrt
 
 connmgr.o: connmgr.cpp messages.h
 loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
@@ -53,8 +53,8 @@ db.o: sqlite3.o db.cpp messages.h
 bookpub.o: bookpub.cpp messages.h
 tradeBot/tradeBot.o: tradeBot/tradeBot.c
 tradeBot/md_receiver.o: tradeBot/md_receiver.c
-shm_cl.o: shm_cl.cpp messages.h
-shm_sv.o: shm_sv.cpp messages.h
+#shm_cl.o: shm_cl.cpp messages.h
+#shm_sv.o: shm_sv.cpp messages.h
 
 clean:
-	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db shm_cl shm_sv
+	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db
