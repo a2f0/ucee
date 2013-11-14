@@ -32,20 +32,25 @@ int main(){
   key2 = ftok("/etc/usb_modeswitch.conf", 'b');
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
   MatchEngOBV MyBooks;
+  cout << "Initialised OBV successfully" << endl;
   MyBooks.msqid = msqid2;
+  cout << "Set key successfully" << endl;
   // load database
   // some testing
   Order orderA = {LIMIT_ORDER,"547","Charlie","4X54",245,BUY,"MSFT","11.3",50};
-  Order orderB = {LIMIT_ORDER,"314","Delta","450X",220,BUY,"MSFT","11.4",540};
-  cout << orderA.order_id << orderB.order_id << endl;
+  Order orderB = {LIMIT_ORDER,"314","Delta","4F0X",220,BUY,"MSFT","11.4",540};
+  cout << "Order A: " << orderA.order_id << endl;
+  cout << "Order B: " << orderB.order_id << endl;
   // setting up
   printf("starting matching engine\n");
   // reading from message queue
   signal(SIGINT,intHandler);
   for(;;) {
+    cout << "Receiving first order" << endl;
     msgrcv(msqid1, &mmb, sizeof(struct message_msgbuf), 2, 0);
-    // printf("Order type: %d\n",mmb.omm.payload.order.order_type);
-    // printf("Buysell: %d\n",mmb.omm.payload.order.buysell);
+    cout << "Received first order" << endl;
+    printf("Order type: %d\n",mmb.omm.payload.order.order_type);
+    printf("Buysell: %d\n",mmb.omm.payload.order.buysell);
     MyBooks.Process(mmb.omm);
   };
   return 0;
