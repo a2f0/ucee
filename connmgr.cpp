@@ -13,6 +13,9 @@
 #include <sys/ioctl.h>
 #include <thread>
 #include <time.h>
+#include <sys/time.h>
+
+
 
 #define PORT             1337
 #define SOCKET_ERROR     -1
@@ -59,6 +62,65 @@ std::string isommvalid(struct OrderManagementMessage omm) {
     printf("Quantity: %lu\n",  omm.payload.order.quantity );
     //the default error message
     return std::string();
+}
+
+void printCurrentTime(void)
+{
+     struct timeval tv;
+     struct tm time_tm;
+     char buffer[256];
+
+     gettimeofday(&tv, NULL);
+
+     localtime_r(&tv.tv_sec, &time_tm);
+     strftime(buffer, sizeof(buffer), "%Y-%m-%d %T", &time_tm);
+     printf("\n[%s.%06lu000]", buffer, tv.tv_usec);
+}
+
+void printFixedLengthString(const char *s, unsigned int size)
+{
+     char buffer[size+1];
+     //memset(buffer, '\0', size + 1);
+     //memcpy(buffer, s, size);
+     strncpy(buffer, s, size);
+     printf("%s\n", buffer);
+}
+
+void printTimestamp(unsigned long long timestamp)
+{
+     long s = timestamp / 1000000000;
+     unsigned long us = timestamp % 1000000;
+     struct tm time_tm;
+     char buffer[256];
+
+     localtime_r(&s, &time_tm);
+     strftime(buffer, sizeof(buffer), "%Y-%m-%d %T", &time_tm);
+     printf("%s.%06lu000", buffer, us);
+}
+
+
+void printOrderNak(const struct OrderNak *orderNak)
+{
+     printCurrentTime();
+     printf(" OrderNak:");
+     printf("\n  Order Id: ");
+     printFixedLengthString(orderNak->order_id, ORDERID_SIZE);
+     printf("\n  Timestamp: ");
+     printTimestamp(orderNak->timestamp);
+     printf("\n  Failure reason: ");
+     printFixedLengthString(orderNak->reason, REASON_SIZE);
+     printf("\n");
+}
+
+void printOrderManagementMessage(const struct OrderManagementMessage *omm)
+{
+     switch (omm->type) {
+     case NEW_ORDER_NAK:
+      printOrderNak(&omm->payload.orderNak);
+      break;
+     default:
+      fprintf(stderr, "Unknown message type\n");
+     }   
 }
 
 int main(){
@@ -209,23 +271,25 @@ int main(){
                     printf("This message is not valid. A nack needs to be sent.\n");
                     if (omm.type == 3) { //this is a modify order
                         romm.type = MODIFY_NAK; //MODIFY_NAK
-                        strcpy( romm.payload.modifyNak.reason , error.c_str());
+                        strncpy( romm.payload.modifyNak.reason , error.c_str(),64);
                         printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
-                        strcpy( romm.payload.modifyNak.order_id , order_id);
+                        strncpy( romm.payload.modifyNak.order_id , order_id,32);
                         romm.payload.modifyNak.timestamp = (long long) time(NULL);
-                        printf("timestamp set to: %llu",romm.payload.modifyNak.timestamp);
+                        printf("timestamp set to: %llu\n",romm.payload.modifyNak.timestamp);
                     } else if (omm.type ==0)  {
                         romm.type = NEW_ORDER_NAK; //NEW_ORDER_NAK
                         printf("configuring this as an order_nak\n");
-                        strcpy( romm.payload.orderNak.reason , error.c_str());
+                        strncpy( romm.payload.orderNak.reason , error.c_str(),64);
                         printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
-                        strcpy( romm.payload.orderNak.order_id , order_id);
+                        strncpy( romm.payload.orderNak.order_id , order_id, 32);
                         romm.payload.orderNak.timestamp = (long long) time(NULL);
-                        printf("timestamp set to: %llu",romm.payload.orderNak.timestamp);
+                        printf("timestamp set to: %llu\n",romm.payload.orderNak.timestamp);
                     } else {
                         printf("Unknown order type failed validation\n");
                     }
                     rc = send(fds[i].fd, &romm, sizeof(romm), 0);
+                    printf("=========printnack======\n");
+                    printOrderManagementMessage(&romm);
                     printf("sent %d bytes through socket in NAK message\n", rc);
                 }
                 printf("======new order======\n");
@@ -326,5 +390,5 @@ int main(){
         }
     }
    */
-
 }
+
