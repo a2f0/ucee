@@ -11,16 +11,19 @@
 #include <stddef.h>
 #include <signal.h>
 #include <sys/types.h>
-
+#include "printing.h"
 using namespace std;
 
 key_t key1,key2;
 int msqid1,msqid2;
 struct message_msgbuf mmb;
 
+MatchEngOBV myBooks;
+
 /*intHandler closes queue and exits*/
 void intHandler(int dummy=0){
   // closing my queue
+  myBooks.Print();
   msgctl(msqid2,IPC_RMID,NULL);
   exit(0);
 };
@@ -31,27 +34,24 @@ int main(){
   msqid1 = msgget(key1, 0666 | IPC_CREAT);
   key2 = ftok("/etc/usb_modeswitch.conf", 'b');
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
-  MatchEngOBV MyBooks;
   cout << "Initialised OBV successfully" << endl;
-  MyBooks.msqid = msqid2;
+  myBooks.msqid = msqid2;
   cout << "Set key successfully" << endl;
+  cout << true << endl;
+  cout << false << endl;
   // load database
-  // some testing
-  Order orderA = {LIMIT_ORDER,"547","Charlie","4X54",245,BUY,"MSFT","11.3",50};
-  Order orderB = {LIMIT_ORDER,"314","Delta","4F0X",220,BUY,"MSFT","11.4",540};
-  cout << "Order A: " << orderA.order_id << endl;
-  cout << "Order B: " << orderB.order_id << endl;
+  
   // setting up
   printf("starting matching engine\n");
   // reading from message queue
   signal(SIGINT,intHandler);
-  for(;;) {
-    cout << "Receiving first order" << endl;
+  for(int m = 0; m < 10;m++) {
+    cout << "Receiving order:" << endl;
     msgrcv(msqid1, &mmb, sizeof(struct message_msgbuf), 2, 0);
-    cout << "Received first order" << endl;
-    printf("Order type: %d\n",mmb.omm.payload.order.order_type);
-    printf("Buysell: %d\n",mmb.omm.payload.order.buysell);
-    MyBooks.Process(mmb.omm);
+    // cout << "Received order" << endl;
+    struct OrderManagementMessage omm = mmb.omm;
+    printOrderManagementMessage(&omm);
+    myBooks.Process(omm);
   };
   return 0;
 };

@@ -1,6 +1,7 @@
 #ifndef MATCHENG_H
 #define MATCHENG_H
 
+#include "printing.h"
 #include "orderbookview.h"
 
 //This is used to send the message through a System V message queue
@@ -26,41 +27,41 @@ void MatchEngOBV::Communicate(enum MESSAGE_TYPE type, char* id, char* reason, un
     case NEW_ORDER_ACK:
       struct OrderAck oack;
       oack.timestamp = now;
-      strcpy(oack.order_id,id);
+      nstrcpy(oack.order_id,id,ORDERID_SIZE);
       myomm.payload.orderAck = oack;
       break;
     case NEW_ORDER_NAK:
       struct OrderNak onak;
-      strcpy(onak.reason,reason);
+      nstrcpy(onak.reason,reason,REASON_SIZE);
       onak.timestamp = now;
-      strcpy(onak.order_id,id);
+      nstrcpy(onak.order_id,id,ORDERID_SIZE);
       myomm.payload.orderNak = onak;
       break;
     case CANCEL_ACK:
       struct CancelAck cack;
       cack.quantity = quantity;
-      strcpy(cack.order_id,id);
+      nstrcpy(cack.order_id,id,ORDERID_SIZE);
       myomm.payload.cancelAck = cack;
       break;
     case CANCEL_NAK:
       struct CancelNak cnak;
-      strcpy(cnak.reason,reason);
+      nstrcpy(cnak.reason,reason,REASON_SIZE);
       cnak.timestamp = now;
-      strcpy(cnak.order_id,id);
+      nstrcpy(cnak.order_id,id,ORDERID_SIZE);
       myomm.payload.cancelNak = cnak;
       break;
     case MODIFY_ACK:
       struct ModifyAck mack;
       mack.quantity = quantity;
       mack.timestamp = now;
-      strcpy(mack.order_id,id);
+      nstrcpy(mack.order_id,id,ORDERID_SIZE);
       myomm.payload.modifyAck = mack;
       break;
     case MODIFY_NAK:
       struct ModifyNak mnak;
-      strcpy(mnak.reason,reason);
+      nstrcpy(mnak.reason,reason,REASON_SIZE);
       mnak.timestamp = now;
-      strcpy(mnak.order_id,id);
+      nstrcpy(mnak.order_id,id,ORDERID_SIZE);
       myomm.payload.modifyNak = mnak;
       break;
     case NEW_ORDER:

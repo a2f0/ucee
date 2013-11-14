@@ -1,12 +1,59 @@
 #ifndef PRINTING_H
 #define PRINTING_H
+#include "messages.h"
+#include <string>
+#include <cstdio>
+#include <cstring>
+#include <time.h>
+#include <sys/time.h>
+using namespace std;
 
-void copyStringField(char *dest, const char *src, unsigned int size)
+// functionality to deal with strings without null termination
+
+// compares two strings by adding null at end
+int nstrcmp(char *s1, const char *s2, unsigned int size)
+{
+  char *buffer1 = (char*) malloc(size + 1);
+  memset(buffer1, '\0', size + 1);
+  memcpy(buffer1, s1, size);
+  char *buffer2 = (char*) malloc(size + 1);
+  memset(buffer2, '\0', size + 1);
+  memcpy(buffer2, s2, size);
+  int result = strcmp(buffer1,buffer2);
+  free(buffer1);
+  free(buffer2);
+  cout << "Result from comparison: "<< result;
+  return result;
+};
+
+/* copies a string into char array, placing ' ' if extra space*/
+void nstringcpy(char* dest, string s, unsigned int size)
+{
+  const char* cstr = s.c_str();
+  memset(dest,' ',size);
+  memcpy(dest, cstr, (strlen(cstr) < size)? strlen(cstr):size);
+};
+
+/* copies char array into another, placing ' ' if extra space*/
+void nstrcpy(char *dest, char*src,unsigned int size)
 {
   memset(dest, ' ', size);
   memcpy(dest, src, (strlen(src) < size) ? strlen(src) : size);
+};
+
+/* makes a char array into a string, leaving out blanks/etc*/
+string nstring(char *s, unsigned int size)
+{
+  char* buffer = (char*)malloc(size +1);
+  memset(buffer, '\0',size+1);
+  for (unsigned int i = 0; !iscntrl(s[i])&&!isblank(s[i])&&i < size; i++)
+    buffer[i]=s[i];
+  string result(buffer);
+  free(buffer);
+  return result;
 }
 
+// functionality for printing
 
 void printCurrentTime(void)
 {
@@ -37,7 +84,7 @@ void printOrderType(enum ORDER_TYPE orderType)
 
 void printFixedLengthString(const char *s, unsigned int size)
 {
-  char *buffer = malloc(size + 1);
+  char *buffer = (char*) malloc(size + 1);
   memset(buffer, '\0', size + 1);
   memcpy(buffer, s, size);
   printf("%s", buffer);
