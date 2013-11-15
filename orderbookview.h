@@ -25,110 +25,138 @@ typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
 
-
+//there is one of these for each price level
 class OrderList
 {
 public:
-  enum ORDER_TYPE type;
-  char pricelevel[PRICE_SIZE];
-  list<Order> orders;
+  enum ORDER_TYPE type; // order type
+  double price; // price level
+  list<Order> orders; // list of orders, older at the front
 public:
-  int AddOrder(Order);
-  pair<int,Order> RemoveOrder(char*);
+  OrderList(){price = 0;}; // constructor
+  int AddOrder(Order); // returns 1 for success, 0 for failure
+  int RemoveOrder(Order); // returns 1 for success, 0 for failure
+  void Print(); // prints orderlist;
 };
 
 // add order to orderlist in correct order, assuming list is sorted
 // checks that the order belongs to the list
 // returns 1 if successful, 0 if unsuccessful
 int OrderList::AddOrder(Order myorder)
-{
-  // error checks
+{ // error checks
   if (myorder.order_type != type)
   {
     cout << "Order added to list of different order type" << endl;
     return 0;
   };
   if(myorder.order_type == LIMIT_ORDER &&
-     abs(atof(myorder.price)-atof(pricelevel)) > .00001)
+     abs(price-natof(myorder.price,PRICE_SIZE)) > .00001)
   {
     cout << "Order added to list of different price level" << endl;
     return 0;
   };
   //main function
+  if (orders.empty())
+  {
+    orders.push_front(myorder);
+    return 1;
+  };
   unsigned long long ts = myorder.timestamp;
   list<Order>::iterator it = orders.begin();
-  while( it != orders.end() && it->timestamp >= ts)
-  {
+  while( it != orders.end() && it->timestamp >= ts){
     it++;
   };
   orders.insert(it, myorder);
-  return 0;
+  return 1;
 };
 
 // removes order from orderlist
 // returns 1 for success, 0 for failure, together with the order removed
-pair<int,Order> OrderList::RemoveOrder(char* myorderid)
+int OrderList::RemoveOrder(Order myorder)
 {
-  Order myorder;
-  int result = 0;
+  if (orders.empty())
+    return 0;
   list<Order>::iterator it = orders.begin();
   while(it != orders.end())
   {
-    // found order, get info about order to return
-    if (strcmp (it->order_id,myorderid)== 0)
+    // found order?
+    if (nstrcmp (it->order_id,myorder.order_id,ORDERID_SIZE)== 0)
     {
-      result = 1;
-      myorder.order_type = it->order_type;
-      nstrcpy(myorder.account,it->account,ACCOUNT_SIZE);
-      nstrcpy(myorder.user,it->user,USER_SIZE);
-      nstrcpy(myorder.order_id,it->order_id,ORDERID_SIZE);
-      nstrcpy(myorder.symbol, it->symbol,SYMBOL_SIZE);
-      nstrcpy(myorder.price, it->price,PRICE_SIZE);
-      myorder.timestamp = it->timestamp;
-      myorder.buysell= it->buysell;
-       myorder.quantity = it->quantity;
       orders.erase(it); // remove order
-      pair<int,Order> p(result,myorder);
-      return p;
+      return 1;
     };
     it++;
   };
   cout << "Order not found" << endl;
-  pair<int,Order> p(result,myorder);
-  return p;
+  return 0;
+};
+
+void OrderList::Print(){
+  if(!orders.empty()){
+    printf("\n***ORDER LIST***PRICE:%f***ORDER:",price);
+    printOrderType(type);
+    printf("***SIZE:%d\n",(int)orders.size());
+    list<Order>::iterator it = orders.begin();
+    while(it != orders.end()){
+      Order myorder = (*it);
+      printOrder(&myorder);
+      ++it;
+    };
+  };
+//  printf("finished this list");
 };
 
 
-
+// keeps orders for one symbol
 class OrderBook
 {
 public:
-  char instr[SYMBOL_SIZE]; // symbol name
-  list<OrderList> sellbook;
-  list<OrderList> buybook;
+  char instr[SYMBOL_SIZE]; // instrument name/ticket/symbol
+  list<OrderList> sellbook; // book of sell orders
+  list<OrderList> buybook; // book of buy orders
 public:
   OrderBook(){};
   OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);};
-  int AddOrder(Order);
-  pair<int,Order> RemoveOrder(char* orderid);
-  void Print();
+  int AddOrder(Order); // returns 0 for failure, 1 for success
+  int RemoveOrder(Order); // return 0 for failure, 1 for success
+  void Print(); // prints the sellbook and buybook
 };
 
 int OrderBook::AddOrder(Order myorder)
 {
+  //testing
+//  printf("* OrderBook: adding an order as follows:\n");
+//  printf("\t\tOrder's symbol: ");
+//  printFixedLengthString(myorder.symbol,SYMBOL_SIZE);
+//  printf("-\n");
+//  printf("\t\tBook's symbol: ");
+//  printFixedLengthString(instr,SYMBOL_SIZE);
+//  printf("-\n");
   //check
-  printFixedLengthString(myorder.symbol,SYMBOL_SIZE);
-  printf("end\n");
-  printFixedLengthString(instr,SYMBOL_SIZE);
-  printf("end\n");
-  if(nstrcmp(myorder.symbol,instr,SYMBOL_SIZE))
+  if(nstrcmp(myorder.symbol,instr,SYMBOL_SIZE)!=0)
   {
     cout << "Adding order to wrong book" << endl;
     return 0;
   };
+//  printf("processing order of SIDE: %d",myorder.buysell);
+  int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell  
+  if ((adj==1 && buybook.empty()) || (adj == -1 && sellbook.empty()))
+  {
+    OrderList OL;
+    OL.type = myorder.order_type;
+    OL.price = natof(myorder.price,PRICE_SIZE);
+    if(adj==1)
+    {
+      buybook.push_front(OL);
+//      printf("modified buybook");
+    }else{
+      sellbook.push_front(OL);
+//      printf("modified sellbook");
+    };
+  };
+  // main functionality
   list<OrderList>::iterator it;
-  int adj = (myorder.buysell == BUY? 1:-1);
-  if(myorder.buysell == BUY){
+  if(adj==1){
     it = buybook.begin();
   }else{
     it = sellbook.begin();
@@ -138,160 +166,158 @@ int OrderBook::AddOrder(Order myorder)
   {
     if (it->type == MARKET_ORDER)
     {
-      it->AddOrder(myorder);
+      return it->AddOrder(myorder); // adds order to OrderList
     }else{
       OrderList OL;
       OL.type = MARKET_ORDER;
-      if(myorder.buysell==BUY)
+      if(adj==1)
       {
         buybook.insert(it,OL);
+//        printf("modified buybook");
       }else{
         sellbook.insert(it,OL);
+//        printf("modified sellbook");
       }
-      it--;
-      it->AddOrder(myorder);
+      it--; // move back to new OrderList
+      return it->AddOrder(myorder);
     };
   };
-  // look for appropriate space in order book
-  if (myorder.order_type == LIMIT_ORDER)
-  {
-    while(it != buybook.end() && it!= sellbook.end()
-          && adj*atof(it->pricelevel) > adj*atof(myorder.price))
+  if (it->type == MARKET_ORDER)
+    it++;
+  // look for appropriate space in order book for limit orders
+  while(it != buybook.end() && it != sellbook.end()
+        && adj*(it->price)
+        > adj*natof(myorder.price,PRICE_SIZE))
       it++;
-  };
   // insert in book
-  it->AddOrder(myorder);
-  return 1;
+  if (it == buybook.end() || it == sellbook.end()
+      || abs(it->price-natof(myorder.price,PRICE_SIZE)) > .00001){
+    OrderList OL;
+    OL.type = LIMIT_ORDER;
+    OL.price = natof(myorder.price,PRICE_SIZE);
+    if(adj==1)
+    {
+      buybook.insert(it,OL);
+    }else{
+      sellbook.insert(it,OL);
+    };
+    it--;
+  };
+  return it->AddOrder(myorder);
 };
 
-pair<int,Order> OrderBook::RemoveOrder(char* orderid)
+int OrderBook::RemoveOrder(Order myorder)
 {
-  list<OrderList>::iterator it = buybook.begin();
-  pair<int,Order> p;
-  p.first = 0;
-  while (it != buybook.end())
-  {
-    p = it->RemoveOrder(orderid);
-    if (p.first==1){ return p;};
+  int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell
+  if((adj==1 && buybook.empty())|| (adj==-1 && sellbook.empty())){
+    return 0;
   };
-  it = sellbook.begin();
-  while (it != sellbook.end())
-  {
-    p = it->RemoveOrder(orderid);
-    if(p.first==1){ return p;};
+  list<OrderList>::iterator it;
+  if(adj==1){
+    it = buybook.begin();
+  }else{
+    it = sellbook.begin();
   };
-  return p;
+  while (it != buybook.end() && it!= sellbook.end())
+  {
+    if(it->RemoveOrder(myorder)){
+      return 1;
+    };
+    it++;
+  };
+  return 0;
 };
 
 void OrderBook::Print()
 {
+  printf("\n***Book for:");
   printFixedLengthString(instr,SYMBOL_SIZE);
-  printf(":\n");
-  printf("***BUY SIDE***\n");
-  printf("***SELL SIZE***\n");
+  printf("\n");
+  list<OrderList>::iterator it;
+  if (!buybook.empty()){
+  printf("\n***BUY SIDE***\n");
+  for (it = buybook.begin(); it != buybook.end(); it++)
+    it->Print();
+  };
+  if (!sellbook.empty()){
+  printf("\n***SELL SIZE***\n");
+  for (it = sellbook.begin(); it!= sellbook.end(); it++)
+    it->Print();
+  };
+//  printf("finished buy and sell side\n");
 };
 
 
 
 
+
+
+// OrderBookView class: view of all books
 class OrderBookView
 {
 public:
-  int msqid;  
-  map<string,OrderBook> mybooks;
-  map<string,Order> myorders;
+  int msqid; // message queue to write ack/nacks
+  map<string,OrderBook> mybooks; // books by instrument
+  map<string,Order> myorders; // orders by orderid
 public:
-  OrderBookView(){};
+  void Process(OrderManagementMessage); // calls other Process
+  void Process(Order); // processes Order omm
+  void Process(Modify); // processes Modify omm
+  void Process(Cancel); // processes Cancel omm
+  void Print(); // prints all books
   virtual void Communicate(enum MESSAGE_TYPE,char*,char*,unsigned long){};
-  void Process(OrderManagementMessage);
-  void Process(Order);
-  void Process(Modify);
-  void Process(Cancel);
-  void Print();
-};
-
-void OrderBookView::Print()
-{
-  printf("*** Order Book View ***\n\n");
-  map<string,OrderBook>::iterator it;
-  for (it = mybooks.begin();it!=mybooks.end();++it)
-  {
-    (it->second).Print();
-  };
+  // communicates acks and naks to message queue
 };
 
 void OrderBookView::Process(OrderManagementMessage omm)
 {
-  printf("processing OrderManagementMessage\n");
-  if (omm.type == NEW_ORDER)
-  {
+//  printf("* myBooks: processing OrderManagementMessage\n");
+  if (omm.type == NEW_ORDER){
     Process(omm.payload.order);
   } else if(omm.type == MODIFY_REQ){
     Process(omm.payload.modify);
   } else if(omm.type == CANCEL_REQ){
     Process(omm.payload.cancel);
   } else {
-    printf("Message cannot be processed\n");
+//    printf("Message cannot be processed\n");
   };
 };
 
 void OrderBookView::Process(Order myorder)
 {
-  printf("processing order\n");
+//  printf("* myBooks: processing Order\n");
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-  cout << "symbol: " << symbol << "end\n";
+//  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-  cout << "orderid: " << orderid << "end\n";
-  myorders[orderid] = myorder;
-  cout << "added order into myorders" << endl;
+//  cout << "* myBooks: here is the order id: " << orderid << "-\n";
   if(mybooks.count(symbol) < 1)
   {
-    cout << "no book with that symbol" << endl;
+//    cout << "* myBooks: no book with that symbol" << endl;
     OrderBook ob(myorder.symbol);
     mybooks[symbol] = ob;
+//    cout << "* myBooks: added book with that symbol" << endl;
   }else{
-    cout<< "book already exists with that symbol" << endl;
+//    cout<< "* myBooks: book already exists, so won't create new" << endl;
   };
-  if(mybooks[symbol].AddOrder(myorder))
+  if(mybooks[symbol].AddOrder(myorder)==1)
   {
-    cout << "Added order\n" << endl;
+//    cout << "* myBooks: added order to corresponding book" << endl;
+    myorders[orderid] = myorder;
+//    cout << "* myBooks: added order into myorders" << endl;
     Communicate(NEW_ORDER_ACK,myorder.order_id,NULL,0);
     // communicating OrderAck
   }else{
-    cout << "didn't add order\n" << endl;
+//    cout << "* myBooks: didn't add order\n" << endl;
     char reason[REASON_SIZE];
-    nstringcpy(reason, "unable to add book",REASON_SIZE);
+    nstringcpy(reason,"unable to add to book",REASON_SIZE);
     Communicate(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
   };
 };
 
-void OrderBookView::Process(Cancel mycancel)
-{
-  string orderid(mycancel.order_id);
-  if(myorders.count(orderid) < 1)
-  {
-    char reason[REASON_SIZE];
-    nstringcpy(reason, "order id is invalid",REASON_SIZE);
-    Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
-  }else{
-    Order myorder = myorders[orderid];
-    string symbol(myorder.symbol);
-    pair<int,Order> oldorder = mybooks[symbol].RemoveOrder(mycancel.order_id);
-    if (!oldorder.first)
-    {
-      char reason[REASON_SIZE];
-      nstringcpy(reason, "order is no longer in book",REASON_SIZE);
-      Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
-    }else{
-      Communicate(CANCEL_ACK,mycancel.order_id,NULL,oldorder.second.quantity);
-    };
-  };
-};
-
 void OrderBookView::Process(Modify mymodify)
 {
-  string orderid(mymodify.order_id);
+  string orderid = nstring(mymodify.order_id,ORDERID_SIZE);
   if(myorders.count(orderid) < 1)
   {
     char reason[REASON_SIZE];
@@ -299,27 +325,62 @@ void OrderBookView::Process(Modify mymodify)
     Communicate(MODIFY_ACK,mymodify.order_id,reason,0);
   }else{
     Order myorder = myorders[orderid];
-    string symbol(myorder.symbol);
-    pair<int,Order> oldorder = mybooks[symbol].RemoveOrder(mymodify.order_id);
-    if (!oldorder.first)
+    string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
+    if((mybooks[symbol]).RemoveOrder(myorder) != 1)
     {
       char reason[REASON_SIZE];
       nstringcpy(reason, "order is no longer in book",REASON_SIZE);
       Communicate(MODIFY_NAK,mymodify.order_id,reason,0);
     }else{
-      Order neworder = oldorder.second;
-      neworder.quantity = mymodify.quantity;
-      nstrcpy(neworder.price,mymodify.price,REASON_SIZE);
-      if(!mybooks[symbol].AddOrder(neworder))
+      myorders.erase(orderid);
+      myorder.quantity = mymodify.quantity;
+      nstrcpy(myorder.price,mymodify.price,REASON_SIZE);
+      if(mybooks[symbol].AddOrder(myorder) != 1)
       {
-        mybooks[symbol].AddOrder(oldorder.second);
         char reason[REASON_SIZE];
-        nstringcpy(reason, "unable to update order",REASON_SIZE);
+        nstringcpy(reason, "order cancel, unable to update order",REASON_SIZE);
         Communicate(MODIFY_NAK,mymodify.order_id,reason,0);
       }else{
+        myorders[orderid] = myorder;
         Communicate(MODIFY_ACK,mymodify.order_id,NULL,mymodify.quantity);
       };
     };
+  };
+};
+
+
+void OrderBookView::Process(Cancel mycancel)
+{
+  string orderid = nstring(mycancel.order_id,ORDERID_SIZE);
+  if(myorders.count(orderid) < 1)
+  {
+    char reason[REASON_SIZE];
+    nstringcpy(reason, "order id is invalid",REASON_SIZE);
+    Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
+  }else{
+    Order myorder = myorders[orderid];
+    string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
+    if ((mybooks[symbol]).RemoveOrder(myorder) != 1)
+    {
+      char reason[REASON_SIZE];
+      nstringcpy(reason, "order is no longer in book",REASON_SIZE);
+      Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
+    }else{
+      unsigned long quantity = myorders[orderid].quantity;
+      myorders.erase(orderid);
+      Communicate(CANCEL_ACK,mycancel.order_id,NULL,quantity);
+    };
+  };
+};
+
+void OrderBookView::Print()
+{
+  printf("\n*** Order Book View ***\n");
+  map<string,OrderBook>::iterator it;
+  for (it = mybooks.begin();it!=mybooks.end();++it)
+  {
+    (it->second).Print();
+//    printf("finished this book\n");
   };
 };
 

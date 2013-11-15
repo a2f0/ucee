@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include "printing.h"
+#include "keys.h"
 using namespace std;
 
 key_t key1,key2;
@@ -30,28 +31,29 @@ void intHandler(int dummy=0){
 
 int main(){
   // set up queues
-  key1 = ftok("/etc/updatedb.conf", 'b');
+  key1 = ftok("/etc/updatedb.conf", 'b'); // key from connection manager
   msqid1 = msgget(key1, 0666 | IPC_CREAT);
-  key2 = ftok("/etc/usb_modeswitch.conf", 'b');
+  key2 = ftok("/etc/usb_modeswitch.conf", 'b'); // key to conn mgr with acks
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
+//  printf("msg queue id to write to: %d", msqid2);
   cout << "Initialised OBV successfully" << endl;
   myBooks.msqid = msqid2;
   cout << "Set key successfully" << endl;
-  cout << true << endl;
-  cout << false << endl;
   // load database
   
   // setting up
-  printf("starting matching engine\n");
+  printf("Ready to receive messages\n");
   // reading from message queue
   signal(SIGINT,intHandler);
-  for(int m = 0; m < 10;m++) {
-    cout << "Receiving order:" << endl;
+  for(;;) {
+//    cout << "* Matching Engine: receiving order" << endl;
     msgrcv(msqid1, &mmb, sizeof(struct message_msgbuf), 2, 0);
-    // cout << "Received order" << endl;
+//    cout << "* Matching Engine: received order:" << endl;
     struct OrderManagementMessage omm = mmb.omm;
     printOrderManagementMessage(&omm);
+//    cout << "* Matching Engine: sending order for processing" << endl;
     myBooks.Process(omm);
   };
+  myBooks.Print();
   return 0;
 };

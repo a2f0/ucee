@@ -1,6 +1,7 @@
 #ifndef PRINTING_H
 #define PRINTING_H
 #include "messages.h"
+#include <cstdlib>
 #include <string>
 #include <cstdio>
 #include <cstring>
@@ -22,7 +23,7 @@ int nstrcmp(char *s1, const char *s2, unsigned int size)
   int result = strcmp(buffer1,buffer2);
   free(buffer1);
   free(buffer2);
-  cout << "Result from comparison: "<< result;
+  //  cout << "Result from comparison: "<< result << endl;
   return result;
 };
 
@@ -52,6 +53,19 @@ string nstring(char *s, unsigned int size)
   free(buffer);
   return result;
 }
+
+/* make a char array into a double*/
+double natof(char* s, unsigned int size)
+{
+  char * buffer = (char*) malloc(size+1);
+  memset(buffer,'\0',size+1);
+  for (unsigned int i = 0; !iscntrl(s[i])&&!isblank(s[i])&&i < size; i++)
+    buffer[i]=s[i];
+  double result = atof(buffer);
+  free(buffer);
+  return result;
+};
+
 
 // functionality for printing
 

@@ -10,21 +10,23 @@ struct message_msgbuf {
   struct OrderManagementMessage omm;
 };
 
+// derived class from OrderBookView, implements communication to ConnMgr
 class MatchEngOBV : public OrderBookView
 {
 public:
-  MatchEngOBV(){};
   void Communicate(enum MESSAGE_TYPE, char*, char*, unsigned long);
 };
 
 void MatchEngOBV::Communicate(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
 {
+//  printf("* myBooks: trying to communicate\n");
   struct OrderManagementMessage myomm;
   struct timeval tm;
   unsigned long long now = tm.tv_sec * 1000000000 + tm.tv_usec;
   myomm.type = type;
   switch (type) {
     case NEW_ORDER_ACK:
+//      printf("* myBooks: trying to transmit NEW_ORDER_ACK\n");
       struct OrderAck oack;
       oack.timestamp = now;
       nstrcpy(oack.order_id,id,ORDERID_SIZE);
@@ -70,7 +72,10 @@ void MatchEngOBV::Communicate(enum MESSAGE_TYPE type, char* id, char* reason, un
       break;
   };
   struct message_msgbuf mmb = {2,myomm};
+//  printf("* myBooks: about to send message to message queue id: %d\n",msqid);
   msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
+//  printf("* myBooks: sent message\n");
+  return;
 };
 
 
