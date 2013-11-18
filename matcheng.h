@@ -14,10 +14,14 @@ struct message_msgbuf {
 class MatchEngOBV : public OrderBookView
 {
 public:
-  void Communicate(enum MESSAGE_TYPE, char*, char*, unsigned long);
+  void CommunicateTrade(struct TradeMessage);
+  void CommunicateAck(enum MESSAGE_TYPE, char*, char*, unsigned long);
 };
 
-void MatchEngOBV::Communicate(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
+void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
+};
+
+void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
 {
 //  printf("* myBooks: trying to communicate\n");
   struct OrderManagementMessage myomm;

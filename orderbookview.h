@@ -63,7 +63,7 @@ int OrderList::AddOrder(Order myorder)
   };
   unsigned long long ts = myorder.timestamp;
   list<Order>::iterator it = orders.begin();
-  while( it != orders.end() && it->timestamp >= ts){
+  while( it != orders.end() && it->timestamp <= ts){
     it++;
   };
   orders.insert(it, myorder);
@@ -115,10 +115,11 @@ public:
   list<OrderList> sellbook; // book of sell orders
   list<OrderList> buybook; // book of buy orders
 public:
-  OrderBook(){};
+  OrderBook(){}; // used for STL MAP functionality
   OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);};
   int AddOrder(Order); // returns 0 for failure, 1 for success
   int RemoveOrder(Order); // return 0 for failure, 1 for success
+  struct TradeMessage  Match();
   void Print(); // prints the sellbook and buybook
 };
 
@@ -247,8 +248,46 @@ void OrderBook::Print()
 //  printf("finished buy and sell side\n");
 };
 
-
-
+struct TradeMessage OrderBook::Match()
+{
+  Order orderA;
+  Order orderB;
+  struct TradeMessage tr_msg;
+  nstrcpy(tr_msg.symbol,instr,SYMBOL_SIZE);
+  tr_msg.quantity()
+  if (sellbook.empty()){
+    if (buybook.front().type == MARKET_ORDER){
+      buybook.pop_front();
+    };
+    return tr_msg;
+  };
+  if (buybook.empty()){
+    if (sellbook.front().type == MARKET_ORDER){
+      sellbook.pop_front();
+    };
+    return tr_msg;
+  };
+  orderA = sellbook.front().orders.front();
+  orderB = buybook.front().orders.front();
+  tr_msg.quantity = min(orderA.quantity,orderB.quantity);
+  if(sellbook.front().type == MARKET_ORDER){
+    nstrcpy(tr_msg.price,orderB.price,PRICE_SIZE);
+    //update book
+    
+  }else if(buybook.front().type == MARKET_ORDER){
+    nstrcpy(tr_msg.price,orderA.price,PRICE_SIZE);
+    //update book
+    
+  }else if(buybook.front().price > sellbook.front().price){
+    if(orderA.timestamp < orderB.timestamp){
+      nstrcpy(tr_msg.price,orderA.price,PRICE_SIZE);
+    }else{
+      nstrcpy(tr_msg.price,orderB.price,PRICE_SIZE);
+    };
+    //update book
+  };
+  return tr_msg;
+};
 
 
 
@@ -265,7 +304,8 @@ public:
   void Process(Modify); // processes Modify omm
   void Process(Cancel); // processes Cancel omm
   void Print(); // prints all books
-  virtual void Communicate(enum MESSAGE_TYPE,char*,char*,unsigned long){};
+  virtual void CommunicateAck(enum MESSAGE_TYPE,char*,char*,unsigned long){};
+  virtual void CommunicateTrade(struct TradeMessage);
   // communicates acks and naks to message queue
 };
 
@@ -304,14 +344,19 @@ void OrderBookView::Process(Order myorder)
 //    cout << "* myBooks: added order to corresponding book" << endl;
     myorders[orderid] = myorder;
 //    cout << "* myBooks: added order into myorders" << endl;
-    Communicate(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
     // communicating OrderAck
   }else{
 //    cout << "* myBooks: didn't add order\n" << endl;
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
-    Communicate(NEW_ORDER_NAK,myorder.order_id,reason,0);
+    CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
+  };
+  struct TradeMessage tr_msg = mybooks[symbol].Match();
+  while(tr_msg.quantity >0){
+    CommunicateTrade(tr_msg);
+    tr_msg = mybooks[symbol].Match();
   };
 };
 
@@ -322,7 +367,7 @@ void OrderBookView::Process(Modify mymodify)
   {
     char reason[REASON_SIZE];
     nstringcpy(reason, "order id is invalid",REASON_SIZE);
-    Communicate(MODIFY_ACK,mymodify.order_id,reason,0);
+    CommunicateAck(MODIFY_ACK,mymodify.order_id,reason,0);
   }else{
     Order myorder = myorders[orderid];
     string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
@@ -330,7 +375,7 @@ void OrderBookView::Process(Modify mymodify)
     {
       char reason[REASON_SIZE];
       nstringcpy(reason, "order is no longer in book",REASON_SIZE);
-      Communicate(MODIFY_NAK,mymodify.order_id,reason,0);
+      CommunicateAck(MODIFY_NAK,mymodify.order_id,reason,0);
     }else{
       myorders.erase(orderid);
       myorder.quantity = mymodify.quantity;
@@ -339,10 +384,10 @@ void OrderBookView::Process(Modify mymodify)
       {
         char reason[REASON_SIZE];
         nstringcpy(reason, "order cancel, unable to update order",REASON_SIZE);
-        Communicate(MODIFY_NAK,mymodify.order_id,reason,0);
+        CommunicateAck(MODIFY_NAK,mymodify.order_id,reason,0);
       }else{
         myorders[orderid] = myorder;
-        Communicate(MODIFY_ACK,mymodify.order_id,NULL,mymodify.quantity);
+        CommunicateAck(MODIFY_ACK,mymodify.order_id,NULL,mymodify.quantity);
       };
     };
   };
@@ -356,7 +401,7 @@ void OrderBookView::Process(Cancel mycancel)
   {
     char reason[REASON_SIZE];
     nstringcpy(reason, "order id is invalid",REASON_SIZE);
-    Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
+    CommunicateAck(CANCEL_NAK,mycancel.order_id,reason,0);
   }else{
     Order myorder = myorders[orderid];
     string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
@@ -364,11 +409,11 @@ void OrderBookView::Process(Cancel mycancel)
     {
       char reason[REASON_SIZE];
       nstringcpy(reason, "order is no longer in book",REASON_SIZE);
-      Communicate(CANCEL_NAK,mycancel.order_id,reason,0);
+      CommunicateAck(CANCEL_NAK,mycancel.order_id,reason,0);
     }else{
       unsigned long quantity = myorders[orderid].quantity;
       myorders.erase(orderid);
-      Communicate(CANCEL_ACK,mycancel.order_id,NULL,quantity);
+      CommunicateAck(CANCEL_ACK,mycancel.order_id,NULL,quantity);
     };
   };
 };
