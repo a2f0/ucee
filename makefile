@@ -1,4 +1,4 @@
-all: connmgr matcheng bookpub db loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
+all: connmgr matcheng bookpub tradepub db loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
 
 CC=gcc
 CXX=g++
@@ -30,6 +30,9 @@ db: db.o sqlite3.o
 bookpub: bookpub.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
+tradepub: tradepub.o
+	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+
 tradeBot/tradeBot: tradeBot/tradeBot.o
 	$(CC) -o $@ $^ -lrt $(CFLAGS)
 
@@ -51,10 +54,11 @@ matcheng.o: matcheng.cpp messages.h matcheng.h orderbookview.h
 sqlite3.o: sqlite3.c
 db.o: sqlite3.o db.cpp messages.h
 bookpub.o: bookpub.cpp messages.h
+tradepub.o: tradepub.cpp messages.h
 tradeBot/tradeBot.o: tradeBot/tradeBot.c
 tradeBot/md_receiver.o: tradeBot/md_receiver.c
 #shm_cl.o: shm_cl.cpp messages.h
 #shm_sv.o: shm_sv.cpp messages.h
 
 clean:
-	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db
+	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o db tradepub
