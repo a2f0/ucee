@@ -8,6 +8,29 @@ using namespace std;
 */
 #include <algorithm>
 #include "db.h"
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <cstring>
+#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include "messages.h"
+#include <cstdlib>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+int mysocket;
+
+
 
 sqlite3* create_db(){
 sqlite3 *db = (sqlite3*) malloc (1024*1000*10*sizeof(char));
@@ -202,10 +225,12 @@ if ((tm = (struct TradeMessage*) shmat(shmid, NULL, 0)) == (struct TradeMessage*
 
 //process(tm);
 
-add_row(tm);
+add_row(*tm);
 
 }
 
+TradeMessage mytm = {"GOOG","322.1",750};
+add_row(mytm);
 
 return 0;
 }
