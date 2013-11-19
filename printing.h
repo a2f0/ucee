@@ -7,6 +7,8 @@
 #include <cstring>
 #include <time.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/shm.h>
 using namespace std;
 
 // functionality to deal with strings without null termination
@@ -286,5 +288,17 @@ void printOrderManagementMessage(const struct OrderManagementMessage *omm)
       fprintf(stderr, "Unknown message type\n");
   }
 }
+
+void printTradeMsg(const struct TradeMessage *tr_msg)
+{
+  printCurrentTime();
+  printf(" TradeMessage:");
+  printf("\n  Symbol: ");
+  printFixedLengthString(tr_msg->symbol, SYMBOL_SIZE);
+  printf("\n  Price: ");
+  printFixedLengthString(tr_msg->price,PRICE_SIZE);
+  printf("\n  Quantity: %lu", tr_msg->quantity);
+  printf("\n");
+};
 
 #endif

@@ -19,14 +19,20 @@ public:
 };
 
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
+  struct TradeMessage* ptr = (struct TradeMessage*) shmat(shmid,NULL,0);
+  nstrcpy(ptr->symbol,tr_msg.symbol,SYMBOL_SIZE);
+  nstrcpy(ptr->price, tr_msg.price, PRICE_SIZE);
+  ptr->quantity = tr_msg.quantity;
+  printTradeMsg(ptr);
 };
 
 void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
 {
 //  printf("* myBooks: trying to communicate\n");
   struct OrderManagementMessage myomm;
-  struct timeval tm;
-  unsigned long long now = tm.tv_sec * 1000000000 + tm.tv_usec;
+  struct timeval tmv;
+  gettimeofday(&tmv,NULL);
+  unsigned long long now = tmv.tv_sec * 1000000000 + tmv.tv_usec;
   myomm.type = type;
   switch (type) {
     case NEW_ORDER_ACK:

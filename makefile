@@ -47,7 +47,7 @@ tradeBot/md_receiver: tradeBot/md_receiver.o
 
 connmgr.o: connmgr.cpp messages.h
 loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
-matcheng.o: matcheng.cpp messages.h
+matcheng.o: matcheng.cpp messages.h matcheng.h orderbookview.h
 sqlite3.o: sqlite3.c
 db.o: sqlite3.o db.cpp messages.h
 bookpub.o: bookpub.cpp messages.h

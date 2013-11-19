@@ -216,15 +216,26 @@ int OrderBook::RemoveOrder(Order myorder)
   list<OrderList>::iterator it;
   if(adj==1){
     it = buybook.begin();
+    while (it != buybook.end()){
+      if(it->RemoveOrder(myorder)==1){
+        if(it->orders.size()==0){
+          buybook.erase(it);
+        };
+        return 1;
+      };
+      it++;
+    };
   }else{
     it = sellbook.begin();
-  };
-  while (it != buybook.end() && it!= sellbook.end())
-  {
-    if(it->RemoveOrder(myorder)){
-      return 1;
+    while (it != sellbook.end()){
+      if(it->RemoveOrder(myorder)==1){
+        if(it->orders.size()==0){
+          buybook.erase(it);
+        };
+        return 1;
+      };
+      it++;
     };
-    it++;
   };
   return 0;
 };
@@ -254,7 +265,7 @@ struct TradeMessage OrderBook::Match()
   Order orderB;
   struct TradeMessage tr_msg;
   nstrcpy(tr_msg.symbol,instr,SYMBOL_SIZE);
-  tr_msg.quantity()
+  tr_msg.quantity = 0;
   if (sellbook.empty()){
     if (buybook.front().type == MARKET_ORDER){
       buybook.pop_front();
@@ -269,23 +280,31 @@ struct TradeMessage OrderBook::Match()
   };
   orderA = sellbook.front().orders.front();
   orderB = buybook.front().orders.front();
+  if(sellbook.front().type==LIMIT_ORDER && buybook.front().type==LIMIT_ORDER
+     && buybook.front().price < sellbook.front().price)
+    return tr_msg;
+  // in other cases, we must have a match:
   tr_msg.quantity = min(orderA.quantity,orderB.quantity);
   if(sellbook.front().type == MARKET_ORDER){
     nstrcpy(tr_msg.price,orderB.price,PRICE_SIZE);
-    //update book
-    
   }else if(buybook.front().type == MARKET_ORDER){
     nstrcpy(tr_msg.price,orderA.price,PRICE_SIZE);
-    //update book
-    
-  }else if(buybook.front().price > sellbook.front().price){
+  }else if(buybook.front().price >= sellbook.front().price){
     if(orderA.timestamp < orderB.timestamp){
       nstrcpy(tr_msg.price,orderA.price,PRICE_SIZE);
     }else{
       nstrcpy(tr_msg.price,orderB.price,PRICE_SIZE);
     };
-    //update book
   };
+  //update book
+  RemoveOrder(orderA);
+  RemoveOrder(orderB);
+  orderA.quantity = orderA.quantity - tr_msg.quantity;
+  orderB.quantity = orderB.quantity - tr_msg.quantity;
+  if(orderA.quantity > 0)
+    AddOrder(orderA);
+  if(orderB.quantity > 0)
+    AddOrder(orderB);
   return tr_msg;
 };
 
@@ -295,18 +314,21 @@ struct TradeMessage OrderBook::Match()
 class OrderBookView
 {
 public:
-  int msqid; // message queue to write ack/nacks
+  int msqid; // message queue to write acks/nacks
+  int shmid; // shared memory to write trade messages
   map<string,OrderBook> mybooks; // books by instrument
   map<string,Order> myorders; // orders by orderid
 public:
+  
   void Process(OrderManagementMessage); // calls other Process
   void Process(Order); // processes Order omm
   void Process(Modify); // processes Modify omm
   void Process(Cancel); // processes Cancel omm
   void Print(); // prints all books
   virtual void CommunicateAck(enum MESSAGE_TYPE,char*,char*,unsigned long){};
-  virtual void CommunicateTrade(struct TradeMessage);
   // communicates acks and naks to message queue
+  virtual void CommunicateTrade(struct TradeMessage){};
+  // communicates trades to shared memory
 };
 
 void OrderBookView::Process(OrderManagementMessage omm)
@@ -389,6 +411,11 @@ void OrderBookView::Process(Modify mymodify)
         myorders[orderid] = myorder;
         CommunicateAck(MODIFY_ACK,mymodify.order_id,NULL,mymodify.quantity);
       };
+    };
+    struct TradeMessage tr_msg = mybooks[symbol].Match();
+    while(tr_msg.quantity >0){
+      CommunicateTrade(tr_msg);
+      tr_msg = mybooks[symbol].Match();
     };
   };
 };

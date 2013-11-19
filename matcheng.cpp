@@ -15,8 +15,8 @@
 #include "keys.h"
 using namespace std;
 
-key_t key1,key2;
-int msqid1,msqid2;
+key_t key1,key2,key3;
+int msqid1,msqid2,shmid3;
 struct message_msgbuf mmb;
 
 MatchEngOBV myBooks;
@@ -26,6 +26,7 @@ void intHandler(int dummy=0){
   // closing my queue
   myBooks.Print();
   msgctl(msqid2,IPC_RMID,NULL);
+  shmctl(shmid3,IPC_RMID,NULL);
   exit(0);
 };
 
@@ -35,9 +36,12 @@ int main(){
   msqid1 = msgget(key1, 0666 | IPC_CREAT);
   key2 = ftok("/etc/usb_modeswitch.conf", 'b'); // key to conn mgr with acks
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
+  key3 = ftok(METOSHKEY1,'b');
+  shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
 //  printf("msg queue id to write to: %d", msqid2);
   cout << "Initialised OBV successfully" << endl;
   myBooks.msqid = msqid2;
+  myBooks.shmid = shmid3;
   cout << "Set key successfully" << endl;
   // load database
   
@@ -47,7 +51,7 @@ int main(){
   signal(SIGINT,intHandler);
   for(;;) {
 //    cout << "* Matching Engine: receiving order" << endl;
-    msgrcv(msqid1, &mmb, sizeof(struct message_msgbuf), 2, 0);
+    msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0);
 //    cout << "* Matching Engine: received order:" << endl;
     struct OrderManagementMessage omm = mmb.omm;
     printOrderManagementMessage(&omm);
