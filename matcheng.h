@@ -21,7 +21,7 @@ public:
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   struct sembuf sops;
   sops.sem_num = 0;
-  sops.sem_op = -1;
+  sops.sem_op = 0;
   sops.sem_flg = 0;
   semop(semid,&sops,1);
   struct TradeMessage* ptr = (struct TradeMessage*) shmat(shmid,NULL,0);
