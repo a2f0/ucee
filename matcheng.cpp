@@ -53,7 +53,10 @@ int main(){
   myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
   // load database
-  
+  //while(there is sth in the database){
+    // get order from database
+    // call myBook.Process(omm);
+  //};
   // setting up
   printf("Ready to receive messages\n");
   // reading from message queue

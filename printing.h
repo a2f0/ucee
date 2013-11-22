@@ -57,6 +57,19 @@ string nstring(char *s, unsigned int size)
   return result;
 }
 
+/* makes a char array into a string, NOT leaving out blanks/etc*/
+string nnstring(char *s, unsigned int size)
+{
+  char* buffer = (char*)malloc(size +1);
+  memset(buffer, '\0',size+1);
+  for (unsigned int i = 0; i < size; i++)
+    buffer[i]=s[i];
+  string result(buffer);
+  free(buffer);
+  return result;
+};
+
+
 /* make a char array into a double*/
 double natof(char* s, unsigned int size)
 {
