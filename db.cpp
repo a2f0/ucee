@@ -83,15 +83,19 @@ while ( (c=sqlite3_step(stmt)) == 100 ){
 		ooo.order_type = (ORDER_TYPE)/*(const char*)*/sqlite3_column_int(stmt,3);		
 		//sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
 		nstrcpy(ooo.account,(char*)sqlite3_column_text(stmt,1),ACCOUNT_SIZE);
-//sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
-		sprintf(ooo.user,"%s",sqlite3_column_text(stmt,2));
-		sprintf(ooo.order_id,"%s",sqlite3_column_text(stmt,0));
+		//sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
+		nstrcpy(ooo.user,(char*)sqlite3_column_text(stmt,2),USER_SIZE);
+		//sprintf(ooo.user,"%s",sqlite3_column_text(stmt,2));
+		nstrcpy(ooo.order_id,(char*)sqlite3_column_text(stmt,0),ORDERID_SIZE);
+		//sprintf(ooo.order_id,"%s",sqlite3_column_text(stmt,0));
 //		ooo.timestamp=sqlite3_column_int(stmt,4);
 		ooo.timestamp=strtoull((const char*)sqlite3_column_text(stmt,4),NULL,0);
 		ooo.buysell=(SIDE) sqlite3_column_int(stmt,5);
 		//ooo.buysell=(SIDE) atoi((const char*)sqlite3_column_text(stmt,5));
-		sprintf(ooo.symbol,"%s",sqlite3_column_text(stmt,6));
-		sprintf(ooo.price,"%s",sqlite3_column_text(stmt,7));
+		nstrcpy(ooo.symbol,(char*)sqlite3_column_text(stmt,6),SYMBOL_SIZE);
+		//sprintf(ooo.symbol,"%s",sqlite3_column_text(stmt,6));
+		nstrcpy(ooo.price,(char*)sqlite3_column_text(stmt,7),PRICE_SIZE);
+		//sprintf(ooo.price,"%s",sqlite3_column_text(stmt,7));
 		//ooo.quantity=sqlite3_column_int(stmt,8);
 		ooo.quantity=strtoul((const char*)sqlite3_column_text(stmt,8),NULL,0);
 		printOrder(&ooo);
@@ -128,7 +132,9 @@ return 0;
 int delete_row(char* order_id){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-sprintf(order_to_sql,"DELETE FROM t1 WHERE t1key='%s';",order_id);
+sprintf(order_to_sql,"DELETE FROM t1 WHERE t1key='%s';",nnstring(order_id, ORDERID_SIZE).c_str());
+//sprintf(order_to_sql,"DELETE FROM t1 WHERE t1key='%s';",order_id);
+//nnstring(order_id, ORDERID_SIZE).c_str()
 
 sqlite3_stmt *stmt2;
 sqlite3* mydb = create_db();
