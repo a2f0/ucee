@@ -187,7 +187,7 @@ return 0;
 int main(){
 
 int shmid/*,shmid2*/;
-key_t mykey=/*5678, mykey2=5679*/;
+key_t mykey/*5678, mykey2=5679*/;
 mykey = ftok("/etc/sensors3.conf",'b');
 //"/etc/sensors3.conf"
 //size_t mysize = 27;

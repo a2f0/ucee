@@ -11,8 +11,11 @@
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+using namespace std;
 //#include <boost/lexical_cast.hpp>
 
 int main(int argc, char* argv[]){
@@ -34,9 +37,24 @@ while ( (c = getopt(argc, argv, "a:p:")) != -1 ){
 	}
 }
 
+
+int shmid/*,shmid2*/;
+key_t mykey/*5678, mykey2=5679*/;
+mykey = ftok("/etc/sensors3.conf",'b');
+
+//size_t mysize = 27;
+size_t mysize = sizeof(struct OrderManagementMessage);
+//char *shm, *s;
+struct OrderManagementMessage* myomm = (struct OrderManagementMessage*) malloc (sizeof(OrderManagementMessage));
+
+
+
+
 //creating a dummy book message
 //
+//struct BookMessage *msg = (struct BookMessage*) malloc (sizeof(struct BookMessage));
 struct BookMessage *msg = (struct BookMessage*) malloc (sizeof(struct BookMessage));
+
 //the following line sets price char array to be the float 100.01
 snprintf(msg->bid[0].price,10,"%f",99.01);
 msg->bid[0].quantity=atoi("100");
@@ -53,7 +71,31 @@ int mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
 
+
+//SHMGET
+if( (shmid = shmget(mykey, mysize, 0666)) < 0)
+        cout << "Error: shmget" << endl;
+//
+
+
 for(;;){
+
+//SHM Part:
+
+if ((myomm = (struct OrderManagementMessage*) shmat(shmid, NULL, 0)) == (struct OrderManagementMessage*) -1) {
+        cout << "Error: shmat" << endl;
+}
+//tm = shm;
+/*
+printf("%s",(char*)tm->symbol);
+printf("%s",(char*)tm->price);
+printf("%s",(char*)tm->quantity);
+*/
+//process(myomm);
+
+
+
+//
 
 //group structure, setting of address and port based on command line arguments taken from getopt
 struct sockaddr_in grp;

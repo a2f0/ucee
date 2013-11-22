@@ -57,8 +57,11 @@ int main(){
 //for(;;){
 //char c;
 int shmid/*,shmid2*/;
-key_t mykey=5678/*, mykey2=5679*/;
-size_t mysize = 27;
+key_t mykey/*5678, mykey2=5679*/;
+mykey = ftok("/etc/sensors3.conf",'i');
+
+//size_t mysize = 27;
+size_t mysize = sizeof(struct TradeMessage);
 //char *shm, *s;
 struct TradeMessage* tm = (struct TradeMessage*) malloc (sizeof(TradeMessage));
 
