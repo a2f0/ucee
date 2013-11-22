@@ -1,3 +1,6 @@
+#include <map>
+#include "printing.h"
+#include "matcheng.h"
 #include "messages.h"
 #include <errno.h>
 #include <signal.h>
@@ -17,6 +20,7 @@
 #include <arpa/inet.h>
 using namespace std;
 //#include <boost/lexical_cast.hpp>
+MatchEngOBV mybooks;
 
 int main(int argc, char* argv[]){
 
@@ -106,7 +110,7 @@ grp.sin_port = htons(atoi(argp));
 
 //3. SENDTO
 //
-ssize_t f = sendto(mysocket, msg, 32, 0, (struct sockaddr*) &grp, sizeof(grp));
+ssize_t f = sendto(mysocket, myomm, 32, 0, (struct sockaddr*) &grp, sizeof(grp));
 //main error reporting:
 if(f<0){
 	fprintf(stderr,"Message Not Sent.\nUsage: ./sn -a 239.192.07.07 -p 1234\n");
