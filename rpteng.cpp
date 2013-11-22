@@ -85,11 +85,11 @@ return 0;
 int add_row(TradeMessage mytm){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-sprintf(order_to_sql,"INSERT INTO t2 VALUES ('%s',%f,%lu);",mytm.symbol,atof(mytm.price),mytm.quantity);
+sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s',%f,%lu);",mytm.symbol,atof(mytm.price),mytm.quantity);
 
 sqlite3_stmt *stmt2;
 sqlite3* mydb = create_db();
-sqlite3_open("OrderBook.db",&mydb);
+sqlite3_open("Reporting.db",&mydb);
 
 
 if ( (rc = sqlite3_prepare_v2(mydb, order_to_sql,-1, &stmt2, NULL )) != SQLITE_OK)
@@ -187,8 +187,11 @@ return 0;
 int main(){
 
 int shmid/*,shmid2*/;
-key_t mykey=5678/*, mykey2=5679*/;
-size_t mysize = 27;
+key_t mykey=/*5678, mykey2=5679*/;
+mykey = ftok("/etc/sensors3.conf",'b');
+//"/etc/sensors3.conf"
+//size_t mysize = 27;
+size_t mysize = sizeof(struct TradeMessage);
 //char *shm, *s;
 struct TradeMessage* tm = (struct TradeMessage*) malloc (sizeof(TradeMessage));
 
