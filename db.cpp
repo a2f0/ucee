@@ -8,6 +8,9 @@ using namespace std;
 */
 #include <algorithm>
 #include "db.h"
+#include "printing.h"
+
+using namespace std;
 
 sqlite3* create_db(){
 sqlite3 *db = (sqlite3*) malloc (1024*1000*10*sizeof(char));
@@ -41,7 +44,8 @@ return 0;
 int add_row(Order myorder){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%f,%lu);",myorder.order_id,myorder.account,myorder.user,(int)myorder.order_type,myorder.timestamp,myorder.buysell,myorder.symbol,atof(myorder.price),myorder.quantity);
+sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%s,%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),nnstring(myorder.account, ACCOUNT_SIZE).c_str(),nnstring(myorder.user,USER_SIZE).c_str(),(int)myorder.order_type,myorder.timestamp,myorder.buysell,nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
+//sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%f,%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),myorder.account,myorder.user,(int)myorder.order_type,myorder.timestamp,myorder.buysell,myorder.symbol,atof(myorder.price),myorder.quantity);
 
 sqlite3_stmt *stmt2;
 sqlite3* mydb = create_db();
@@ -72,19 +76,25 @@ if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt, NULL )) != SQLITE_OK)
 //	throw string(sqlite3_errmsg(mydb));
 	cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt)) == 100 ){
-	for(int j=0; j<8; j++) //there are 9 columns in the database as defined in database.sh
+//	for(int j=0; j<8; j++) //there are 9 columns in the database as defined in database.sh
 
 
-		ooo.order_type = (ORDER_TYPE) atoi((const char*)sqlite3_column_text(stmt,3));		
-		sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
+		//ooo.order_type = (ORDER_TYPE) atoi((const char*)sqlite3_column_text(stmt,3));		
+		ooo.order_type = (ORDER_TYPE)/*(const char*)*/sqlite3_column_int(stmt,3);		
+		//sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
+		nstrcpy(ooo.account,(char*)sqlite3_column_text(stmt,1),ACCOUNT_SIZE);
+//sprintf(ooo.account,"%s",sqlite3_column_text(stmt,1));		
 		sprintf(ooo.user,"%s",sqlite3_column_text(stmt,2));
 		sprintf(ooo.order_id,"%s",sqlite3_column_text(stmt,0));
+//		ooo.timestamp=sqlite3_column_int(stmt,4);
 		ooo.timestamp=strtoull((const char*)sqlite3_column_text(stmt,4),NULL,0);
-		ooo.buysell=(SIDE) atoi((const char*)sqlite3_column_text(stmt,5));
+		ooo.buysell=(SIDE) sqlite3_column_int(stmt,5);
+		//ooo.buysell=(SIDE) atoi((const char*)sqlite3_column_text(stmt,5));
 		sprintf(ooo.symbol,"%s",sqlite3_column_text(stmt,6));
 		sprintf(ooo.price,"%s",sqlite3_column_text(stmt,7));
+		//ooo.quantity=sqlite3_column_int(stmt,8);
 		ooo.quantity=strtoul((const char*)sqlite3_column_text(stmt,8),NULL,0);
-
+		printOrder(&ooo);
 		mylist.push_back(ooo);
 }
 
@@ -135,17 +145,19 @@ sqlite3_close(mydb);
 return 0;
 }
 
-int main(){
-
-Order orderA = {LIMIT_ORDER,"5647","Sarah","4X11",21345,BUY,"GOOG","322.1",750};
+int main2(){
+//2147483647
+Order orderA = {LIMIT_ORDER,"5647","Sarah","4X11xxxyxxx",21345,BUY,"GOOG","322.1",2147483649};
 add_row(orderA);
+Order orderAA = {LIMIT_ORDER,"5647","Sarah","4X11xyxxxx",21345,BUY,"GOOG","322.1",2147483645};
+add_row(orderAA);
 Order orderB = {LIMIT_ORDER,"5648","Jack","4X22",21345,BUY,"RAX","88.70",250};
 add_row(orderB);
 printf("\n\n\n");
 printf("\n%s\n","1. Initial State of Table t1");
 print_table();
 printf("\n%s\n","2. Insert Row");
-Order orderC = {LIMIT_ORDER,"5647","Charlie","4X99",21345,BUY,"MSFT","11.3",1000};
+Order orderC = {LIMIT_ORDER,"5647       ","Charlie","4X99",21345,BUY,"MSFT","11.3",1000};
 add_row(orderC);
 print_table();
 printf("\n%s\n","3. Modify Row From Step 2");
