@@ -13,6 +13,8 @@
 #include <sys/types.h>
 #include "printing.h"
 #include "keys.h"
+#include "db.cpp"
+
 using namespace std;
 
 key_t key1,key2,key3,key4;
@@ -52,6 +54,10 @@ int main(){
   myBooks.shmid = shmid3;
   myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
+  list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
+  for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it)
+	myBooks.Process(*it);        
+
   // load database
   //while(there is sth in the database){
     // get order from database
