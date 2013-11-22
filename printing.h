@@ -9,6 +9,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/shm.h>
+#include <sys/sem.h>
 using namespace std;
 
 // functionality to deal with strings without null termination

@@ -15,8 +15,8 @@
 #include "keys.h"
 using namespace std;
 
-key_t key1,key2,key3;
-int msqid1,msqid2,shmid3;
+key_t key1,key2,key3,key4;
+int msqid1,msqid2,shmid3,semid4;
 struct message_msgbuf mmb;
 
 MatchEngOBV myBooks;
@@ -27,6 +27,7 @@ void intHandler(int dummy=0){
   myBooks.Print();
   msgctl(msqid2,IPC_RMID,NULL);
   shmctl(shmid3,IPC_RMID,NULL);
+  semctl(semid4,0,IPC_RMID);
   exit(0);
 };
 
@@ -38,10 +39,18 @@ int main(){
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
   key3 = ftok(METOSHKEY1,'b');
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
+  key4 = ftok(SEMKEY1,'b');
+  semid4 = semget(key4,2,0666| IPC_CREAT);
+  struct sembuf sops;
+  sops.sem_num =0;
+  sops.sem_op = 1;
+  sops.sem_flg = 0;
+  semop(semid4,&sops,1);
 //  printf("msg queue id to write to: %d", msqid2);
   cout << "Initialised OBV successfully" << endl;
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
+  myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
   // load database
   
