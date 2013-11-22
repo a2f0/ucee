@@ -40,7 +40,7 @@ while ( (c = getopt(argc, argv, "a:p:")) != -1 ){
 
 int shmid/*,shmid2*/;
 key_t mykey/*5678, mykey2=5679*/;
-mykey = ftok("/etc/sensors3.conf",'b');
+mykey = ftok("/etc/smartd.conf",'b');
 
 //size_t mysize = 27;
 size_t mysize = sizeof(struct OrderManagementMessage);
