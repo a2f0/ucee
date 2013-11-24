@@ -59,7 +59,7 @@ int OrderList::AddOrder(Order myorder)
   if (orders.empty())
   {
     orders.push_front(myorder);
-    add_row(myorder);
+//    add_row(myorder);
     return 1;
   };
   unsigned long long ts = myorder.timestamp;
@@ -331,7 +331,7 @@ public:
   // communicates acks and naks to message queue
   virtual void CommunicateTrade(struct TradeMessage){};
   // communicates trades to shared memory
-  virtual void Broadcast(struct BookMessage){};
+  virtual void CommunicateBookMsg(struct BookMessage){};
   // broadcasts bookmessage via multicast
 };
 
@@ -386,7 +386,7 @@ void OrderBookView::Process(Order myorder)
   };
   struct BookMessage mybookmsg;
   // generate bookmessage
-  Broadcast(mybookmsg);
+  CommunicateBookMsg(mybookmsg);
 };
 
 void OrderBookView::Process(Modify mymodify)
