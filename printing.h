@@ -10,7 +10,6 @@
 #include <sys/types.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
-using namespace std;
 
 // functionality to deal with strings without null termination
 
@@ -31,7 +30,7 @@ int nstrcmp(char *s1, const char *s2, unsigned int size)
 };
 
 /* copies a string into char array, placing ' ' if extra space*/
-void nstringcpy(char* dest, string s, unsigned int size)
+void nstringcpy(char* dest, std::string s, unsigned int size)
 {
   const char* cstr = s.c_str();
   memset(dest,' ',size);
@@ -46,25 +45,25 @@ void nstrcpy(char *dest, char*src,unsigned int size)
 };
 
 /* makes a char array into a string, leaving out blanks/etc*/
-string nstring(char *s, unsigned int size)
+std::string nstring(char *s, unsigned int size)
 {
   char* buffer = (char*)malloc(size +1);
   memset(buffer, '\0',size+1);
   for (unsigned int i = 0; !iscntrl(s[i])&&!isblank(s[i])&&i < size; i++)
     buffer[i]=s[i];
-  string result(buffer);
+  std::string result(buffer);
   free(buffer);
   return result;
 }
 
 /* makes a char array into a string, NOT leaving out blanks/etc*/
-string nnstring(char *s, unsigned int size)
+std::string nnstring(char *s, unsigned int size)
 {
   char* buffer = (char*)malloc(size +1);
   memset(buffer, '\0',size+1);
   for (unsigned int i = 0; i < size; i++)
     buffer[i]=s[i];
-  string result(buffer);
+  std::string result(buffer);
   free(buffer);
   return result;
 };
