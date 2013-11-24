@@ -21,7 +21,7 @@ public:
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   struct sembuf sops;
   sops.sem_num = 0;
-  sops.sem_op = 0;
+  sops.sem_op = 0; // set to -1 later
   sops.sem_flg = 0;
   semop(semid,&sops,1);
   struct TradeMessage* ptr = (struct TradeMessage*) shmat(shmid,NULL,0);
@@ -29,7 +29,7 @@ void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   nstrcpy(ptr->price, tr_msg.price, PRICE_SIZE);
   ptr->quantity = tr_msg.quantity;
   sops.sem_num =1;
-  sops.sem_op = 1;
+  sops.sem_op =1;
   semop(semid,&sops,1);
   printTradeMsg(ptr);
 };
@@ -47,7 +47,6 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
 //      printf("* myBooks: trying to transmit NEW_ORDER_ACK\n");
       struct OrderAck oack;
       oack.timestamp = now;
-      nstrcpy(oack.order_id,id,ORDERID_SIZE);
       myomm.payload.orderAck = oack;
       break;
     case NEW_ORDER_NAK:
