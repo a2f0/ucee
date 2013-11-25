@@ -90,7 +90,7 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
   };
   struct message_msgbuf mmb = {2,myomm};
 //  printf("* myBooks: about to send message to message queue id: %d\n",msqid);
-  msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
+//  msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
 //  printf("* myBooks: sent message\n");
   return;
 };
