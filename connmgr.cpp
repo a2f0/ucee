@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <sys/socket.h>
-//#include <stdlib.h>
 #include <netdb.h>
 #include "messages.h"
 #include <iostream>
@@ -14,138 +13,215 @@
 #include <thread>
 #include <time.h>
 #include <sys/time.h>
+#include <signal.h>
+#include "printing.h"
+#include <errno.h>
+#include "keys.h"
+//#include <sys/sem.h>
 
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
-
-#define PORT             1337
+#define PORT             1338
 #define SOCKET_ERROR     -1
 #define QUEUE_SIZE       5
 #define TRUE             1
 #define FALSE            0
 
-//using namespace std;
+#define SEMKEYPATH "/home"       /* Path used on ftok for semget key  */
+#define SEMKEYID 1              /* Id used on ftok for semget key    */
+#define NUMSEMS 2
+
+//A decent amount of this code was stolen from here:
+//http://pic.dhe.ibm.com/infocenter/iseries/v6r1m0/index.jsp?topic=/rzab6/poll.htm
+//http://www.yolinux.com/TUTORIALS/CppStlMultiMap.html
+//http://beej.us/guide/bgipc/output/html/multipage/mq.html
+//http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Fapis%2Fapiexusmem.htm
 
 std::map<std::string, int> connectionmapper;
 
-//THis is used to send the message through a System V message queue
+int found = 0;
+int notfound = 0;
+int receivedfromtradebots = 0;
+int copiedthroughsharedmemory = 0;
+
+//This is used to send the message through a System V message queue
 struct message_msgbuf {
     long mtype;  /* must be positive */
     struct OrderManagementMessage omm;
 };
 
+int semid;
+void* shm;
+int shmid;
+struct shmid_ds shmid_struct;
+
+void my_handler(int s){
+    printf("Cleaning up...\n");
+    int rc;
+    rc = semctl( semid, 1, IPC_RMID );
+    if (rc==-1)
+    {
+        printf("main: semctl() remove id failed\n");
+    }
+    rc = shmdt(shm);
+    if (rc==-1)
+    {
+        printf("main: shmdt() failed\n");
+    }
+    rc = shmctl(shmid, IPC_RMID, &shmid_struct);
+    if (rc==-1)
+    {
+        printf("main: shmctl() failed\n");
+    }
+
+    printf("Connection manager operational summary:");
+    printf("Caught signal %d\n",s);
+    printf("Found (and acknowledged) for reverse routing (to tradebot): %d\n", found);
+    printf("Not found for reverse routing (to tradebot): %d\n",notfound);
+    printf("Total messages received from trade bots: %d\n",receivedfromtradebots);
+    exit(1); 
+}
+
 //This should be called from a separate thread.
 void readfrommatchingengine() {
-    printf("Thread spawned.\n");
-    /*
+
+    printf("Thread to read from Matching Engine System V message queue spawned.\n");
     key_t key2;
     int msqid2;
     key2 = ftok("/etc/usb_modeswitch.conf", 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
-    */
+    printf("Getting ready to read order acknowledgement messages from message queue...\n");
+    //char *order_id;
+
+    for(;;) {
+        char order_id[33];
+        struct message_msgbuf mmb;
+        /*
+        printf("Matcheng listening on msqi2d: %d\n", msqid2);
+        */
+        int rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
+        /*
+        strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
+        order_id[32] = '\0';
+        printf("======message received from matching enginee======\n"); 
+        printf("Received: %d bytes from matching engine\n", rcv_bytes);
+        printf("receiver mmb type: %lu\n", mmb.mtype);
+        printf("receiver omm type: %d\n", mmb.omm.type);
+        printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
+        printf("receiver omm order_id: %s.\n", order_id); 
+        std::string ordr(order_id);
+        auto it = connectionmapper.find(order_id);
+        if (it != connectionmapper.end()) {
+            printf("descriptor: %d\n", it->second);
+            send(it->second, &mmb.omm, sizeof(mmb.omm), 0);
+            found++;
+        } else {
+            notfound++;
+        }
+        printf("as str: %s.\n",ordr.c_str());
+        printf("======message received from matching engine======\n"); 
+        //printOrderManagementMessage(&mmb.omm);
+        */
+        std::this_thread::yield();
+    }
 }
-//
+
 std::string isommvalid(struct OrderManagementMessage omm) {
-    printf("validating message of type: %d\n", omm.type);
+    printf("Validating message of type: %d\n", omm.type);
     if (omm.type == 0 || omm.type == 3) { //If this is a new order or a modify order verify the quantity is non-negative.
-        if (omm.payload.order.quantity > 0 ) {
-            char order_id[32];
-            strncpy(order_id, omm.payload.order.order_id, 32);
+        if (omm.payload.order.quantity < 0 ) {
+            char order_id[33];
+            strncpy(order_id, omm.payload.order.order_id, 33);
+            order_id[32]='\0';
             std::string ordr(order_id);
-            printf("negative quantity detected for order %s\n", order_id);
+            printf("Error!! Negative quantity detected for order: %s\n", order_id);
             std::string error ("Negative quantity");
-            printf("returning error\n");
             return error;
         } else {
-
+            //Then there was no error
         }
     } 
-    printf("Quantity: %lu\n",  omm.payload.order.quantity );
-    //the default error message
+    //printf("Quantity: %lu\n",  omm.payload.order.quantity );
     return std::string();
 }
 
-void printCurrentTime(void)
-{
-     struct timeval tv;
-     struct tm time_tm;
-     char buffer[256];
-
-     gettimeofday(&tv, NULL);
-
-     localtime_r(&tv.tv_sec, &time_tm);
-     strftime(buffer, sizeof(buffer), "%Y-%m-%d %T", &time_tm);
-     printf("\n[%s.%06lu000]", buffer, tv.tv_usec);
-}
-
-void printFixedLengthString(const char *s, unsigned int size)
-{
-     char buffer[size+1];
-     //memset(buffer, '\0', size + 1);
-     //memcpy(buffer, s, size);
-     strncpy(buffer, s, size);
-     printf("%s\n", buffer);
-}
-
-void printTimestamp(unsigned long long timestamp)
-{
-     long s = timestamp / 1000000000;
-     unsigned long us = timestamp % 1000000;
-     struct tm time_tm;
-     char buffer[256];
-
-     localtime_r(&s, &time_tm);
-     strftime(buffer, sizeof(buffer), "%Y-%m-%d %T", &time_tm);
-     printf("%s.%06lu000", buffer, us);
-}
-
-
-void printOrderNak(const struct OrderNak *orderNak)
-{
-     printCurrentTime();
-     printf(" OrderNak:");
-     printf("\n  Order Id: ");
-     printFixedLengthString(orderNak->order_id, ORDERID_SIZE);
-     printf("\n  Timestamp: ");
-     printTimestamp(orderNak->timestamp);
-     printf("\n  Failure reason: ");
-     printFixedLengthString(orderNak->reason, REASON_SIZE);
-     printf("\n");
-}
-
-void printOrderManagementMessage(const struct OrderManagementMessage *omm)
-{
-     switch (omm->type) {
-     case NEW_ORDER_NAK:
-      printOrderNak(&omm->payload.orderNak);
-      break;
-     default:
-      fprintf(stderr, "Unknown message type\n");
-     }   
-}
-
 int main(){
+
+    //Trap the signal
+    struct sigaction sigIntHandler;
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+    sigaction(SIGINT, &sigIntHandler, NULL);
+
+    int rc;
+
+    /* semaphore initialization */
+    key_t key_shm;
+    key_shm = 9041;
+    //void* shm;
+    key_t semkey;
+
+    short sarray[NUMSEMS];
+    struct sembuf operations[2];
+    
+    if ((shmid = shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT)) < 0) {
+       perror("shmget");
+    }
+    printf("shmid for shmat: %d\n", shmid);
+    shm = shmat(shmid, NULL, 0);
+
+    semkey = ftok(SEMKEYPATH,SEMKEYID);
+    if ( semkey == (key_t)-1 )
+    {
+    printf("main: ftok() for sem failed\n");
+    return -1;
+    }
+    
+    printf("semid: %d\n", semid); 
+    rc = semctl( semid, 1, IPC_RMID );
+    if (rc==-1)
+    {
+        printf("main: semctl() remove id failed\n");
+    }
+
+    printf("semkey: %d\n", semkey); 
+    semid = semget( semkey, NUMSEMS, 0666 | IPC_CREAT );
+    if ( semid == -1 )
+    {
+        //printf("main: semget() failed\n");
+        printf("Error in semget(): %s\n", strerror(errno));
+        return -1;
+    }
+
+    sarray[0] = 0;
+    sarray[1] = 0;
+    rc = semctl( semid, 1, SETALL, sarray);
+    if(rc == -1)
+    {
+    printf("main: semctl() initialization failed\n");
+    return -1;
+    }
+
     std::thread rfme(readfrommatchingengine);
-    rfme.join();
     key_t key;
-    key = ftok("/etc/updatedb.conf", 'b');
+    key = ftok(CMTOMEKEY1, 'b');
     int msqid;
     msqid = msgget(key, 0666 | IPC_CREAT); 
-    printf("msgqid is equal to:%d\n",msqid); 
+    printf("msgqid for cm to matching engine (msgqid) equal to: %d\n",msqid); 
 
     printf("Starting connection manager\n"); 
     int hServerSocket;
-    hServerSocket=socket(AF_INET,SOCK_STREAM,0);
     struct sockaddr_in Address;
     int nAddressSize=sizeof(struct sockaddr_in);
-    //int hSocket;
-    //http://pic.dhe.ibm.com/infocenter/iseries/v6r1m0/index.jsp?topic=/rzab6/poll.htm
     struct pollfd fds[200];
-    
-    int rc;
 
+    hServerSocket=socket(AF_INET,SOCK_STREAM,0);
     if(hServerSocket == SOCKET_ERROR) {
         printf("\nCould not make a socket\n");
-    return -1;
+        return -1;
     }
     Address.sin_addr.s_addr=INADDR_ANY;
     Address.sin_port=htons(PORT);
@@ -166,11 +242,14 @@ int main(){
         printf("error set socket to be non-blocking\n");
         exit(-1);
     }
-
+    
+    //Bind the socket
     if(bind(hServerSocket,(struct sockaddr*)&Address,sizeof(Address)) == SOCKET_ERROR) {
         printf("\nCould not connect to host\n");
-        return 0;
+        return -1;
     }
+    
+    //Print socket information
     getsockname( hServerSocket, (struct sockaddr *) &Address,(socklen_t *)&nAddressSize);
     printf("opened socket as fd (%d) on port (%d) for stream i/o\n",hServerSocket, ntohs(Address.sin_port) );
     printf("Server\n\
@@ -182,14 +261,7 @@ int main(){
              , ntohs(Address.sin_port)
     );
 
-    /*
-    printf("Making a listen queue of %d elements\n",QUEUE_SIZE);
-    if(listen(hServerSocket,QUEUE_SIZE) == SOCKET_ERROR)
-    {
-        printf("Could not listen\n");
-        return 0;
-    }*/
-
+    //Set the listen backlog
     rc = listen(hServerSocket, 32);
     if (rc < 0)
     {
@@ -197,19 +269,10 @@ int main(){
         exit(-1);
     }
     
+    //Configure the initial listening socket
     fds[0].fd = hServerSocket;
     fds[0].events = POLLIN;
     
-    /*
-    //Here you go.
-    fd_set active_fd_set, read_fd_set; 
-    //Initialize the set of active sockets.
-    FD_ZERO (&active_fd_set);
-    FD_SET (hServerSocket, &active_fd_set);
-    //struct sockaddr_in clientname;
-    //int ordernumber = 0; 
-    */
-
     int nfds=1;
     int timeout;
     timeout = (3 * 60 * 1000);
@@ -217,73 +280,98 @@ int main(){
     int new_sd;
     int end_server = FALSE;
     int i;
+    int close_conn;
+    int compress_array = FALSE;
+    int j;
     do {
+        printf("Waiting on poll\n");
         rc = poll(fds, nfds, timeout); 
 
         if (rc < 0) {
             printf("poll() failed\n");
+            break;
         }
         
+        //Check to see if the 3 minute time out expired
         if (rc == 0) {
             printf("poll() timed out\n");
+            break;
         }
+        
+        //One ore more descriptors are readable, we need to determine which ones they are.
         current_size = nfds;
         for (i = 0; i < current_size; i++) {
+            //Loop through to find the descriptors that returned
+            //POLLIN and determine whether it's the listenin
+            //or the active connection.
+
             if(fds[i].revents == 0)
                 continue;
+            
+            //If revents is not POLLIN, it's an unexpected result
+            //log and end the server.
             if(fds[i].revents != POLLIN) {
                 printf("  Error! revents = %d\n", fds[i].revents);
+                end_server = TRUE;
                 break;
             }
+            
             if (fds[i].fd == hServerSocket) {
                 printf("Listening socket is readable\n");
                 do {
-                    printf("Running do loop.\n");
+                    //Accept all incoming connections that are queued up
+                    //on the listening socket before we loop back and
+                    //poll again
+                    //printf("Running do loop.\n");
                     new_sd = accept(hServerSocket, NULL, NULL);
                     if (new_sd < 0) {
                         if (errno != EWOULDBLOCK) {
-                            printf("this should terminate");
+                            printf("accept () failed.");
+                            end_server = TRUE;
+                        
                         }
-                        printf("calling break\n");
                         break;
                     }
                     printf("new_sd: %d", new_sd);
-                    printf("  New incoming connection - %d\n", new_sd);
+                    printf("new incoming connection - %d\n", new_sd);
                     fds[nfds].fd = new_sd;
                     fds[nfds].events = POLLIN;
                     nfds++;
                 } while (new_sd != -1);
             } else {
                 printf("descriptor %d is readable\n", fds[i].fd);
+                close_conn = FALSE;
                 struct OrderManagementMessage omm;
                 rc = recv(fds[i].fd, &omm, sizeof(omm), 0);
+                receivedfromtradebots++;
                 std::string error = isommvalid(omm);
-                printf("error returned: %s\n", error.c_str());
-                //char reason[64];
-                //strcpy(reason,error.c_str());
-                char order_id[32];
+                //printf("error returned: %s\n", error.c_str());
+                //char order_id[32];
+                char order_id[33];
                 strncpy(order_id, omm.payload.order.order_id, 32);
+                order_id[32] = '\0';
+                printf("order_id char array pre: %s.\n", order_id);
                 printf("time: %lld\n", (long long) time(NULL));
                 if ( error.empty() ) {
                     printf("This is a valid message.\n");
-                } else {  //then there was an error
+                } else { 
                     struct OrderManagementMessage romm;
                     printf("This message is not valid. A nack needs to be sent.\n");
-                    if (omm.type == 3) { //this is a modify order
-                        romm.type = MODIFY_NAK; //MODIFY_NAK
+                    if (omm.type == 3) { 
+                        romm.type = MODIFY_NAK;
                         strncpy( romm.payload.modifyNak.reason , error.c_str(),64);
                         printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
                         strncpy( romm.payload.modifyNak.order_id , order_id,32);
                         romm.payload.modifyNak.timestamp = (long long) time(NULL);
-                        printf("timestamp set to: %llu\n",romm.payload.modifyNak.timestamp);
+                        printf("Timestamp set to: %llu\n",romm.payload.modifyNak.timestamp);
                     } else if (omm.type ==0)  {
-                        romm.type = NEW_ORDER_NAK; //NEW_ORDER_NAK
-                        printf("configuring this as an order_nak\n");
+                        romm.type = NEW_ORDER_NAK; 
+                        printf("Configuring this as an order_nak\n");
                         strncpy( romm.payload.orderNak.reason , error.c_str(),64);
                         printf("Reason set to: %s\n", romm.payload.modifyNak.reason);
                         strncpy( romm.payload.orderNak.order_id , order_id, 32);
                         romm.payload.orderNak.timestamp = (long long) time(NULL);
-                        printf("timestamp set to: %llu\n",romm.payload.orderNak.timestamp);
+                        printf("Timestamp set to: %llu\n",romm.payload.orderNak.timestamp);
                     } else {
                         printf("Unknown order type failed validation\n");
                     }
@@ -292,103 +380,110 @@ int main(){
                     printOrderManagementMessage(&romm);
                     printf("sent %d bytes through socket in NAK message\n", rc);
                 }
+                
+                //int accountsize = strlen( omm.payload.order.account ); 
+
+                char acct[33];
+                strncpy(acct, omm.payload.order.account, 32);
+                acct[32] = '\0';
+                printf("account: %s.\n", acct);
+                
+                char usr[33];
+                strncpy(usr, omm.payload.order.user, 32);
+                usr[32] = '\0';
+                printf("user: %s.\n", usr);
+                //printf("order_id char array: %s\n", order_id);
+                std::string ordr(order_id);
+                
+                //size_t p = ordr.find_last_not_of(" \t");
+                //if (std::string::npos != p)
+                //    ordr.erase(p+1);
+                
+                printf("inserting %d as file descriptor for order %s.\n", fds[i].fd, ordr.c_str());
+                connectionmapper.insert(std::pair<std::string,int>(ordr ,fds[i].fd ));
+               
+                /* 
                 printf("======new order======\n");
                 printf("read %d bytes through socket with file descripter %d, current size: %d\n",rc, fds[i].fd, current_size);
                 printf("Message type: %d\n",omm.type);
                 printf("Order type: %d\n",omm.payload.order.order_type);
                 printf("Buysell: %d\n",omm.payload.order.buysell);
                 printf("Account size constant: %d\n", ACCOUNT_SIZE);
-                int accountsize = strlen( omm.payload.order.account ); 
                 printf("Account size: %d\n", accountsize);
                 printf("Quantity: %lu\n",  omm.payload.order.quantity );
                 printf("Timestamp: %llu\n", omm.payload.order.timestamp );
-
-                char acct[32];
-                strncpy(acct, omm.payload.order.account, 31);
-                printf("account: %s\n", acct);
+                printf("Received on FD (i): %d\n", i);
+                printf("map size after insert: %lu\n", connectionmapper.size());
+                printf("======new order======\n");
+                */
                 
-                char usr[32];
-                strncpy(usr, omm.payload.order.user, 31);
-                printf("user: %s\n", usr);
-                
-                //printf("order_id: %s\n", order_id);
-                printf("i: %d\n", i);
-                std::string ordr(order_id);
-                //http://www.yolinux.com/TUTORIALS/CppStlMultiMap.html
-                //printf("inserting order id %s into stl map with fd: %d\n", order_id,i);
-                connectionmapper.insert(std::pair<std::string,int>(ordr ,fds[i].fd ));
-                printf("map size: %lu", connectionmapper.size());
-                //http://beej.us/guide/bgipc/output/html/multipage/mq.html
                 struct message_msgbuf mmb = {2, omm};
+                printf("sending message to queue with queue id: %d\n", msqid);
                 msgsnd(msqid, &mmb, sizeof(struct OrderManagementMessage ), 0);
-            }
-        } printf("made it here\n");
-    } while (end_server == FALSE);
+                printf("successfully sent message to queue.\n");
 
-    /* 
-    for(;;) {
-        read_fd_set = active_fd_set;
-        if (select (FD_SETSIZE, &read_fd_set, NULL, NULL, NULL) < 0) {
-            printf("select");
-            return -1; 
-        }
-        int i;
-        for (i = 0; i < FD_SETSIZE; ++i) {
-            if (FD_ISSET (i, &read_fd_set)) {
-                if (i == hServerSocket) {
-                     int nw;
-                     nw = hSocket=accept(hServerSocket,(struct sockaddr*)&Address,(socklen_t *)&nAddressSize);
-                     if (nw < 0) {
-                        printf("accept error\n");
-                        return -1; 
-                     }
-                     FD_SET (nw, &active_fd_set);
-                } else {
-                     printf("Trying to pull data in an already existing socket.\n");
-                     struct OrderManagementMessage omm;
-                     int bytes_read;
-                     bytes_read = read(i,&omm,sizeof(omm));
-                     if (bytes_read == 0) {
-                        close (i);
-                        FD_CLR (i, &active_fd_set);
-                     } else {
-                        printf("read %d bytes through socket with file descripter %d\n",bytes_read, i);
-                        printf("======new order======\n");
-                        printf("Message type: %d\n",omm.type);
-                        printf("Order type: %d\n",omm.payload.order.order_type);
-                        printf("Buysell: %d\n",omm.payload.order.buysell);
-                        printf("Account size constant: %d\n", ACCOUNT_SIZE);
-                        int accountsize = strlen( omm.payload.order.account ); 
-                        printf("Account size: %d\n", accountsize);
-                        printf("Quantity: %lu\n",  omm.payload.order.quantity );
-                        printf("Timestamp: %llu\n", omm.payload.order.timestamp );
-
-                        char acct[32];
-                        strncpy(acct, omm.payload.order.account, 31);
-                        printf("account: %s\n", acct);
-                        
-                        char usr[32];
-                        strncpy(usr, omm.payload.order.user, 31);
-                        printf("user: %s\n", usr);
-                        
-                        char order_id[32];
-                        strncpy(order_id, omm.payload.order.order_id, 32);
-                        printf("order_id: %s\n", order_id);
-                        printf("i: %d\n", i);
-                        std::string ordr(order_id);
-                        //http://www.yolinux.com/TUTORIALS/CppStlMultiMap.html
-                        printf("inserting order id %s into stl map with fd: %d\n", order_id,i);
-                        connectionmapper.insert(std::pair<string,int>(ordr,i));
-                        printf("map size: %d", connectionmapper.size());
-                        printf("Writing to SystemV message queue\n"); 
-                        //http://beej.us/guide/bgipc/output/html/multipage/mq.html
-                        struct message_msgbuf mmb = {2, omm};
-                        msgsnd(msqid, &mmb, sizeof(struct OrderManagementMessage ), 0);
-                    }
+                /* that the shared memory segment is busy.                   */
+               
+                operations[0].sem_num = 1;
+                operations[0].sem_op =  1;
+                operations[0].sem_flg = 0;
+                operations[1].sem_num = 0;
+                operations[1].sem_op =  0;
+                operations[1].sem_flg = 0;
+                printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid); 
+                rc = semop( semid, operations, 2 );
+                printf("semop completed.\n"); 
+                if (rc == -1)
+                {
+                    printf("main: semop() failed\n");
+                    return -1;
+                }
+                
+                /*action here*/
+                printf("segment id:%d\n", shmid);
+                printf("Timestamp: %llu\n", omm.payload.order.timestamp);
+                memcpy(shm,&omm,sizeof(omm));
+                printf("successfully copied message to shared memory with order type %d\n", omm.type);
+                struct OrderManagementMessage omm2;
+                memcpy(&omm2,shm,sizeof(omm2));
+                printf("Timestamp from shared memory: %llu\n", omm2.payload.order.timestamp);
+                copiedthroughsharedmemory++;
+                /*end action here*/
+               
+                operations[0].sem_num = 1;
+                operations[0].sem_op = -1;
+                operations[0].sem_flg = 0;
+                printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid); 
+                rc = semop( semid, operations, 1 );
+                printf("Semop successful\n");
+                if (rc == -1)
+                {
+                    printf("main: semop() failed\n");
+                    return -1;
+                }
+                
+                if (close_conn) {
+                    printf("Close conn received\n");
+                    close(fds[i].fd);
+                    fds[i].fd = -1;
+                    compress_array = TRUE;
                 }
             }
         }
-    }
-   */
+        if (compress_array)
+        {
+            compress_array = FALSE;
+            for (i = 0; i < nfds; i++)
+            {
+                if (fds[i].fd == -1)
+                {
+                    for(j = i; j < nfds; j++)
+                    {
+                        fds[j].fd = fds[j+1].fd;
+                    }
+                    nfds--;
+                }
+            }
+        }
+    } while (end_server == FALSE);
 }
-

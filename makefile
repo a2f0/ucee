@@ -1,4 +1,4 @@
-all: connmgr matcheng bookpub tradepub rpteng loopthroughmessagequeue tradeBot/md_receiver tradeBot/tradeBot
+all: connmgr matcheng bookpub tradepub rpteng loopthroughmessagequeue loopthroughsharedmemory tradeBot/md_receiver tradeBot/tradeBot
 
 CC=gcc
 CXX=g++
@@ -16,6 +16,9 @@ connmgr: connmgr.o
 	$(CXX) -o $@ $^ -lpthread
 
 loopthroughmessagequeue: loopthroughmessagequeue.o
+	$(CXX) -o $@ $^ -lrt
+
+loopthroughsharedmemory: loopthroughsharedmemory.o
 	$(CXX) -o $@ $^ -lrt
 
 matcheng: matcheng.o sqlite3.o
@@ -53,6 +56,7 @@ tradeBot/md_receiver: tradeBot/md_receiver.o
 
 connmgr.o: connmgr.cpp messages.h
 loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
+loopthrougsharedmemory.o: loopthroughsharedmemory.cpp
 matcheng.o: matcheng.cpp messages.h matcheng.h orderbookview.h
 sqlite3.o: sqlite3.c
 bookpub.o: sqlite3.o bookpub.cpp messages.h
