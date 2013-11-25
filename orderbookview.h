@@ -86,6 +86,7 @@ int OrderList::RemoveOrder(Order myorder)
     if (nstrcmp (it->order_id,myorder.order_id,ORDERID_SIZE)== 0)
     {
       orders.erase(it); // remove order
+      delete_row(myorder.order_id);
       return 1;
     };
     it++;
