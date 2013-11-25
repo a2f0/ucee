@@ -55,13 +55,15 @@ int main(){
   myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
   // loading database
+  writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
   for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it)
-	myBooks.Process(*it);
+    myBooks.Process(*it);
   // setting up
   printf("Ready to receive messages\n");
   // reading from message queue
   signal(SIGINT,intHandler);
+  writetodatabase = 1;
   for(;;) {
 //    cout << "* Matching Engine: receiving order" << endl;
     msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0);
@@ -71,6 +73,6 @@ int main(){
     cout << "* Matching Engine: sending order for processing" << endl;
     myBooks.Process(omm);
     };
-  myBooks.Print();
+//  myBooks.Print();
   return 0;
 };

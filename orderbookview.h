@@ -25,6 +25,7 @@ typedef struct OrderNak OrderNak;
 typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
+int writetodatabase;
 
 //there is one of these for each price level
 class OrderList
@@ -60,7 +61,8 @@ int OrderList::AddOrder(Order myorder)
   if (orders.empty())
   {
     orders.push_front(myorder);
-    add_row(myorder);
+    if (writetodatabase==1)
+      add_row(myorder);
     return 1;
   };
   unsigned long long ts = myorder.timestamp;
@@ -69,7 +71,8 @@ int OrderList::AddOrder(Order myorder)
     it++;
   };
   orders.insert(it, myorder);
-  add_row(myorder);  
+  if(writetodatabase==1)
+    add_row(myorder);
   return 1;
 };
 
@@ -86,7 +89,8 @@ int OrderList::RemoveOrder(Order myorder)
     if (nstrcmp (it->order_id,myorder.order_id,ORDERID_SIZE)== 0)
     {
       orders.erase(it); // remove order
-      delete_row(myorder.order_id);
+      if(writetodatabase==1)
+        delete_row(myorder.order_id);
       return 1;
     };
     it++;
