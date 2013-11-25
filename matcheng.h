@@ -44,8 +44,8 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
   myomm.type = type;
   switch (type) {
     case NEW_ORDER_ACK:
-//      printf("* myBooks: trying to transmit NEW_ORDER_ACK\n");
       struct OrderAck oack;
+      nstrcpy(oack.order_id,id,ORDERID_SIZE);
       oack.timestamp = now;
       myomm.payload.orderAck = oack;
       break;
@@ -89,9 +89,9 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
       break;
   };
   struct message_msgbuf mmb = {2,myomm};
-//  printf("* myBooks: about to send message to message queue id: %d\n",msqid);
-  msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
-//  printf("* myBooks: sent message\n");
+    printf("* myBooks: about to send message to message queue id: %d\n",msqid);
+    msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
+    printf("* myBooks: sent message\n");
   return;
 };
 
