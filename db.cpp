@@ -6,6 +6,9 @@
 #include "messages.h"
 using namespace std;
 */
+
+#ifndef DB_H
+#define DB_H
 #include <algorithm>
 #include "db.h"
 #include "printing.h"
@@ -107,7 +110,7 @@ sqlite3_close(mydb);
 return mylist;
 }
 
-
+/*
 int modify_row(Modify mymodify){
 int rc,c;
 char* query1 = (char*) malloc (1024*sizeof(char));
@@ -127,7 +130,7 @@ sqlite3_finalize(stmt);
 sqlite3_close(mydb);
 return 0;
 }
-
+*/
 
 int delete_row(char* order_id){
 int rc,c;
@@ -150,7 +153,7 @@ sqlite3_finalize(stmt2);
 sqlite3_close(mydb);
 return 0;
 }
-
+/*
 int main2(){
 //2147483647
 Order orderA = {LIMIT_ORDER,"5647","Sarah","4X11xxxyxxx",21345,BUY,"GOOG","322.1",2147483649};
@@ -181,7 +184,7 @@ printf("\n%s\n","6. Printing that list<Order>");
 for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it)
 	printf("%s|%s|%s|%d|%llu|%d|%s|%f|%lu\n",it->order_id,it->account,it->user,(int)it->order_type,it->timestamp,it->buysell,it->symbol,atof(it->price),it->quantity);
 printf("\n\n\n");
-/*
+
 Order *a = (Order*) malloc (100*sizeof(Order));
 a->order_type=LIMIT_ORDER;
 snprintf(a->account,32,"%d",5647);
@@ -194,7 +197,9 @@ snprintf(a->price,10,"%f",11.3);
 a->quantity=500;
 
 add_row(*a);
-*/
 
 return 0;
 }
+*/
+
+#endif

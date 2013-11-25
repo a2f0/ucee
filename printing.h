@@ -10,7 +10,6 @@
 #include <sys/types.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
-
 // functionality to deal with strings without null termination
 
 // compares two strings by adding null at end

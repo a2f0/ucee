@@ -55,10 +55,9 @@ int main(){
   myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
   // loading database
-/*  list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
+  list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
   for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it)
 	myBooks.Process(*it);
-*/
   // setting up
   printf("Ready to receive messages\n");
   // reading from message queue

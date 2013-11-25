@@ -12,6 +12,7 @@
 #include <sys/msg.h>
 #include <stddef.h>
 #include "printing.h"
+#include "db.cpp"
 using namespace std;
 
 typedef struct Order Order;
@@ -59,7 +60,7 @@ int OrderList::AddOrder(Order myorder)
   if (orders.empty())
   {
     orders.push_front(myorder);
-//    add_row(myorder);
+    add_row(myorder);
     return 1;
   };
   unsigned long long ts = myorder.timestamp;
@@ -68,6 +69,7 @@ int OrderList::AddOrder(Order myorder)
     it++;
   };
   orders.insert(it, myorder);
+  add_row(myorder);  
   return 1;
 };
 
@@ -141,7 +143,8 @@ int OrderBook::AddOrder(Order myorder)
     return 0;
   };
 //  printf("processing order of SIDE: %d",myorder.buysell);
-  int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell  
+  int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell
+  // add the OrderList if none exists
   if ((adj==1 && buybook.empty()) || (adj == -1 && sellbook.empty()))
   {
     OrderList OL;
@@ -324,6 +327,7 @@ public:
   
   void Process(OrderManagementMessage); // calls other Process
   void Process(Order); // processes Order omm
+  void ProcessDB(Order); //process Order from database
   void Process(Modify); // processes Modify omm
   void Process(Cancel); // processes Cancel omm
   void Print(); // prints all books
@@ -378,6 +382,41 @@ void OrderBookView::Process(Order myorder)
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
     CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
+  };
+  struct TradeMessage tr_msg = mybooks[symbol].Match();
+  while(tr_msg.quantity >0){
+    CommunicateTrade(tr_msg);
+    tr_msg = mybooks[symbol].Match();
+  };
+  struct BookMessage mybookmsg;
+  // generate bookmessage
+  CommunicateBookMsg(mybookmsg);
+};
+
+
+void OrderBookView::ProcessDB(Order myorder)
+{
+//  printf("* myBooks: processing Order\n");
+  string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
+//  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
+  string orderid = nstring(myorder.order_id,ORDERID_SIZE);
+//  cout << "* myBooks: here is the order id: " << orderid << "-\n";
+  if(mybooks.count(symbol) < 1)
+  {
+//    cout << "* myBooks: no book with that symbol" << endl;
+    OrderBook ob(myorder.symbol);
+    mybooks[symbol] = ob;
+//    cout << "* myBooks: added book with that symbol" << endl;
+  }else{
+//    cout<< "* myBooks: book already exists, so won't create new" << endl;
+  };
+  if(mybooks[symbol].AddOrder(myorder)==1)
+  {
+//    cout << "* myBooks: added order to corresponding book" << endl;
+    myorders[orderid] = myorder;
+//    cout << "* myBooks: added order into myorders" << endl;
+  }else{
+//    cout << "* myBooks: didn't add order\n" << endl;
   };
   struct TradeMessage tr_msg = mybooks[symbol].Match();
   while(tr_msg.quantity >0){
