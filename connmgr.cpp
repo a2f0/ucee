@@ -90,7 +90,7 @@ void readfrommatchingengine() {
     printf("Thread to read from Matching Engine System V message queue spawned.\n");
     key_t key2;
     int msqid2;
-    key2 = ftok("/etc/usb_modeswitch.conf", 'b');
+    key2 = ftok(METOCMKEY1, 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
     printf("Getting ready to read order acknowledgement messages from message queue...\n");
     //char *order_id;
@@ -177,8 +177,8 @@ int main(){
     semkey = ftok(SEMKEY2,'b');
     if ( semkey == (key_t)-1 )
     {
-    printf("main: ftok() for sem failed\n");
-    return -1;
+        printf("main: ftok() for sem failed\n");
+        return -1;
     }
     
     printf("semid: %d\n", semid); 
@@ -202,8 +202,8 @@ int main(){
     rc = semctl( semid, 1, SETALL, sarray);
     if(rc == -1)
     {
-    printf("main: semctl() initialization failed\n");
-    return -1;
+        printf("main: semctl() initialization failed\n");
+        return -1;
     }
 
     std::thread rfme(readfrommatchingengine);
