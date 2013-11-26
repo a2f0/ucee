@@ -21,8 +21,9 @@ void BookPubOBV::CommunicateBookMsg(struct BookMessage bk_msg){
 
 ssize_t f = sendto(mysocket, &bk_msg, 32, 0, (struct sockaddr*) &grp, sizeof(grp));
 if(f<0){
+        //TO DO:: ERROR HANDLING
         //fprintf(stderr,"Message Not Sent.\nUsage: ./sn -a 239.192.07.07 -p 1234\n");
-        return -1;
+        //return -1;
         }
 }
 ;

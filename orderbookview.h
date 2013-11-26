@@ -13,6 +13,13 @@
 #include <stddef.h>
 #include "printing.h"
 #include "db.cpp"
+#include <sys/socket.h>
+//#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+
 using namespace std;
 
 typedef struct Order Order;
@@ -326,6 +333,8 @@ public:
   int msqid; // message queue to write acks/nacks
   int shmid; // shared memory to write trade messages
   int semid;
+  int mysocket;
+  struct sockaddr_in grp;
   map<string,OrderBook> mybooks; // books by instrument
   map<string,Order> myorders; // orders by orderid
 public:

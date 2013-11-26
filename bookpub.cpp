@@ -50,10 +50,12 @@ int main(){
 mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
-memset((char *) &grp, 0, sizeof(grp));
-grp.sin_family = AF_INET;
-grp.sin_addr.s_addr = inet_addr(MULTICAST_ADDRESS);
-grp.sin_port = htons(atoi(MULTICAST_PORT));
+//memset((char *) &grp, 0, sizeof(grp));
+myBooks.grp.sin_family = AF_INET;
+myBooks.grp.sin_addr.s_addr = inet_addr(MULTICAST_ADDRESS);
+myBooks.grp.sin_port = htons(atoi(MULTICAST_PORT));
+myBooks.mysocket=mysocket;
+//myBooks.grp=grp;
 
 
 
