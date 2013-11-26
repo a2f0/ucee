@@ -17,8 +17,8 @@
 
 using namespace std;
 
-key_t key1,key2,key3,key4;
-int msqid1,msqid2,shmid3,semid4;
+key_t key1,key2,key3,key4,key5;
+int msqid1,msqid2,shmid3,semid4, semid5;
 struct message_msgbuf mmb;
 
 MatchEngOBV myBooks;
@@ -26,10 +26,10 @@ MatchEngOBV myBooks;
 /*intHandler closes queue and exits*/
 void intHandler(int dummy=0){
   // closing my queue
-  myBooks.Print();
+//  myBooks.Print();
   msgctl(msqid2,IPC_RMID,NULL);
   shmctl(shmid3,IPC_RMID,NULL);
-  semctl(semid4,0,IPC_RMID);
+  semctl(semid4,0,IPC_RMID,NULL);
   exit(0);
 };
 
@@ -43,6 +43,8 @@ int main(){
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
   key4 = ftok(SEMKEY1,'b');
   semid4 = semget(key4,2,0666| IPC_CREAT);
+  key5 = ftok(SEMKEY3,'b');
+  semid5 = semget(key5,1,0666| IPC_CREAT);
   struct sembuf sops;
   sops.sem_num =0;
   sops.sem_op = 1;
@@ -58,7 +60,10 @@ int main(){
   writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
   for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end(); ++it)
-    myBooks.Process(*it);
+    myBooks.ProcessDB(*it);
+  // wait for BookPub to load database
+  sops.sem_op = -1;
+  semop(semid5,&sops,1);
   // setting up
   printf("Ready to receive messages\n");
   // reading from message queue
@@ -73,6 +78,6 @@ int main(){
     cout << "* Matching Engine: sending order for processing" << endl;
     myBooks.Process(omm);
     };
-//  myBooks.Print();
+  myBooks.Print();
   return 0;
 };
