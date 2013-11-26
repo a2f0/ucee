@@ -45,6 +45,19 @@ void intHandler(int dummy=0){
 };
 
 int main(){
+  
+  
+mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+unsigned char mc_ttl = 1;
+setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
+memset((char *) &grp, 0, sizeof(grp));
+grp.sin_family = AF_INET;
+grp.sin_addr.s_addr = inet_addr(MULTICAST_ADDRESS);
+grp.sin_port = htons(atoi(MULTICAST_PORT));
+
+
+
+
   key3 = ftok(CMTOBPKEY1,'b'); //for shared memory
   size_t mysize = sizeof(struct OrderManagementMessage); //for shared memory
   shmid3 = shmget(key3, mysize, 0666|IPC_CREAT);
