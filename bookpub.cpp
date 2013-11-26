@@ -63,7 +63,7 @@ myBooks.mysocket=mysocket;
   key3 = ftok(CMTOBPKEY1,'b'); //for shared memory
   size_t mysize = sizeof(struct OrderManagementMessage); //for shared memory
   shmid3 = shmget(key3, mysize, 0666|IPC_CREAT);
-  key4 = ftok(SEMKEY2,'b');
+  key4 = ftok(SEMKEY2,'b'); // semaphore w/ connection manager
   semid4 = semget(key4,2,0666|IPC_CREAT);
   key5 = ftok(SEMKEY3,'b');
   semid5= semget(key5,1,0666|IPC_CREAT);
@@ -76,6 +76,7 @@ myBooks.mysocket=mysocket;
   for (std::list<Order>::const_iterator it = mylist.begin(); it!=mylist.end();++it)
     myBooks.ProcessDB(*it);
   // allow Matching engine to continue
+  struct OrderManagementMessage omm;
   struct sembuf sops;
   sops.sem_num = 0;
   sops.sem_op = 1;
@@ -91,7 +92,8 @@ myBooks.mysocket=mysocket;
     cout << "* Book Publisher: received order:" << endl;
     printOrderManagementMessage(ptr);
     cout << "* Book Publisher: sending order for processing" << endl;
-    myBooks.Process(*ptr);
+    memcpy(&omm,ptr,sizeof(omm));
+    myBooks.Process(omm);
     sops.sem_num =0;
     sops.sem_op =1;
     semop(semid4,&sops,1);
