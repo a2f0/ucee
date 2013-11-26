@@ -29,8 +29,8 @@
 #define TRUE             1
 #define FALSE            0
 
-#define SEMKEYPATH "/home"       /* Path used on ftok for semget key  */
-#define SEMKEYID 1              /* Id used on ftok for semget key    */
+//#define SEMKEYPATH "/home"       /* Path used on ftok for semget key  */
+//#define SEMKEYID 1              /* Id used on ftok for semget key    */
 #define NUMSEMS 2
 
 //A decent amount of this code was stolen from here:
@@ -160,7 +160,8 @@ int main(){
 
     /* semaphore initialization */
     key_t key_shm;
-    key_shm = 9041;
+    //key_shm = CMTOBPKEY1;
+    key_shm = ftok(CMTOBPKEY1, 'b');
     //void* shm;
     key_t semkey;
 
@@ -173,7 +174,7 @@ int main(){
     printf("shmid for shmat: %d\n", shmid);
     shm = shmat(shmid, NULL, 0);
 
-    semkey = ftok(SEMKEYPATH,SEMKEYID);
+    semkey = ftok(SEMKEY2,'b');
     if ( semkey == (key_t)-1 )
     {
     printf("main: ftok() for sem failed\n");
