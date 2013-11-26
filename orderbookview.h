@@ -1,7 +1,7 @@
 #ifndef ORDERBOOKVIEW_H
 #define ORDERBOOKVIEW_H
 
-
+#include <map>
 #include <cstring>
 #include <iostream>
 #include "messages.h"
@@ -397,7 +397,6 @@ void OrderBookView::Process(Order myorder)
   // generate bookmessage
   CommunicateBookMsg(mybookmsg);
 };
-
 
 void OrderBookView::ProcessDB(Order myorder)
 {

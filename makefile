@@ -30,7 +30,7 @@ sqlite3: sqlite3.o
 #db: db.o sqlite3.o
 #	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
-bookpub: bookpub.o
+bookpub: bookpub.o sqlite3.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
 tradepub: tradepub.o
@@ -59,7 +59,7 @@ loopthroughmessagequeue.o: loopthroughmessagequeue.cpp messages.h
 loopthrougsharedmemory.o: loopthroughsharedmemory.cpp
 matcheng.o: matcheng.cpp messages.h matcheng.h orderbookview.h
 sqlite3.o: sqlite3.c
-bookpub.o: sqlite3.o bookpub.cpp messages.h
+bookpub.o: bookpub.cpp messages.h bookpub.h orderbookview.h
 #db.o: sqlite3.o db.cpp messages.h
 tradepub.o: tradepub.cpp messages.h
 rpteng.o: rpteng.cpp messages.h
