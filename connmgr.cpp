@@ -29,8 +29,8 @@
 #define TRUE             1
 #define FALSE            0
 
-#define SEMKEYPATH "/home"       /* Path used on ftok for semget key  */
-#define SEMKEYID 1              /* Id used on ftok for semget key    */
+//#define SEMKEYPATH "/home"       /* Path used on ftok for semget key  */
+//#define SEMKEYID 1              /* Id used on ftok for semget key    */
 #define NUMSEMS 2
 
 //A decent amount of this code was stolen from here:
@@ -90,7 +90,7 @@ void readfrommatchingengine() {
     printf("Thread to read from Matching Engine System V message queue spawned.\n");
     key_t key2;
     int msqid2;
-    key2 = ftok("/etc/usb_modeswitch.conf", 'b');
+    key2 = ftok(METOCMKEY1, 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
     printf("Getting ready to read order acknowledgement messages from message queue...\n");
     //char *order_id;
@@ -160,7 +160,8 @@ int main(){
 
     /* semaphore initialization */
     key_t key_shm;
-    key_shm = 9041;
+    //key_shm = CMTOBPKEY1;
+    key_shm = ftok(CMTOBPKEY1, 'b');
     //void* shm;
     key_t semkey;
 
@@ -173,11 +174,11 @@ int main(){
     printf("shmid for shmat: %d\n", shmid);
     shm = shmat(shmid, NULL, 0);
 
-    semkey = ftok(SEMKEYPATH,SEMKEYID);
+    semkey = ftok(SEMKEY2,'b');
     if ( semkey == (key_t)-1 )
     {
-    printf("main: ftok() for sem failed\n");
-    return -1;
+        printf("main: ftok() for sem failed\n");
+        return -1;
     }
     
     printf("semid: %d\n", semid); 
@@ -201,8 +202,8 @@ int main(){
     rc = semctl( semid, 1, SETALL, sarray);
     if(rc == -1)
     {
-    printf("main: semctl() initialization failed\n");
-    return -1;
+        printf("main: semctl() initialization failed\n");
+        return -1;
     }
 
     std::thread rfme(readfrommatchingengine);
