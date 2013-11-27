@@ -15,6 +15,7 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 #include "messages.h"
+#include "printing.h"
 #include <cstdlib>
 #include <netdb.h>
 #include <sys/types.h>
@@ -27,8 +28,8 @@ int process(TradeMessage tm);
 int mysocket;
 
 int process(TradeMessage tm){
-char* arga = (char*) malloc (50*sizeof(char));
-char* argp = (char*) malloc (50*sizeof(char));
+//char* arga = (char*) malloc (50*sizeof(char));
+//char* argp = (char*) malloc (50*sizeof(char));
 //sprintf(arga,"%s", MULTICAST_ADDRESS);
 //sprintf(argp,"%s", MULTICAST_PORT);
 struct sockaddr_in grp;
@@ -53,22 +54,20 @@ int main(){
 //
 int shmid;
 key_t mykey;
-mykey = ftok("/etc/warnquota.conf",'b');
+mykey = ftok(METOTPKEY1,'b'); // shared memory with matcheng
 size_t mysize = sizeof(struct TradeMessage);
-struct TradeMessage* tm = (struct TradeMessage*) malloc (sizeof(TradeMessage));
-//
+if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
+	cout << "Error: shmget" << ' ' << strerror(errno) << endl;
+struct TradeMessage* tm = (struct TradeMessage*) shmat(shmid, NULL, 0);
+
+
 
 //SEM SETUP:
 //
 int sem_id;
 struct sembuf sops;
-/*
-sops.sem_num = 1;
-sops.sem_op = -1;
-sops.sem_flg = 0;
-*/
-
-sem_id = semget(ftok("/etc/locale.alias",'b'), 2, 0666 | IPC_CREAT );
+// semaphore with matcheng
+sem_id = semget(ftok(SEMKEY1,'b'), 2, 0666 | IPC_CREAT );
 if(sem_id == -1){
 perror("segment failed: ");
 exit(EXIT_FAILURE);
@@ -80,26 +79,16 @@ mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
 
-if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
-	cout << "Error: shmget" << ' ' << strerror(errno) << endl;
-
-for(;;){
-
 sops.sem_num = 1;
 sops.sem_op = -1;
 sops.sem_flg = 0;
 
-semop(sem_id, &sops, 1); //RESERVE SEMAPHORE
+while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 
-if ((tm = (struct TradeMessage*) shmat(shmid, NULL, 0)) == (struct TradeMessage*) -1) {
-	cout << "Error: shmat" << endl;
-}
 
-printf("%s",(char*)tm->symbol);
-printf("%s",(char*)tm->price);
-printf("%s",(char*)tm->quantity);
+  printTradeMsg(tm);
 
-process(*tm);
+//process(*tm);
 
 
 
@@ -107,11 +96,11 @@ process(*tm);
 sops.sem_num = 0;
 sops.sem_op = 1;
 sops.sem_flg = 0;
-
 semop(sem_id, &sops, 1); //RELEASE SEMAPHORE
+sops.sem_num=1;
+sops.sem_op=-1;
 
-
-}
+};
 //shmctl(shmid, IPC_RMID, struct shmid_ds * buf);
 return 0;
 

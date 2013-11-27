@@ -402,7 +402,7 @@ void OrderBookView::Process(Order myorder)
   cout << "Performed matching once" << endl;
   int k=0;
   while(tr_msg.quantity >0){
-//    CommunicateTrade(tr_msg);
+    CommunicateTrade(tr_msg);
     tr_msg = mybooks[symbol].Match();
     cout << "number of matching: " << k << endl;
   };
@@ -439,7 +439,7 @@ void OrderBookView::ProcessDB(Order myorder)
   struct TradeMessage tr_msg = mybooks[symbol].Match();
   cout << "Matching algorithim running" << endl;
   while(tr_msg.quantity >0){
-//    CommunicateTrade(tr_msg);
+    CommunicateTrade(tr_msg);
     tr_msg = mybooks[symbol].Match();
   };
   cout << "Matching algorithm finished" << endl;

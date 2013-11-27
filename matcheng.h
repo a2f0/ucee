@@ -21,17 +21,18 @@ public:
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   struct sembuf sops;
   sops.sem_num = 0;
-  sops.sem_op = 0; // set to -1 later
+  sops.sem_op = -1; // set to -1 later
   sops.sem_flg = 0;
-  semop(semid,&sops,1);
+  if(semop(semid,&sops,1)!=-1){
   struct TradeMessage* ptr = (struct TradeMessage*) shmat(shmid,NULL,0);
   nstrcpy(ptr->symbol,tr_msg.symbol,SYMBOL_SIZE);
   nstrcpy(ptr->price, tr_msg.price, PRICE_SIZE);
   ptr->quantity = tr_msg.quantity;
   sops.sem_num = 1;
-  sops.sem_op = 0; // set to 1 later
+  sops.sem_op = 1; // set to 1 later
   semop(semid,&sops,1);
   printTradeMsg(ptr);
+  };
 };
 
 void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)

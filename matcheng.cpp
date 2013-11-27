@@ -39,25 +39,29 @@ int main(){
   msqid1 = msgget(key1, 0666 | IPC_CREAT);
   key2 = ftok("/etc/usb_modeswitch.conf", 'b'); // key to conn mgr with acks
   msqid2 = msgget(key2, 0666 | IPC_CREAT);
-  key3 = ftok(METOSHKEY1,'b');
+  key3 = ftok(METOTPKEY1,'b'); // shared memory with tradepub
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
-  key4 = ftok(SEMKEY1,'b'); // semaphore with connmgr
+  key4 = ftok(SEMKEY1,'b'); // semaphore with tradepub
   semid4 = semget(key4,2,0666| IPC_CREAT);
-  key5 = ftok(SEMKEY3,'b'); // semaphore with bookpub
-  semid5 = semget(key5,1,0666| IPC_CREAT);
-//  printf("msg queue id to write to: %d", msqid2);
+  struct sembuf sops;
+  sops.sem_num = 0;
+  sops.sem_op = 1;
+  sops.sem_flg =0;
+  semop(semid4,&sops,1);
   cout << "Initialised OBV successfully" << endl;
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
   myBooks.semid = semid4;
   cout << "Set key successfully" << endl;
-  // loading database
+  key5 = ftok(SEMKEY3,'b'); // semaphore with bookpub
+  semid5 = semget(key5,1,0666| IPC_CREAT);
+//  printf("msg queue id to write to: %d", msqid2);
+   // loading database
   writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
   for(std::list<Order>::const_iterator it = mylist.begin(); it != mylist.end();it++)
       myBooks.ProcessDB(*it);
   // wait for BookPub to load database
-  struct sembuf sops;
   sops.sem_num =0;
   sops.sem_op = -1;
   sops.sem_flg = 0;

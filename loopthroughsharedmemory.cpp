@@ -8,13 +8,13 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <errno.h>
-
+#include "keys.h"
 
 //http://stackoverflow.com/questions/7261699/how-to-pass-data-using-shared-memory-and-save-the-received-data-to-file
 
 
-#define SEMKEYPATH "/home"      /* Path used on ftok for semget key  */
-#define SEMKEYID 1              /* Id used on ftok for semget key    */
+#define SEMKEYPATH SEMKEY1      /* Path used on ftok for semget key  */
+#define SEMKEYID 'b'              /* Id used on ftok for semget key    */
 #define NUMSEMS 2
 
 int main(){
@@ -28,7 +28,7 @@ int main(){
         int rc;
         long long int copiedthroughsharedmemory=0;
         //name of shared memory segment
-        key = 9041;
+        key = ftok(CMTOBPKEY1,'b');
 
         //key_t key;
         //int semid;
