@@ -76,7 +76,7 @@ if ((mem_ptr = (char*) shmat(shm_id, NULL, 0)) == (char*) -1) {
 	cout << "Error: shmat" << endl;
 }
 
-if ( (semset_id = semget (SEM_KEY, 2, (IPC_CREAT | 0777 | IPC_EXCL))) == -1)
+if ( (semset_id = semget (SEM_KEY, 2, (IPC_CREAT | 0777 ))) == -1)
 	printf("ERROR:  semget");
 
 set_sem_value (semset_id, 0, 0);
