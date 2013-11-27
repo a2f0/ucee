@@ -28,8 +28,8 @@ void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   nstrcpy(ptr->symbol,tr_msg.symbol,SYMBOL_SIZE);
   nstrcpy(ptr->price, tr_msg.price, PRICE_SIZE);
   ptr->quantity = tr_msg.quantity;
-  sops.sem_num =1;
-  sops.sem_op =1;
+  sops.sem_num = 1;
+  sops.sem_op = 0; // set to 1 later
   semop(semid,&sops,1);
   printTradeMsg(ptr);
 };
@@ -89,9 +89,9 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
       break;
   };
   struct message_msgbuf mmb = {2,myomm};
-    printf("* myBooks: about to send message to message queue id: %d\n",msqid);
+//    printf("* myBooks: about to send message to message queue id: %d\n",msqid);
     msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
-    printf("* myBooks: sent message\n");
+//    printf("* myBooks: sent message\n");
   return;
 };
 
