@@ -135,6 +135,7 @@ public:
   int AddOrder(Order); // returns 0 for failure, 1 for success
   int RemoveOrder(Order); // return 0 for failure, 1 for success
   struct TradeMessage  Match();
+  struct BookMessage TopBook();
   void Print(); // prints the sellbook and buybook
 };
 
@@ -324,6 +325,10 @@ struct TradeMessage OrderBook::Match()
   return tr_msg;
 };
 
+struct BookMessage OrderBook::TopBook(){
+  struct BookMessage mymsg;
+  return mymsg;
+};
 
 
 // OrderBookView class: view of all books
@@ -388,65 +393,35 @@ void OrderBookView::Process(Order myorder)
     cout << "* myBooks: added order to corresponding book" << endl;
     myorders[orderid] = myorder;
     cout << "* myBooks: added order into myorders" << endl;
-    CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    if (writetodatabase == 1){
+      CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    };
     // communicating OrderAck
   }else{
     cout << "* myBooks: didn't add order\n" << endl;
+    if (writetodatabase==1){
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
     CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
+    };
   };
-  cout << "Performing the matching algorithm." << endl;
+  struct BookMessage mybookmsg;
   struct TradeMessage tr_msg = mybooks[symbol].Match();
-  cout << "Performed matching once" << endl;
-  int k=0;
+  int matches = 0;
   while(tr_msg.quantity >0){
+    matches++;
     CommunicateTrade(tr_msg);
     tr_msg = mybooks[symbol].Match();
-    cout << "number of matching: " << k << endl;
   };
   cout << "Performed the matching algorithm." << endl;
-  struct BookMessage mybookmsg;
   // generate bookmessage
-  CommunicateBookMsg(mybookmsg);
+  if (matches > 0){
+    mybookmsg = mybooks[symbol].TopBook();
+    CommunicateBookMsg(mybookmsg);
+  };
 };
 
-void OrderBookView::ProcessDB(Order myorder)
-{
-  printf("* myBooks: processing Order\n");
-  string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
-  string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-  cout << "* myBooks: here is the order id: " << orderid << "-\n";
-  if(mybooks.count(symbol) < 1)
-  {
-    cout << "* myBooks: no book with that symbol" << endl;
-    OrderBook ob(myorder.symbol);
-    mybooks[symbol] = ob;
-    cout << "* myBooks: added book with that symbol" << endl;
-  }else{
-    cout<< "* myBooks: book already exists, so won't create new" << endl;
-  };
-  if(mybooks[symbol].AddOrder(myorder)==1)
-  {
-    cout << "* myBooks: added order to corresponding book" << endl;
-    myorders[orderid] = myorder;
-    cout << "* myBooks: added order into myorders" << endl;
-  }else{
-    cout << "* myBooks: didn't add order\n" << endl;
-  };
-  struct TradeMessage tr_msg = mybooks[symbol].Match();
-  cout << "Matching algorithim running" << endl;
-  while(tr_msg.quantity >0){
-    CommunicateTrade(tr_msg);
-    tr_msg = mybooks[symbol].Match();
-  };
-  cout << "Matching algorithm finished" << endl;
-  struct BookMessage mybookmsg;
-  // generate bookmessage
-  CommunicateBookMsg(mybookmsg);
-};
 
 void OrderBookView::Process(Modify mymodify)
 {
