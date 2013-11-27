@@ -1,4 +1,4 @@
-all: connmgr matcheng bookpub tradepub rpteng loopthroughmessagequeue loopthroughsharedmemory tradeBot/md_receiver tradeBot/tradeBot
+all: connmgr matcheng bookpub tradepub rpteng loopthroughmessagequeue loopthroughsharedmemory tradeBot/md_receiver tradeBot/tradeBot shm_cl shm_sv
 
 CC=gcc
 CXX=g++
@@ -39,17 +39,20 @@ tradepub: tradepub.o
 rpteng: rpteng.o sqlite3.o
 	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
+#rpt: rpt.o sqlite3.o
+#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+
 tradeBot/tradeBot: tradeBot/tradeBot.o
 	$(CC) -o $@ $^ -lrt $(CFLAGS)
 
 tradeBot/md_receiver: tradeBot/md_receiver.o
 	$(CC) -o $@ $^ -lrt $(CFLAGS)
 
-#shm_cl: shm_cl.o
-#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+shm_cl: shm_cl.o
+	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
-#shm_sv: shm_sv.o
-#	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
+shm_sv: shm_sv.o
+	$(CXX) -o $@ $^ -lrt $(CXXFLAGS) -lpthread -ldl
 
 #shm-boost: shm-boost.o
 #	g++ -I/usr/include/boost shm-boost.cpp -o shm-boost -lpthread -lrt
@@ -63,10 +66,12 @@ bookpub.o: bookpub.cpp messages.h bookpub.h orderbookview.h
 #db.o: sqlite3.o db.cpp messages.h
 tradepub.o: tradepub.cpp messages.h
 rpteng.o: rpteng.cpp messages.h
+#rpt.o: rpt.cpp messages.h
 tradeBot/tradeBot.o: tradeBot/tradeBot.c
 tradeBot/md_receiver.o: tradeBot/md_receiver.c
-#shm_cl.o: shm_cl.cpp messages.h
-#shm_sv.o: shm_sv.cpp messages.h
+shm_cl.o: shm_cl.cpp messages.h
+shm_sv.o: shm_sv.cpp messages.h
+
 
 clean:
-	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o tradepub rpteng
+	-rm -f *.o connmgr *~ bookpub matcheng loopthroughmessagequeue tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o tradepub rpteng shm_cl shm_sv
