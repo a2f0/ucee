@@ -103,7 +103,6 @@ void readfrommatchingengine() {
         printf("Matcheng listening on msqi2d: %d\n", msqid2);
         */
         int rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
-        /*
         strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
         order_id[32] = '\0';
         printf("======message received from matching enginee======\n"); 
@@ -124,7 +123,6 @@ void readfrommatchingengine() {
         printf("as str: %s.\n",ordr.c_str());
         printf("======message received from matching engine======\n"); 
         //printOrderManagementMessage(&mmb.omm);
-        */
         std::this_thread::yield();
     }
 }
