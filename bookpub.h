@@ -18,7 +18,7 @@ public:
 };
 
 void BookPubOBV::CommunicateBookMsg(struct BookMessage bk_msg){
-
+  
 ssize_t f = sendto(mysocket, &bk_msg, 32, 0, (struct sockaddr*) &grp, sizeof(grp));
 if(f<0){
         //TO DO:: ERROR HANDLING

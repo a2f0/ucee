@@ -369,39 +369,44 @@ void OrderBookView::Process(OrderManagementMessage omm)
 
 void OrderBookView::Process(Order myorder)
 {
-//  printf("* myBooks: processing Order\n");
+  printf("* myBooks: processing Order\n");
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-//  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
+  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-//  cout << "* myBooks: here is the order id: " << orderid << "-\n";
+  cout << "* myBooks: here is the order id: " << orderid << "-\n";
   if(mybooks.count(symbol) < 1)
   {
-//    cout << "* myBooks: no book with that symbol" << endl;
+    cout << "* myBooks: no book with that symbol" << endl;
     OrderBook ob(myorder.symbol);
     mybooks[symbol] = ob;
-//    cout << "* myBooks: added book with that symbol" << endl;
+    cout << "* myBooks: added book with that symbol" << endl;
   }else{
-//    cout<< "* myBooks: book already exists, so won't create new" << endl;
+    cout<< "* myBooks: book already exists, so won't create new" << endl;
   };
   if(mybooks[symbol].AddOrder(myorder)==1)
   {
-//    cout << "* myBooks: added order to corresponding book" << endl;
+    cout << "* myBooks: added order to corresponding book" << endl;
     myorders[orderid] = myorder;
-//    cout << "* myBooks: added order into myorders" << endl;
+    cout << "* myBooks: added order into myorders" << endl;
     CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
     // communicating OrderAck
   }else{
-//    cout << "* myBooks: didn't add order\n" << endl;
+    cout << "* myBooks: didn't add order\n" << endl;
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
     CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
   };
+  cout << "Performing the matching algorithm." << endl;
   struct TradeMessage tr_msg = mybooks[symbol].Match();
+  cout << "Performed matching once" << endl;
+  int k=0;
   while(tr_msg.quantity >0){
     CommunicateTrade(tr_msg);
     tr_msg = mybooks[symbol].Match();
+    cout << "number of matching: " << k << endl;
   };
+  cout << "Performed the matching algorithm." << endl;
   struct BookMessage mybookmsg;
   // generate bookmessage
   CommunicateBookMsg(mybookmsg);
@@ -409,33 +414,35 @@ void OrderBookView::Process(Order myorder)
 
 void OrderBookView::ProcessDB(Order myorder)
 {
-//  printf("* myBooks: processing Order\n");
+  printf("* myBooks: processing Order\n");
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-//  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
+  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-//  cout << "* myBooks: here is the order id: " << orderid << "-\n";
+  cout << "* myBooks: here is the order id: " << orderid << "-\n";
   if(mybooks.count(symbol) < 1)
   {
-//    cout << "* myBooks: no book with that symbol" << endl;
+    cout << "* myBooks: no book with that symbol" << endl;
     OrderBook ob(myorder.symbol);
     mybooks[symbol] = ob;
-//    cout << "* myBooks: added book with that symbol" << endl;
+    cout << "* myBooks: added book with that symbol" << endl;
   }else{
-//    cout<< "* myBooks: book already exists, so won't create new" << endl;
+    cout<< "* myBooks: book already exists, so won't create new" << endl;
   };
   if(mybooks[symbol].AddOrder(myorder)==1)
   {
-//    cout << "* myBooks: added order to corresponding book" << endl;
+    cout << "* myBooks: added order to corresponding book" << endl;
     myorders[orderid] = myorder;
-//    cout << "* myBooks: added order into myorders" << endl;
+    cout << "* myBooks: added order into myorders" << endl;
   }else{
-//    cout << "* myBooks: didn't add order\n" << endl;
+    cout << "* myBooks: didn't add order\n" << endl;
   };
   struct TradeMessage tr_msg = mybooks[symbol].Match();
+  cout << "Matching algorithim running" << endl;
   while(tr_msg.quantity >0){
     CommunicateTrade(tr_msg);
     tr_msg = mybooks[symbol].Match();
   };
+  cout << "Matching algorithm finished" << endl;
   struct BookMessage mybookmsg;
   // generate bookmessage
   CommunicateBookMsg(mybookmsg);

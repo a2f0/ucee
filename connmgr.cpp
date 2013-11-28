@@ -53,10 +53,10 @@ struct message_msgbuf {
 };
 
 int semid;
-void* shm;
 int shmid;
 struct shmid_ds shmid_struct;
-
+struct OrderManagementMessage* shm;
+  
 void my_handler(int s){
     printf("Cleaning up...\n");
     int rc;
@@ -81,6 +81,7 @@ void my_handler(int s){
     printf("Found (and acknowledged) for reverse routing (to tradebot): %d\n", found);
     printf("Not found for reverse routing (to tradebot): %d\n",notfound);
     printf("Total messages received from trade bots: %d\n",receivedfromtradebots);
+    printf("%d", copiedthroughsharedmemory);
     exit(1); 
 }
 
@@ -102,7 +103,6 @@ void readfrommatchingengine() {
         printf("Matcheng listening on msqi2d: %d\n", msqid2);
         */
         int rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
-        /*
         strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
         order_id[32] = '\0';
         printf("======message received from matching enginee======\n"); 
@@ -123,7 +123,6 @@ void readfrommatchingengine() {
         printf("as str: %s.\n",ordr.c_str());
         printf("======message received from matching engine======\n"); 
         //printOrderManagementMessage(&mmb.omm);
-        */
         std::this_thread::yield();
     }
 }
@@ -163,30 +162,29 @@ int main(){
     //key_shm = CMTOBPKEY1;
     key_shm = ftok(CMTOBPKEY1, 'b');
     //void* shm;
-    key_t semkey;
+    struct OrderManagementMessage* shm;
 
-    short sarray[NUMSEMS];
-    struct sembuf operations[2];
+    key_t semkey;
+    
+//    short sarray[NUMSEMS];
+    // struct sembuf operations[2];
+    struct sembuf sops;
+    sops.sem_num =0;
+    sops.sem_op = 1;
+    sops.sem_flg =0;
     
     if ((shmid = shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT)) < 0) {
        perror("shmget");
     }
     printf("shmid for shmat: %d\n", shmid);
-    shm = shmat(shmid, NULL, 0);
+    shm = (struct OrderManagementMessage*) shmat(shmid, NULL, 0);
 
     semkey = ftok(SEMKEY2,'b');
     if ( semkey == (key_t)-1 )
     {
         printf("main: ftok() for sem failed\n");
         return -1;
-    }
-    
-    printf("semid: %d\n", semid); 
-    rc = semctl( semid, 1, IPC_RMID );
-    if (rc==-1)
-    {
-        printf("main: semctl() remove id failed\n");
-    }
+    };
 
     printf("semkey: %d\n", semkey); 
     semid = semget( semkey, NUMSEMS, 0666 | IPC_CREAT );
@@ -196,15 +194,12 @@ int main(){
         printf("Error in semget(): %s\n", strerror(errno));
         return -1;
     }
+   
+//    sarray[0] = 0;
+//    sarray[1] = 0;
+//    rc = semctl( semid, 1, SETALL, sarray);
+    semop(semid,&sops,1);
 
-    sarray[0] = 0;
-    sarray[1] = 0;
-    rc = semctl( semid, 1, SETALL, sarray);
-    if(rc == -1)
-    {
-        printf("main: semctl() initialization failed\n");
-        return -1;
-    }
 
     std::thread rfme(readfrommatchingengine);
     key_t key;
@@ -353,6 +348,7 @@ int main(){
                 order_id[32] = '\0';
                 printf("order_id char array pre: %s.\n", order_id);
                 printf("time: %lld\n", (long long) time(NULL));
+                // error checking
                 if ( error.empty() ) {
                     printf("This is a valid message.\n");
                 } else { 
@@ -380,10 +376,9 @@ int main(){
                     printf("=========printnack======\n");
                     printOrderManagementMessage(&romm);
                     printf("sent %d bytes through socket in NAK message\n", rc);
-                }
+                };
                 
-                //int accountsize = strlen( omm.payload.order.account ); 
-
+                //int accountsize = strlen( omm.payload.order.account );
                 char acct[33];
                 strncpy(acct, omm.payload.order.account, 32);
                 acct[32] = '\0';
@@ -401,6 +396,11 @@ int main(){
                 //    ordr.erase(p+1);
                 
                 printf("inserting %d as file descriptor for order %s.\n", fds[i].fd, ordr.c_str());
+                // end of error checking
+
+
+
+                
                 connectionmapper.insert(std::pair<std::string,int>(ordr ,fds[i].fd ));
                
                 /* 
@@ -424,15 +424,11 @@ int main(){
                 printf("successfully sent message to queue.\n");
 
                 /* that the shared memory segment is busy.                   */
-               
-                operations[0].sem_num = 1;
-                operations[0].sem_op =  1;
-                operations[0].sem_flg = 0;
-                operations[1].sem_num = 0;
-                operations[1].sem_op =  0;
-                operations[1].sem_flg = 0;
+                sops.sem_num = 0;
+                sops.sem_op = -1;
+                sops.sem_flg = 0;
                 printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid); 
-                rc = semop( semid, operations, 2 );
+                rc = semop( semid, &sops, 1 );
                 printf("semop completed.\n"); 
                 if (rc == -1)
                 {
@@ -448,14 +444,12 @@ int main(){
                 struct OrderManagementMessage omm2;
                 memcpy(&omm2,shm,sizeof(omm2));
                 printf("Timestamp from shared memory: %llu\n", omm2.payload.order.timestamp);
-                copiedthroughsharedmemory++;
+                printf("%d\n",copiedthroughsharedmemory++);
                 /*end action here*/
-               
-                operations[0].sem_num = 1;
-                operations[0].sem_op = -1;
-                operations[0].sem_flg = 0;
-                printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid); 
-                rc = semop( semid, operations, 1 );
+                sops.sem_num = 1;
+                sops.sem_op = 1;
+                printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid);
+                rc = semop(semid,&sops,1);
                 printf("Semop successful\n");
                 if (rc == -1)
                 {
