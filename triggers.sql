@@ -1,4 +1,4 @@
-
+--    
 -- Trigger 1: duplicates insertions to t1--which may be changed, for example if there are partial fills--into t2, which will not be changed
 
 DELIMITER |
