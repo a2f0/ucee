@@ -95,9 +95,10 @@ mykey = ftok(METOREKEY1,'b');
 //size_t mysize = 27;
 size_t mysize = sizeof(struct ReportingMessage);
 //struct ReportingMessage* rm = (struct ReportingMessage*) malloc (sizeof(ReportingMessage));
-struct ReportingMessage* rm = (struct ReportingMessage*) shmat(shmid, NULL, 0);
+//struct ReportingMessage* rm = (struct ReportingMessage*) shmat(shmid, NULL, 0);
 if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
         cout << "Error: shmget" << endl;
+struct ReportingMessage* rm = (struct ReportingMessage*) shmat(shmid, NULL, 0);
 //if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
 //        cout << "Error: shmat" << endl;
 //}
