@@ -13,6 +13,7 @@
 
 struct ReportingMessage
 {
+  unsigned long long timestamp;
   struct TradeMessage trademsg;
   struct Order orderA;
   struct Order orderB;
@@ -346,6 +347,7 @@ void printBookMsg(const struct BookMessage *bk_msg)
 void printReportingMsg(const struct ReportingMessage *rp_msg)
 {
   printf(" ReportingMessage: \n");
+  printf(" * Timestamp: %llu \n", rp_msg->timestamp);
   printf(" * TradeMessage: \n");
   struct TradeMessage tr_msg = rp_msg->trademsg;
   printTradeMsg(&tr_msg);

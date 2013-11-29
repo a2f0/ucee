@@ -293,7 +293,10 @@ struct ReportingMessage OrderBook::Match()
   struct TradeMessage tr_msg;
   nstrcpy(tr_msg.symbol,instr,SYMBOL_SIZE);
   tr_msg.quantity = 0;
-  struct ReportingMessage rp_msg = {tr_msg,orderA,orderB};
+  struct timeval tmv;
+  gettimeofday(&tmv,NULL);
+  unsigned long long now = tmv.tv_sec * 1000000000 + tmv.tv_usec;
+  struct ReportingMessage rp_msg = {now,tr_msg,orderA,orderB};
   if (sellbook.empty()){
     if (buybook.front().type == MARKET_ORDER){
       buybook.pop_front();
@@ -438,7 +441,7 @@ void OrderBookView::Process(Order myorder)
   if(mybooks[symbol].AddOrder(myorder)==1)
   {
     cout << "* myBooks: added order to corresponding book" << endl;
-    if (myorder.order_type = LIMIT_ORDER)
+    if (myorder.order_type == LIMIT_ORDER)
       myorders[orderid] = myorder;
     cout << "* myBooks: added order into myorders" << endl;
     if (writetodatabase == 1){
@@ -459,6 +462,14 @@ void OrderBookView::Process(Order myorder)
   int matches = 0;
   while(rp_msg.trademsg.quantity >0){
     matches++;
+    string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
+    string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
+    myorders.erase(orderidA);
+    myorders.erase(orderidB);
+    if (rp_msg.orderA.quantity > 0)
+      myorders[orderidA]= rp_msg.orderA;
+    if (rp_msg.orderB.quantity > 0)
+      myorders[orderidB]= rp_msg.orderB;
     CommunicateTrade(rp_msg.trademsg);
     CommunicateReportingMsg(rp_msg);
     rp_msg = mybooks[symbol].Match();
@@ -510,6 +521,14 @@ void OrderBookView::Process(Modify mymodify)
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
       matches++;
+      string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
+      string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
+      myorders.erase(orderidA);
+      myorders.erase(orderidB);
+      if (rp_msg.orderA.quantity > 0)
+        myorders[orderidA]= rp_msg.orderA;
+      if (rp_msg.orderB.quantity > 0)
+        myorders[orderidB]= rp_msg.orderB;
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
@@ -552,6 +571,14 @@ void OrderBookView::Process(Cancel mycancel)
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
       matches++;
+      string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
+      string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
+      myorders.erase(orderidA);
+      myorders.erase(orderidB);
+      if (rp_msg.orderA.quantity > 0)
+        myorders[orderidA]= rp_msg.orderA;
+      if (rp_msg.orderB.quantity > 0)
+        myorders[orderidB]= rp_msg.orderB;
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
