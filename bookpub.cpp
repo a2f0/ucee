@@ -39,9 +39,10 @@ BookPubOBV myBooks;
 
 void intHandler(int dummy=0){
   // closing IPCs
-//  myBooks.Print();
   shmctl(shmid3, IPC_RMID,NULL);
   semctl(semid4,0, IPC_RMID,NULL);
+  semctl(semid5,0, IPC_RMID,NULL);
+//  myBooks.Print();
 };
 
 int main(){

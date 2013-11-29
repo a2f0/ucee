@@ -25,13 +25,12 @@ MatchEngOBV myBooks;
 
 /*intHandler closes queue and exits*/
 void intHandler(int dummy=0){
-  // closing my queue
-//  myBooks.Print();
-  msgctl(msqid2,IPC_RMID,NULL);
+  // closing IPCs
   shmctl(shmid3,IPC_RMID,NULL);
   semctl(semid4,0,IPC_RMID,NULL);
   shmctl(shmid6rp,IPC_RMID,NULL);
   semctl(semid6rp,0,IPC_RMID,NULL);
+  // myBooks.Print();
   exit(0);
 };
 
