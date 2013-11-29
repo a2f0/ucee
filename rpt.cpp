@@ -9,7 +9,10 @@ int rc,c;
 char* query3 = (char*) malloc (1024*sizeof(char));
 //sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
 //sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
-sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+
+sprintf(query3,"%s","SELECT * FROM t3 b, t2 a WHERE (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+//sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+
 //sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
 //sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
 //sprintf(query3,"%s","SELECT * FROM rdb.t1 b INNER JOIN odb.t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
@@ -38,7 +41,7 @@ if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt3)) == 100 ){
       for(int j=0; j<6; j++) //number of columns in the database as defined in database.sh
-		printf("%s | ",(char*)sqlite3_column_text(stmt3,j));
+		printf("%16s   ",(char*)sqlite3_column_text(stmt3,j));
       printf("\n");
 }
 
@@ -97,7 +100,7 @@ if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt3)) == 100 ){
       for(int j=0; j<6; j++) //number of columns in the database as defined in database.sh
-                printf("%s | ",(char*)sqlite3_column_text(stmt3,j));
+                printf("%16s   ",(char*)sqlite3_column_text(stmt3,j));
       printf("\n");
 }
 
