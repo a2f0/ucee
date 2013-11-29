@@ -14,7 +14,6 @@
 #include "printing.h"
 #include "db.cpp"
 #include <sys/socket.h>
-//#include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -22,6 +21,7 @@
 
 using namespace std;
 
+// shorthand notation for structs in "messages.h"
 typedef struct Order Order;
 typedef struct Modify Modify;
 typedef struct Cancel Cancel;
@@ -32,10 +32,10 @@ typedef struct OrderNak OrderNak;
 typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
+// variable that indicates whether to write to database
 int writetodatabase;
-//int readfromdatabase;
 
-//there is one of these for each price level
+//list of Orders for each price level:
 class OrderList
 {
 public:
@@ -50,8 +50,8 @@ public:
   void Print(); // prints orderlist;
 };
 
-// add order to orderlist in correct order, assuming list is sorted
-// checks that the order belongs to the list
+// add order to "orders" in increasing timestamp order
+// assumes "orders" is sorted
 // returns 1 if successful, 0 if unsuccessful
 int OrderList::AddOrder(Order myorder)
 { // error checks
@@ -85,8 +85,8 @@ int OrderList::AddOrder(Order myorder)
   return 1;
 };
 
-// removes order from orderlist
-// returns 1 for success, 0 for failure, together with the order removed
+// removes order from "orders"
+// returns 1 for success, 0 for failure
 int OrderList::RemoveOrder(Order myorder)
 {
   if (orders.empty())
@@ -108,6 +108,7 @@ int OrderList::RemoveOrder(Order myorder)
   return 0;
 };
 
+// returns the to total quantity for the list of orders
 unsigned long long OrderList::Quantity(){
   list<Order>::iterator it;
   unsigned long long q =0;
@@ -116,56 +117,50 @@ unsigned long long OrderList::Quantity(){
   return q;
 };
 
+// prints the list of orders
 void OrderList::Print(){
   if(!orders.empty()){
+    // header
     printf("\n***ORDER LIST***PRICE:%f***ORDER:",price);
     printOrderType(type);
     printf("***SIZE:%d\n",(int)orders.size());
     list<Order>::iterator it = orders.begin();
+    // running through each order
     while(it != orders.end()){
       Order myorder = (*it);
       printOrder(&myorder);
       ++it;
     };
   };
-//  printf("finished this list");
 };
 
-
-// keeps orders for one symbol
+// keeps list of OrderLists, one for each price level
+// one object in the class is associated to each symbol in exchange
 class OrderBook
 {
 public:
-  char instr[SYMBOL_SIZE]; // instrument name/ticket/symbol
+  char instr[SYMBOL_SIZE]; // instrument name/ticker/symbol
   list<OrderList> sellbook; // book of sell orders
   list<OrderList> buybook; // book of buy orders
 public:
   OrderBook(){}; // used for STL MAP functionality
-  OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);};
+  OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);}; // constructor by symbol
   int AddOrder(Order); // returns 0 for failure, 1 for success
   int RemoveOrder(Order); // return 0 for failure, 1 for success
-  struct ReportingMessage  Match();
-  struct BookMessage TopBook();
+  struct ReportingMessage  Match(); // matching algorithm  
+  struct BookMessage TopBook(); // top of book
   void Print(); // prints the sellbook and buybook
 };
 
+// adding order to orderbook
 int OrderBook::AddOrder(Order myorder)
 {
-  //testing
-//  printf("* OrderBook: adding an order as follows:\n");
-//  printf("\t\tOrder's symbol: ");
-//  printFixedLengthString(myorder.symbol,SYMBOL_SIZE);
-//  printf("-\n");
-//  printf("\t\tBook's symbol: ");
-//  printFixedLengthString(instr,SYMBOL_SIZE);
-//  printf("-\n");
-  //check
+  //check the order is being added to the right book
   if(nstrcmp(myorder.symbol,instr,SYMBOL_SIZE)!=0)
   {
     cout << "Adding order to wrong book" << endl;
     return 0;
   };
-//  printf("processing order of SIDE: %d",myorder.buysell);
   int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell
   // add the OrderList if none exists
   if ((adj==1 && buybook.empty()) || (adj == -1 && sellbook.empty()))
@@ -176,10 +171,8 @@ int OrderBook::AddOrder(Order myorder)
     if(adj==1)
     {
       buybook.push_front(OL);
-//      printf("modified buybook");
     }else{
       sellbook.push_front(OL);
-//      printf("modified sellbook");
     };
   };
   // main functionality
@@ -201,10 +194,8 @@ int OrderBook::AddOrder(Order myorder)
       if(adj==1)
       {
         buybook.insert(it,OL);
-//        printf("modified buybook");
       }else{
         sellbook.insert(it,OL);
-//        printf("modified sellbook");
       }
       it--; // move back to new OrderList
       return it->AddOrder(myorder);
@@ -234,6 +225,7 @@ int OrderBook::AddOrder(Order myorder)
   return it->AddOrder(myorder);
 };
 
+// removing order from orderbook
 int OrderBook::RemoveOrder(Order myorder)
 {
   int adj = (myorder.buysell == BUY? 1:-1);// simplifies dealing buy vs sell
@@ -267,25 +259,7 @@ int OrderBook::RemoveOrder(Order myorder)
   return 0;
 };
 
-void OrderBook::Print()
-{
-  printf("\n***Book for:");
-  printFixedLengthString(instr,SYMBOL_SIZE);
-  printf("\n");
-  list<OrderList>::iterator it;
-  if (!buybook.empty()){
-  printf("\n***BUY SIDE***\n");
-  for (it = buybook.begin(); it != buybook.end(); it++)
-    it->Print();
-  };
-  if (!sellbook.empty()){
-  printf("\n***SELL SIZE***\n");
-  for (it = sellbook.begin(); it!= sellbook.end(); it++)
-    it->Print();
-  };
-//  printf("finished buy and sell side\n");
-};
-
+// doing matching algorithm on orderbook
 struct ReportingMessage OrderBook::Match()
 {
   Order orderA;
@@ -342,6 +316,7 @@ struct ReportingMessage OrderBook::Match()
   return rp_msg;
 };
 
+// retrieving bookmessage from orderbook
 struct BookMessage OrderBook::TopBook(){
   struct BookMessage mymsg;
   nstrcpy(mymsg.symbol,instr,SYMBOL_SIZE);
@@ -377,25 +352,42 @@ struct BookMessage OrderBook::TopBook(){
   return mymsg;
 };
 
+// printing orderbook
+void OrderBook::Print()
+{
+  printf("\n***Book for:");
+  printFixedLengthString(instr,SYMBOL_SIZE);
+  printf("\n");
+  list<OrderList>::iterator it;
+  if (!buybook.empty()){
+  printf("\n***BUY SIDE***\n");
+  for (it = buybook.begin(); it != buybook.end(); it++)
+    it->Print();
+  };
+  if (!sellbook.empty()){
+  printf("\n***SELL SIZE***\n");
+  for (it = sellbook.begin(); it!= sellbook.end(); it++)
+    it->Print();
+  };
+};
+
 
 // OrderBookView class: view of all books
 class OrderBookView
 {
 public:
   int msqid; // message queue to write acks/nacks
-  int shmid; // shared memory
-  int semid;
+  int shmid; // default shared memory
+  int semid; // semid to synchronise access to shmid
   int shmidrp; // shared memory to write reporting messages
-  int semidrp;
-  int mysocket;
+  int semidrp; // semid to synchronise access to shmidrp
+  int mysocket; // socket for multicasting
   struct sockaddr_in grp;
   map<string,OrderBook> mybooks; // books by instrument
   map<string,Order> myorders; // orders by orderid
 public:
-  
   void Process(OrderManagementMessage); // calls other Process
   void Process(Order); // processes Order omm
-  void ProcessDB(Order); //process Order from database
   void Process(Modify); // processes Modify omm
   void Process(Cancel); // processes Cancel omm
   void Print(); // prints all books
@@ -406,11 +398,11 @@ public:
   virtual void CommunicateBookMsg(struct BookMessage){};
   // broadcasts bookmessage via multicast
   virtual void CommunicateReportingMsg(struct ReportingMessage){};
+  // communicates reportingmessage via shmidrp
 };
 
 void OrderBookView::Process(OrderManagementMessage omm)
 {
-//  printf("* myBooks: processing OrderManagementMessage\n");
   if (omm.type == NEW_ORDER){
     Process(omm.payload.order);
   } else if(omm.type == MODIFY_REQ){
@@ -418,42 +410,31 @@ void OrderBookView::Process(OrderManagementMessage omm)
   } else if(omm.type == CANCEL_REQ){
     Process(omm.payload.cancel);
   } else {
-//    printf("Message cannot be processed\n");
+    printf("Message cannot be processed\n");
   };
 };
 
 void OrderBookView::Process(Order myorder)
 {
-  printf("* myBooks: processing Order\n");
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-  cout << "* myBooks: here is the order id: " << orderid << "-\n";
   if(mybooks.count(symbol) < 1)
   {
-    cout << "* myBooks: no book with that symbol" << endl;
     OrderBook ob(myorder.symbol);
     mybooks[symbol] = ob;
-    cout << "* myBooks: added book with that symbol" << endl;
-  }else{
-    cout<< "* myBooks: book already exists, so won't create new" << endl;
   };
   if(mybooks[symbol].AddOrder(myorder)==1)
   {
-    cout << "* myBooks: added order to corresponding book" << endl;
     if (myorder.order_type == LIMIT_ORDER)
       myorders[orderid] = myorder;
-    cout << "* myBooks: added order into myorders" << endl;
-    if (writetodatabase == 1){
+    if (writetodatabase == 1) // communicating OrderAck
       CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
-    };
-    // communicating OrderAck
   }else{
-    cout << "* myBooks: didn't add order\n" << endl;
     if (writetodatabase==1){
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
-    CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
+    if (writetodatabase == 1)
+      CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
     };
   };
@@ -474,7 +455,6 @@ void OrderBookView::Process(Order myorder)
     CommunicateReportingMsg(rp_msg);
     rp_msg = mybooks[symbol].Match();
   };
-  cout << "Performed the matching algorithm." << endl;
   // generate bookmessage
   if (matches > 0 || myorder.order_type == LIMIT_ORDER){
     cout << "Compiling book message" << endl;
