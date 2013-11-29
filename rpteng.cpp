@@ -123,6 +123,9 @@ while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 //}
 
 add_row(*rm);
+printReportingMsg(*rm);
+
+
 
 sops.sem_num = 0;
 sops.sem_op = 1;
