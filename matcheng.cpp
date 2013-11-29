@@ -30,6 +30,8 @@ void intHandler(int dummy=0){
   semctl(semid4,0,IPC_RMID,NULL);
   shmctl(shmid6rp,IPC_RMID,NULL);
   semctl(semid6rp,0,IPC_RMID,NULL);
+  msgctl(msqid1,IPC_RMID,NULL);
+  msgctl(msqid2,IPC_RMID,NULL);
   // myBooks.Print();
   exit(0);
 };
