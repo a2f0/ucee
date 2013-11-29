@@ -6,3 +6,16 @@ Dan Sullivan (dansully@uchicago.edu)
 
 The most recent version of this source tree can be pulled down (with authentication):
 git clone git@bitbucket.org:mpcs51025gamma/ucee.git
+
+STARTING THE SIMULATION ENVIRONMENT:
+
+1) make clean; make
+2) ./connmgr
+3) ./database.sh
+4) ./tradepub
+5) ./bookpub
+6) ./tradepub
+7) ./simulate.sh
+
+
+
