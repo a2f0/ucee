@@ -33,7 +33,7 @@ typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
 int writetodatabase;
-int readfromdatabase;
+//int readfromdatabase;
 
 //there is one of these for each price level
 class OrderList

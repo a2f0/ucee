@@ -193,11 +193,10 @@ int main(){
         //printf("main: semget() failed\n");
         printf("Error in semget(): %s\n", strerror(errno));
         return -1;
-    }
-   
-//    sarray[0] = 0;
-//    sarray[1] = 0;
-//    rc = semctl( semid, 1, SETALL, sarray);
+    }   
+//    int sarray[2] = {0,0};
+//    semctl( semid, 0, SETALL, sarray);
+
     semop(semid,&sops,1);
 
 
