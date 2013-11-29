@@ -29,10 +29,10 @@ using namespace std;
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "db.cpp"
-//#include "printing.h"
+#include "keys.h"
 int mysocket;
 int sem_id;
-
+int shmid;
 void intHandler(int dummy=0){
   // closing IPCs
   shmctl(shmid,IPC_RMID,NULL);
@@ -79,12 +79,15 @@ int main(){
 
 //SHM SETUP
 //
-int shmid/*,shmid2*/;
+//int shmid/*,shmid2*/;
 key_t mykey/*5678, mykey2=5679*/;
 mykey = ftok("/etc/sensors3.conf",'b');
 //size_t mysize = 27;
 size_t mysize = sizeof(struct TradeMessage);
 struct ReportingMessage* rm = (struct ReportingMessage*) malloc (sizeof(ReportingMessage));
+if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
+        cout << "Error: shmget" << endl;
+
 //
 
 //SOCKET SETUP
@@ -97,7 +100,7 @@ setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_tt
 //SEM SETUP:
 //
 struct sembuf sops;
-sem_id = semget(ftok(SEMKEY1,'b'), 2, 0666 | IPC_CREAT );
+sem_id = semget(ftok(METORESEM,'b'), 2, 0666 | IPC_CREAT );
 if(sem_id == -1){
 perror("segment failed: ");
 exit(EXIT_FAILURE);
@@ -111,8 +114,11 @@ sops.sem_flg = 0;
 signal(SIGINT,intHandler);
 
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
+if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
+        cout << "Error: shmat" << endl;
+}
 
-//ADD ROW
+add_row(*rm);
 
 sops.sem_num = 0;
 sops.sem_op = 1;

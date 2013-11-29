@@ -4,31 +4,34 @@
 int trader_rpt(char* tr){
 printf("\n\nTRADER REPORT:\n\n");
 int rc,c;
-char* query1 = (char*) malloc (1024*sizeof(char));
-char* query2 = (char*) malloc (1024*sizeof(char));
+//char* query1 = (char*) malloc (1024*sizeof(char));
+//char* query2 = (char*) malloc (1024*sizeof(char));
 char* query3 = (char*) malloc (1024*sizeof(char));
-sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
-sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
-sprintf(query3,"%s","SELECT * FROM rdb.t1 b INNER JOIN odb.t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
-sqlite3_stmt *stmt1;
-sqlite3_stmt *stmt2;
+//sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+//sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+//sprintf(query3,"%s","SELECT * FROM rdb.t1 b INNER JOIN odb.t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+//sqlite3_stmt *stmt1;
+//sqlite3_stmt *stmt2;
 sqlite3_stmt *stmt3;
 sqlite3* mydb = create_db();
 sqlite3_open("OrderBook.db",&mydb);
-if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
-        cout << sqlite3_errmsg(mydb);
+//if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
+//        cout << sqlite3_errmsg(mydb);
 //while ( (c=sqlite3_step(stmt1)) == 100 ){
 //;
 //}
-sqlite3_finalize(stmt1);
+//sqlite3_finalize(stmt1);
 
 
-if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
-        cout << sqlite3_errmsg(mydb);
+//if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
+//        cout << sqlite3_errmsg(mydb);
 //while ( (c=sqlite3_step(stmt2)) == 100 ){
 //;
 //}
-sqlite3_finalize(stmt2);
+//sqlite3_finalize(stmt2);
 
 
 if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
@@ -63,31 +66,31 @@ printf("\n\n\n");
 int instrument_rpt(char* in){
 printf("\n\nINSTRUMENT REPORT:\n\n");
 int rc,c;
-char* query1 = (char*) malloc (1024*sizeof(char));
-char* query2 = (char*) malloc (1024*sizeof(char));
+//char* query1 = (char*) malloc (1024*sizeof(char));
+//char* query2 = (char*) malloc (1024*sizeof(char));
 char* query3 = (char*) malloc (1024*sizeof(char));
-sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
-sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
-sprintf(query3,"%s","SELECT * FROM rdb.t1 b INNER JOIN odb.t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol;");
-sqlite3_stmt *stmt1;
-sqlite3_stmt *stmt2;
+//sprintf(query1,"%s","ATTACH 'OrderBook.db' as odb;");
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol;");
+//sqlite3_stmt *stmt1;
+//sqlite3_stmt *stmt2;
 sqlite3_stmt *stmt3;
 sqlite3* mydb = create_db();
 sqlite3_open("OrderBook.db",&mydb);
-if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
-        cout << sqlite3_errmsg(mydb);
+//if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
+//        cout << sqlite3_errmsg(mydb);
 //while ( (c=sqlite3_step(stmt1)) == 100 ){
 //;
 //}
-sqlite3_finalize(stmt1);
+//sqlite3_finalize(stmt1);
 
 
-if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
-        cout << sqlite3_errmsg(mydb);
+//if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
+//        cout << sqlite3_errmsg(mydb);
 //while ( (c=sqlite3_step(stmt2)) == 100 ){
 //;
 //}
-sqlite3_finalize(stmt2);
+//sqlite3_finalize(stmt2);
 
 
 if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)

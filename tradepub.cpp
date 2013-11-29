@@ -98,6 +98,10 @@ signal(SIGINT,intHandler);
 
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 
+if ((tm = (struct TradeMessage*) shmat(shmid, NULL, 0)) == (struct TradeMessage*) -1) {
+        cout << "Error: shmat" << endl;
+}
+ 
 
   printTradeMsg(tm);
 
