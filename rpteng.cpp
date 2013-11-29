@@ -36,7 +36,7 @@ int shmid;
 void intHandler(int dummy=0){
   // closing IPCs
   shmctl(shmid,IPC_RMID,NULL);
-  semctl(sem_id,IPC_RMID,NULL);
+  semctl(sem_id,0,IPC_RMID,NULL);
   exit(0);
 };
 
@@ -52,7 +52,17 @@ struct ReportingMessage
 int add_row(ReportingMessage myrm){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-sprintf(order_to_sql,"INSERT INTO t3 VALUES ('%s',%llu,%f,%lu,%s,%s);",myrm.trademsg.symbol,myrm.orderA.timestamp,atof(myrm.trademsg.price),myrm.trademsg.quantity,myrm.orderA.order_id,myrm.orderB.order_id);
+sprintf(order_to_sql,"INSERT INTO t3 VALUES ('%s',%llu,%s,%lu,'%s','%s');",nnstring(myrm.trademsg.symbol, SYMBOL_SIZE).c_str(),myrm.timestamp,nnstring(myrm.trademsg.price,PRICE_SIZE).c_str(),myrm.trademsg.quantity,nnstring(myrm.orderA.order_id, ORDERID_SIZE).c_str(),nnstring(myrm.orderB.order_id, ORDERID_SIZE).c_str());
+
+
+//TEST WITH INSERTING ON LIMITED COLUMNS//sprintf(order_to_sql,"INSERT INTO t3 VALUES ('%s',%llu);",nnstring(myrm.trademsg.symbol, SYMBOL_SIZE).c_str(),myrm.orderA.timestamp);
+
+
+//sprintf(order_to_sql,"INSERT INTO t3 VALUES ('%s',%llu,%f,%lu,%s,%s);",nnstring(myrm.trademsg.symbol, SYMBOL_SIZE).c_str(),myrm.orderA.timestamp,atof(myrm.trademsg.price),myrm.trademsg.quantity,myrm.orderA.order_id,myrm.orderB.order_id);
+
+//sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%s,%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),nnstring(myorder.account, ACCOUNT_SIZE).c_str(),nnstring(myorder.user,USER_SIZE).c_str(),(int)myorder.order_type,myorder.timestamp,myorder.buysell,nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
+
+//nnstring(myorder.order_id, ORDERID_SIZE).c_str()
 //(symbol TEXT, timestamp UNSIGNED BIG INT, price DOUBLE, quantity UNSIGNED BIG INT, orderid1 TEXT, orderid2 TEXT)
 sqlite3_stmt *stmt2;
 sqlite3* mydb = create_db();
@@ -122,8 +132,9 @@ while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 //        cout << "Error: shmat" << endl;
 //}
 
-add_row(*rm);
+//add_row(*rm);
 printReportingMsg(rm);
+add_row(*rm);
 
 
 
