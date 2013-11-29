@@ -81,12 +81,16 @@ int main(){
 //
 //int shmid/*,shmid2*/;
 key_t mykey/*5678, mykey2=5679*/;
-mykey = ftok("/etc/sensors3.conf",'b');
+mykey = ftok(METOREKEY1,'b');
 //size_t mysize = 27;
-size_t mysize = sizeof(struct TradeMessage);
-struct ReportingMessage* rm = (struct ReportingMessage*) malloc (sizeof(ReportingMessage));
+size_t mysize = sizeof(struct ReportingMessage);
+struct ReportingMessage* rm;/* = (struct ReportingMessage*) malloc (sizeof(ReportingMessage));*/
 if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
         cout << "Error: shmget" << endl;
+if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
+        cout << "Error: shmat" << endl;
+}
+
 
 //
 
@@ -114,9 +118,9 @@ sops.sem_flg = 0;
 signal(SIGINT,intHandler);
 
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
-if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
-        cout << "Error: shmat" << endl;
-}
+//if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
+//        cout << "Error: shmat" << endl;
+//}
 
 add_row(*rm);
 
