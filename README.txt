@@ -15,4 +15,6 @@ STARTING THE SIMULATION ENVIRONMENT:
 4) ./matcheng
 5) ./tradepub
 6) ./bookpub
-7) ./simulate.sh
+7) ./rpteng
+8) ./simulate.sh
+9) ./rpt
