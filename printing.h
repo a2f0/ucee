@@ -11,6 +11,8 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 
+// structure passed to the reporting engine:
+
 struct ReportingMessage
 {
   unsigned long long timestamp;
@@ -18,8 +20,6 @@ struct ReportingMessage
   struct Order orderA;
   struct Order orderB;
 };
-
-
 
 // functionality to deal with strings without null termination
 
@@ -35,11 +35,10 @@ int nstrcmp(char *s1, const char *s2, unsigned int size)
   int result = strcmp(buffer1,buffer2);
   free(buffer1);
   free(buffer2);
-  //  cout << "Result from comparison: "<< result << endl;
   return result;
 };
 
-/* copies a string into char array, placing ' ' if extra space*/
+// copies a string into char array, placing ' ' if extra space
 void nstringcpy(char* dest, std::string s, unsigned int size)
 {
   const char* cstr = s.c_str();
@@ -47,14 +46,14 @@ void nstringcpy(char* dest, std::string s, unsigned int size)
   memcpy(dest, cstr, (strlen(cstr) < size)? strlen(cstr):size);
 };
 
-/* copies char array into another, placing ' ' if extra space*/
+// copies char array into another, placing ' ' if extra space
 void nstrcpy(char *dest, char*src,unsigned int size)
 {
   memset(dest, ' ', size);
   memcpy(dest, src, (strlen(src) < size) ? strlen(src) : size);
 };
 
-/* makes a char array into a string, leaving out blanks/etc*/
+//  makes a char array into a string, leaving out blanks/etc
 std::string nstring(char *s, unsigned int size)
 {
   char* buffer = (char*)malloc(size +1);
@@ -66,7 +65,7 @@ std::string nstring(char *s, unsigned int size)
   return result;
 }
 
-/* makes a char array into a string, NOT leaving out blanks/etc*/
+// makes a char array into a string, NOT leaving out blanks/etc
 std::string nnstring(char *s, unsigned int size)
 {
   char* buffer = (char*)malloc(size +1);
@@ -78,8 +77,7 @@ std::string nnstring(char *s, unsigned int size)
   return result;
 };
 
-
-/* make a char array into a double*/
+// make a char array into a double
 double natof(char* s, unsigned int size)
 {
   char * buffer = (char*) malloc(size+1);
@@ -92,7 +90,7 @@ double natof(char* s, unsigned int size)
 };
 
 
-// functionality for printing
+// functionality for printing, extracted from TradeBot
 
 void printCurrentTime(void)
 {
@@ -312,6 +310,8 @@ void printOrderManagementMessage(const struct OrderManagementMessage *omm)
   }
 }
 
+// extra functionality for printing
+
 void printTradeMsg(const struct TradeMessage *tr_msg)
 {
   printCurrentTime();
@@ -357,6 +357,7 @@ void printReportingMsg(const struct ReportingMessage *rp_msg)
   struct Order orderB = rp_msg->orderB;
   printf(" * Order B: \n");
   printOrder(&orderB);
+  printf("\n");
 };
   
 
