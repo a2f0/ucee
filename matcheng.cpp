@@ -51,8 +51,6 @@ int main(){
   semid4 = semget(key4,2,0666| IPC_CREAT);
   semctl(semid4,0,IPC_RMID,NULL);
   semid4 = semget(key4,2,0666| IPC_CREAT);
-  int sarray[2] = {0,0};
-  semctl( semid4, 1, SETALL, sarray);
   
   key6 = ftok(METOREKEY1,'b');
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
@@ -63,7 +61,6 @@ int main(){
   semid6rp = semget(key7,2,0666|IPC_CREAT);
   semctl(semid6rp,0,IPC_RMID,NULL);
   semid6rp = semget(key7,2,0666|IPC_CREAT);
-  semctl(semid6rp, 1, SETALL, sarray);
 
   struct sembuf sops;
   sops.sem_num = 0;

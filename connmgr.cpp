@@ -93,18 +93,22 @@ void readfrommatchingengine() {
     int msqid2;
     key2 = ftok(METOCMKEY1, 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
+    msgctl(msqid2,IPC_RMID,NULL);
+    msqid2 = msgget(key2, 0666 | IPC_CREAT);
     printf("Getting ready to read order acknowledgement messages from message queue...\n");
-    //char *order_id;
+    //char *order_id
+    char order_id[33];
+    order_id[32] = '\0';
+    
+    struct message_msgbuf mmb;
+    int rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
 
-    for(;;) {
-        char order_id[33];
-        struct message_msgbuf mmb;
+    while(rcv_bytes !=-1) {
         /*
         printf("Matcheng listening on msqi2d: %d\n", msqid2);
         */
-        int rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
+        
         strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
-        order_id[32] = '\0';
         printf("======message received from matching enginee======\n"); 
         printf("Received: %d bytes from matching engine\n", rcv_bytes);
         printf("receiver mmb type: %lu\n", mmb.mtype);
@@ -124,8 +128,9 @@ void readfrommatchingengine() {
         printf("======message received from matching engine======\n"); 
         //printOrderManagementMessage(&mmb.omm);
         std::this_thread::yield();
-    }
-}
+        rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
+    };
+};
 
 std::string isommvalid(struct OrderManagementMessage omm) {
     printf("Validating message of type: %d\n", omm.type);
@@ -172,7 +177,9 @@ int main(){
     sops.sem_num =0;
     sops.sem_op = 1;
     sops.sem_flg =0;
-    
+
+    shmid=shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT);
+    shmctl(shmid, IPC_RMID,NULL);
     if ((shmid = shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT)) < 0) {
        perror("shmget");
     }
@@ -185,17 +192,16 @@ int main(){
         printf("main: ftok() for sem failed\n");
         return -1;
     };
-
     printf("semkey: %d\n", semkey); 
+    semid = semget( semkey, NUMSEMS, 0666 | IPC_CREAT );
+    semctl(semid,0,IPC_RMID,NULL);
     semid = semget( semkey, NUMSEMS, 0666 | IPC_CREAT );
     if ( semid == -1 )
     {
         //printf("main: semget() failed\n");
         printf("Error in semget(): %s\n", strerror(errno));
         return -1;
-    }   
-//    int sarray[2] = {0,0};
-//    semctl( semid, 0, SETALL, sarray);
+    }
 
     semop(semid,&sops,1);
 
@@ -204,7 +210,9 @@ int main(){
     key_t key;
     key = ftok(CMTOMEKEY1, 'b');
     int msqid;
-    msqid = msgget(key, 0666 | IPC_CREAT); 
+    msqid = msgget(key, 0666 | IPC_CREAT);
+    msgctl(msqid,IPC_RMID,NULL);
+    msqid = msgget(key, 0666 | IPC_CREAT);
     printf("msgqid for cm to matching engine (msgqid) equal to: %d\n",msqid); 
 
     printf("Starting connection manager\n"); 
