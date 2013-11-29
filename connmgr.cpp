@@ -18,6 +18,7 @@
 #include <errno.h>
 #include "keys.h"
 //#include <sys/sem.h>
+#include <mutex>
 
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -40,6 +41,7 @@
 //http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Fapis%2Fapiexusmem.htm
 
 std::map<std::string, int> connectionmapper;
+std::mutex writetoken;
 
 int found = 0;
 int notfound = 0;
@@ -58,7 +60,7 @@ struct shmid_ds shmid_struct;
 struct OrderManagementMessage* shm;
   
 void my_handler(int s){
-    printf("Cleaning up...\n");
+    printf("caught signal %d\n",s);
     int rc;
     rc = semctl( semid, 1, IPC_RMID );
     if (rc==-1)
@@ -76,11 +78,10 @@ void my_handler(int s){
         printf("main: shmctl() failed\n");
     }
 
-    printf("Connection manager operational summary:");
-    printf("Caught signal %d\n",s);
-    printf("Found (and acknowledged) for reverse routing (to tradebot): %d\n", found);
-    printf("Not found for reverse routing (to tradebot): %d\n",notfound);
-    printf("Total messages received from trade bots: %d\n",receivedfromtradebots);
+    printf("connection manager operational summary:");
+    printf("found (and acknowledged) for reverse routing (to tradebot): %d\n", found);
+    printf("not found for reverse routing (to tradebot): %d\n",notfound);
+    printf("total messages received from trade bots: %d\n",receivedfromtradebots);
     printf("%d", copiedthroughsharedmemory);
     exit(1); 
 }
@@ -88,14 +89,14 @@ void my_handler(int s){
 //This should be called from a separate thread.
 void readfrommatchingengine() {
 
-    printf("Thread to read from Matching Engine System V message queue spawned.\n");
+    printf("thread to read from matching engine system v message queue spawned.\n");
     key_t key2;
     int msqid2;
     key2 = ftok(METOCMKEY1, 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
     msgctl(msqid2,IPC_RMID,NULL);
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
-    printf("Getting ready to read order acknowledgement messages from message queue...\n");
+    printf("getting ready to read order acknowledgement messages from message queue...\n");
     //char *order_id
     char order_id[33];
     order_id[32] = '\0';
@@ -107,10 +108,10 @@ void readfrommatchingengine() {
         /*
         printf("Matcheng listening on msqi2d: %d\n", msqid2);
         */
-        
+        writetoken.lock();
         strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
         printf("======message received from matching enginee======\n"); 
-        printf("Received: %d bytes from matching engine\n", rcv_bytes);
+        printf("received: %d bytes from matching engine\n", rcv_bytes);
         printf("receiver mmb type: %lu\n", mmb.mtype);
         printf("receiver omm type: %d\n", mmb.omm.type);
         printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
@@ -118,14 +119,17 @@ void readfrommatchingengine() {
         std::string ordr(order_id);
         auto it = connectionmapper.find(order_id);
         if (it != connectionmapper.end()) {
-            printf("descriptor: %d\n", it->second);
+            printf("descriptor matched for reverse routing: %d\n", it->second);
             send(it->second, &mmb.omm, sizeof(mmb.omm), 0);
+            connectionmapper.erase(it);
+            printf("removed map entry from connection manager.\n");
             found++;
         } else {
+            printf("**warning: no file descripter matched for reverse routing**: %d\n", it->second);
             notfound++;
         }
-        printf("as str: %s.\n",ordr.c_str());
-        printf("======message received from matching engine======\n"); 
+        printf("======end message received from matching engine======\n"); 
+        writetoken.unlock();
         //printOrderManagementMessage(&mmb.omm);
         std::this_thread::yield();
         rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
@@ -152,6 +156,7 @@ std::string isommvalid(struct OrderManagementMessage omm) {
 }
 
 int main(){
+    printf("starting connection manager...\n"); 
 
     //Trap the signal
     struct sigaction sigIntHandler;
@@ -162,23 +167,21 @@ int main(){
 
     int rc;
 
-    /* semaphore initialization */
+    /* shared memory initialization */
     key_t key_shm;
-    //key_shm = CMTOBPKEY1;
     key_shm = ftok(CMTOBPKEY1, 'b');
-    //void* shm;
     struct OrderManagementMessage* shm;
 
+    /* semaphore initialization */
     key_t semkey;
     
-//    short sarray[NUMSEMS];
-    // struct sembuf operations[2];
     struct sembuf sops;
     sops.sem_num =0;
     sops.sem_op = 1;
     sops.sem_flg =0;
 
     shmid=shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT);
+    printf("shared memory segment id initialized to: %d\n", shmid);
     shmctl(shmid, IPC_RMID,NULL);
     if ((shmid = shmget(key_shm,sizeof(struct OrderManagementMessage),0666|IPC_CREAT)) < 0) {
        perror("shmget");
@@ -198,13 +201,11 @@ int main(){
     semid = semget( semkey, NUMSEMS, 0666 | IPC_CREAT );
     if ( semid == -1 )
     {
-        //printf("main: semget() failed\n");
         printf("Error in semget(): %s\n", strerror(errno));
         return -1;
     }
 
     semop(semid,&sops,1);
-
 
     std::thread rfme(readfrommatchingengine);
     key_t key;
@@ -215,7 +216,6 @@ int main(){
     msqid = msgget(key, 0666 | IPC_CREAT);
     printf("msgqid for cm to matching engine (msgqid) equal to: %d\n",msqid); 
 
-    printf("Starting connection manager\n"); 
     int hServerSocket;
     struct sockaddr_in Address;
     int nAddressSize=sizeof(struct sockaddr_in);
@@ -314,13 +314,13 @@ int main(){
             //If revents is not POLLIN, it's an unexpected result
             //log and end the server.
             if(fds[i].revents != POLLIN) {
-                printf("  Error! revents = %d\n", fds[i].revents);
+                printf("**error revents = %d\n**", fds[i].revents);
                 end_server = TRUE;
                 break;
             }
             
             if (fds[i].fd == hServerSocket) {
-                printf("Listening socket is readable\n");
+                printf("listening socket is readable\n");
                 do {
                     //Accept all incoming connections that are queued up
                     //on the listening socket before we loop back and
@@ -335,32 +335,54 @@ int main(){
                         }
                         break;
                     }
-                    printf("new_sd: %d", new_sd);
-                    printf("new incoming connection - %d\n", new_sd);
+                    printf("new: incoming connection on descripter %d\n", new_sd);
                     fds[nfds].fd = new_sd;
                     fds[nfds].events = POLLIN;
                     nfds++;
                 } while (new_sd != -1);
             } else {
-                printf("descriptor %d is readable\n", fds[i].fd);
+                printf("poll: descriptor %d is readable\n", fds[i].fd);
                 close_conn = FALSE;
                 struct OrderManagementMessage omm;
                 rc = recv(fds[i].fd, &omm, sizeof(omm), 0);
                 receivedfromtradebots++;
                 std::string error = isommvalid(omm);
-                //printf("error returned: %s\n", error.c_str());
-                //char order_id[32];
                 char order_id[33];
                 strncpy(order_id, omm.payload.order.order_id, 32);
                 order_id[32] = '\0';
                 printf("order_id char array pre: %s.\n", order_id);
                 printf("time: %lld\n", (long long) time(NULL));
+
+                char acct[33];
+                strncpy(acct, omm.payload.order.account, 32);
+                acct[32] = '\0';
+
+                char usr[33];
+                strncpy(usr, omm.payload.order.user, 32);
+                usr[32] = '\0';
+                std::string ordr(order_id);
+
+                writetoken.lock();
+                printf("======incoming order======\n");
+                printf("read %d bytes through socket with file descripter %d, current size: %d\n",rc, fds[i].fd, current_size);
+                printf("message type: %d\n",omm.type);
+                printf("order type: %d\n",omm.payload.order.order_type);
+                printf("buysell: %d\n",omm.payload.order.buysell);
+                printf("quantity: %lu\n",  omm.payload.order.quantity );
+                printf("timestamp: %llu\n", omm.payload.order.timestamp );
+                printf("received on fd (i): %d\n", i);
+                printf("map size after insert: %lu\n", connectionmapper.size());
+                printf("account: %s.\n", acct);
+                printf("user: %s.\n", usr);
+                printf("======end incoming order======\n");
+                writetoken.unlock();
+                
                 // error checking
                 if ( error.empty() ) {
-                    printf("This is a valid message.\n");
+                    printf("the most recent incoming order was valid..\n");
                 } else { 
                     struct OrderManagementMessage romm;
-                    printf("This message is not valid. A nack needs to be sent.\n");
+                    printf("This message is not valid. Sending a nack.\n");
                     if (omm.type == 3) { 
                         romm.type = MODIFY_NAK;
                         strncpy( romm.payload.modifyNak.reason , error.c_str(),64);
@@ -384,47 +406,13 @@ int main(){
                     printOrderManagementMessage(&romm);
                     printf("sent %d bytes through socket in NAK message\n", rc);
                 };
-                
-                //int accountsize = strlen( omm.payload.order.account );
-                char acct[33];
-                strncpy(acct, omm.payload.order.account, 32);
-                acct[32] = '\0';
-                printf("account: %s.\n", acct);
-                
-                char usr[33];
-                strncpy(usr, omm.payload.order.user, 32);
-                usr[32] = '\0';
-                printf("user: %s.\n", usr);
-                //printf("order_id char array: %s\n", order_id);
-                std::string ordr(order_id);
-                
-                //size_t p = ordr.find_last_not_of(" \t");
-                //if (std::string::npos != p)
-                //    ordr.erase(p+1);
-                
-                printf("inserting %d as file descriptor for order %s.\n", fds[i].fd, ordr.c_str());
                 // end of error checking
 
-
-
-                
+                //Insert the entry in to the connection mapper.
+                printf("inserting %d as file descriptor for order %s.\n", fds[i].fd, ordr.c_str());
                 connectionmapper.insert(std::pair<std::string,int>(ordr ,fds[i].fd ));
-               
-                /* 
-                printf("======new order======\n");
-                printf("read %d bytes through socket with file descripter %d, current size: %d\n",rc, fds[i].fd, current_size);
-                printf("Message type: %d\n",omm.type);
-                printf("Order type: %d\n",omm.payload.order.order_type);
-                printf("Buysell: %d\n",omm.payload.order.buysell);
-                printf("Account size constant: %d\n", ACCOUNT_SIZE);
-                printf("Account size: %d\n", accountsize);
-                printf("Quantity: %lu\n",  omm.payload.order.quantity );
-                printf("Timestamp: %llu\n", omm.payload.order.timestamp );
-                printf("Received on FD (i): %d\n", i);
-                printf("map size after insert: %lu\n", connectionmapper.size());
-                printf("======new order======\n");
-                */
-                
+
+                //Send the message to the MatchingEngine 
                 struct message_msgbuf mmb = {2, omm};
                 printf("sending message to queue with queue id: %d\n", msqid);
                 msgsnd(msqid, &mmb, sizeof(struct OrderManagementMessage ), 0);
@@ -443,21 +431,14 @@ int main(){
                     return -1;
                 }
                 
-                /*action here*/
-                printf("segment id:%d\n", shmid);
-                printf("Timestamp: %llu\n", omm.payload.order.timestamp);
                 memcpy(shm,&omm,sizeof(omm));
                 printf("successfully copied message to shared memory with order type %d\n", omm.type);
-                struct OrderManagementMessage omm2;
-                memcpy(&omm2,shm,sizeof(omm2));
-                printf("Timestamp from shared memory: %llu\n", omm2.payload.order.timestamp);
                 printf("%d\n",copiedthroughsharedmemory++);
-                /*end action here*/
                 sops.sem_num = 1;
                 sops.sem_op = 1;
                 printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid);
                 rc = semop(semid,&sops,1);
-                printf("Semop successful\n");
+                printf("semop successful\n");
                 if (rc == -1)
                 {
                     printf("main: semop() failed\n");
