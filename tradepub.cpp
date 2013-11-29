@@ -38,12 +38,12 @@ memset((char *) &grp2, 0, sizeof(grp));
 grp2.sin_family = AF_INET;
 //grp2.sin_addr.s_addr = inet_addr(MULTICAST_ADDRESS);
 //grp2.sin_port = htons(atoi(MULTICAST_PORT));
-grp.sin_addr.s_addr = inet_addr("239.192.07.07");
-grp.sin_port = htons(atoi("1234"));
-
-ssize_t f = sendto(mysocket, &tm, 32, 0, (struct sockaddr*) &grp2, sizeof(grp));
+grp2.sin_addr.s_addr = inet_addr("239.192.07.07");
+grp2.sin_port = htons(atoi("1234"));
+ssize_t f = sendto(mysocket, &tm, sizeof(TradeMessage), 0, (struct sockaddr*) &grp2, sizeof(grp2));
 if(f<0){
-        fprintf(stderr,"Message Not Sent.\nUsage: ./sn -a 239.192.07.07 -p 1234\n");
+        fprintf(stderr,"Message Not Sent.\n");
+	fprintf(stderr,strerror(errno));
         return -1;
 }
 
@@ -58,7 +58,7 @@ int sem_id;
 void intHandler(int dummy=0){
   // closing IPCs
   shmctl(shmid,IPC_RMID,NULL);
-  semctl(sem_id,IPC_RMID,NULL);
+  semctl(sem_id,0,IPC_RMID,NULL);
   exit(0);
 };
 
@@ -94,7 +94,7 @@ mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
 
-memset((char *) &grp, 0, sizeof(sockaddr_in));
+//memset((char *) &grp, 0, sizeof(sockaddr_in));
 grp.sin_family = AF_INET;
 grp.sin_addr.s_addr = inet_addr("239.192.07.07");
 //grp.sin_addr.s_addr = inet_addr(MULTICAST_ADDRESS);
@@ -127,7 +127,7 @@ sops.sem_op=-1;
 };
 //shmctl(shmid, IPC_RMID, struct shmid_ds * buf);
 
-
+/*
 struct TradeMessage *test = (struct TradeMessage*) malloc (sizeof(struct TradeMessage));
 sprintf(test->symbol,"%s","msft");
 sprintf(test->price,"%s","100");
@@ -140,13 +140,14 @@ struct sockaddr_in grp2;
 grp2.sin_family = AF_INET;
 grp.sin_addr.s_addr = inet_addr("239.192.07.07");
 grp.sin_port = htons(1234);
-ssize_t mylen = (ssize_t) sizeof(struct TradeMessage);
-ssize_t f = sendto(mysocket, test, mylen, 0, (struct sockaddr*) &grp2, sizeof(struct sockaddr));
+ssize_t mylen = (ssize_t) 2*sizeof(struct TradeMessage);
+ssize_t f = sendto(mysocket, test, mylen, 0, (struct sockaddr*) &grp2, sizeof(struct sockaddr_in));
 if(f<0){
         fprintf(stderr,"Message Not Sent.\nUsage: ./sn -a 239.192.07.07 -p 1234\n");
         return -1;
 }
 }
+*/
 
 close(mysocket);
 return 0;
