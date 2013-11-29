@@ -41,14 +41,14 @@ void MatchEngOBV::CommunicateReportingMsg(struct ReportingMessage rp_msg){
   sops.sem_num = 0;
   sops.sem_op = -1; // set to -1 later
   sops.sem_flg = 0;
-  // if(semop(semidrp,&sops,1)!=-1){
+  if(semop(semidrp,&sops,1)!=-1){
   struct ReportingMessage* ptr=(struct ReportingMessage*)shmat(shmidrp,NULL,0);
   memcpy(ptr,&rp_msg,sizeof(rp_msg));
   sops.sem_num = 1;
   sops.sem_op = 1; // set to 1 later
   printReportingMsg(ptr);
-//  semop(semidrp,&sops,1);
-//  };
+  semop(semidrp,&sops,1);
+  };
 };
 
 

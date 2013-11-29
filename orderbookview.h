@@ -438,7 +438,8 @@ void OrderBookView::Process(Order myorder)
   if(mybooks[symbol].AddOrder(myorder)==1)
   {
     cout << "* myBooks: added order to corresponding book" << endl;
-    myorders[orderid] = myorder;
+    if (myorder.order_type = LIMIT_ORDER)
+      myorders[orderid] = myorder;
     cout << "* myBooks: added order into myorders" << endl;
     if (writetodatabase == 1){
       CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
@@ -546,7 +547,7 @@ void OrderBookView::Process(Cancel mycancel)
       myorders.erase(orderid);
       CommunicateAck(CANCEL_ACK,mycancel.order_id,NULL,quantity);
     };
-        struct BookMessage mybookmsg;
+    struct BookMessage mybookmsg;
     struct ReportingMessage rp_msg = mybooks[symbol].Match();
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
