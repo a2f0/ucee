@@ -16,6 +16,7 @@ class MatchEngOBV : public OrderBookView
 public:
   void CommunicateTrade(struct TradeMessage);
   void CommunicateAck(enum MESSAGE_TYPE, char*, char*, unsigned long);
+  void CommunicateReportingMsg(struct ReportingMessage);
 };
 
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
@@ -34,6 +35,23 @@ void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   printTradeMsg(ptr);
   };
 };
+
+void MatchEngOBV::CommunicateReportingMsg(struct ReportingMessage rp_msg){
+  struct sembuf sops;
+  sops.sem_num = 0;
+  sops.sem_op = 0; // set to -1 later
+  sops.sem_flg = 0;
+  if(semop(semidrp,&sops,1)!=-1){
+  struct ReportingMessage* ptr=(struct ReportingMessage*)shmat(shmidrp,NULL,0);
+  memcpy(ptr,&rp_msg,sizeof(rp_msg));
+  sops.sem_num = 1;
+  sops.sem_op = 0; // set to 1 later
+  semop(semidrp,&sops,1);
+  printReportingMsg(ptr);
+  };
+};
+
+
 
 void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
 {

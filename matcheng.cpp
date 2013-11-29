@@ -17,8 +17,8 @@
 
 using namespace std;
 
-key_t key1,key2,key3,key4,key5;
-int msqid1,msqid2,shmid3,semid4, semid5;
+key_t key1,key2,key3,key4,key5,key6,key7;
+int msqid1,msqid2,shmid3,semid4, semid5, shmid6rp, semid6rp;
 struct message_msgbuf mmb;
 
 MatchEngOBV myBooks;
@@ -30,6 +30,8 @@ void intHandler(int dummy=0){
   msgctl(msqid2,IPC_RMID,NULL);
   shmctl(shmid3,IPC_RMID,NULL);
   semctl(semid4,0,IPC_RMID,NULL);
+  shmctl(shmid6rp,IPC_RMID,NULL);
+  semctl(semid6rp,0,IPC_RMID,NULL);
   exit(0);
 };
 
@@ -43,6 +45,10 @@ int main(){
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
   key4 = ftok(SEMKEY1,'b'); // semaphore with tradepub
   semid4 = semget(key4,2,0666| IPC_CREAT);
+  key6 = ftok(METOREKEY1,'b');
+  shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
+  key7 = ftok(METORESEM,'b');
+  semid6rp = semget(key7,2,0666|IPC_CREAT);
   struct sembuf sops;
   sops.sem_num = 0;
   sops.sem_op = 1;
@@ -52,6 +58,8 @@ int main(){
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
   myBooks.semid = semid4;
+  myBooks.shmidrp = shmid6rp;
+  myBooks.semidrp = semid6rp;
   cout << "Set key successfully" << endl;
   key5 = ftok(SEMKEY3,'b'); // semaphore with bookpub
   semid5 = semget(key5,1,0666| IPC_CREAT);
@@ -73,10 +81,8 @@ int main(){
   signal(SIGINT,intHandler);
   writetodatabase = 1;
   int j = 0;
-  for(;;) {
-    cout << "* Matching Engine: receiving order" << endl;
-    msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0);
-    cout << "* Matching Engine: received order n." << j++ << "from CM"  << endl;
+  while(msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0)!=-1){
+    cout << "* Matching Engine: received order n." << j++ << "from CM"<< endl;
     struct OrderManagementMessage omm = mmb.omm;
     printOrderManagementMessage(&omm);
     cout << "* Matching Engine: sending order for processing" << endl;
