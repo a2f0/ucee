@@ -48,11 +48,23 @@ return 0;
 
 
 
+int shmid;
+int sem_id;
+
+void intHandler(int dummy=0){
+  // closing IPCs
+  shmctl(shmid,IPC_RMID,NULL);
+  semctl(sem_id,IPC_RMID,NULL);
+  exit(0);
+};
+
+
+
+
 int main(){
 
 //SHM SETUP:
 //
-int shmid;
 key_t mykey;
 mykey = ftok(METOTPKEY1,'b'); // shared memory with matcheng
 size_t mysize = sizeof(struct TradeMessage);
@@ -64,7 +76,6 @@ struct TradeMessage* tm = (struct TradeMessage*) shmat(shmid, NULL, 0);
 
 //SEM SETUP:
 //
-int sem_id;
 struct sembuf sops;
 // semaphore with matcheng
 sem_id = semget(ftok(SEMKEY1,'b'), 2, 0666 | IPC_CREAT );
@@ -82,6 +93,8 @@ setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_tt
 sops.sem_num = 1;
 sops.sem_op = -1;
 sops.sem_flg = 0;
+
+signal(SIGINT,intHandler);
 
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 

@@ -33,6 +33,7 @@ typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
 int writetodatabase;
+//int readfromdatabase;
 
 //there is one of these for each price level
 class OrderList
@@ -45,6 +46,7 @@ public:
   OrderList(){price = 0;}; // constructor
   int AddOrder(Order); // returns 1 for success, 0 for failure
   int RemoveOrder(Order); // returns 1 for success, 0 for failure
+  unsigned long long Quantity();
   void Print(); // prints orderlist;
 };
 
@@ -106,6 +108,14 @@ int OrderList::RemoveOrder(Order myorder)
   return 0;
 };
 
+unsigned long long OrderList::Quantity(){
+  list<Order>::iterator it;
+  unsigned long long q =0;
+  for (it = orders.begin(); it!=orders.end();it++)
+    q += it->quantity;
+  return q;
+};
+
 void OrderList::Print(){
   if(!orders.empty()){
     printf("\n***ORDER LIST***PRICE:%f***ORDER:",price);
@@ -134,7 +144,8 @@ public:
   OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);};
   int AddOrder(Order); // returns 0 for failure, 1 for success
   int RemoveOrder(Order); // return 0 for failure, 1 for success
-  struct TradeMessage  Match();
+  struct ReportingMessage  Match();
+  struct BookMessage TopBook();
   void Print(); // prints the sellbook and buybook
 };
 
@@ -275,30 +286,31 @@ void OrderBook::Print()
 //  printf("finished buy and sell side\n");
 };
 
-struct TradeMessage OrderBook::Match()
+struct ReportingMessage OrderBook::Match()
 {
   Order orderA;
   Order orderB;
   struct TradeMessage tr_msg;
   nstrcpy(tr_msg.symbol,instr,SYMBOL_SIZE);
   tr_msg.quantity = 0;
+  struct ReportingMessage rp_msg = {tr_msg,orderA,orderB};
   if (sellbook.empty()){
     if (buybook.front().type == MARKET_ORDER){
       buybook.pop_front();
     };
-    return tr_msg;
+    return rp_msg;
   };
   if (buybook.empty()){
     if (sellbook.front().type == MARKET_ORDER){
       sellbook.pop_front();
     };
-    return tr_msg;
+    return rp_msg;
   };
   orderA = sellbook.front().orders.front();
   orderB = buybook.front().orders.front();
   if(sellbook.front().type==LIMIT_ORDER && buybook.front().type==LIMIT_ORDER
      && buybook.front().price < sellbook.front().price)
-    return tr_msg;
+    return rp_msg;
   // in other cases, we must have a match:
   tr_msg.quantity = min(orderA.quantity,orderB.quantity);
   if(sellbook.front().type == MARKET_ORDER){
@@ -321,9 +333,46 @@ struct TradeMessage OrderBook::Match()
     AddOrder(orderA);
   if(orderB.quantity > 0)
     AddOrder(orderB);
-  return tr_msg;
+  rp_msg.trademsg = tr_msg;
+  rp_msg.orderA = orderA;
+  rp_msg.orderB = orderB;
+  return rp_msg;
 };
 
+struct BookMessage OrderBook::TopBook(){
+  struct BookMessage mymsg;
+  nstrcpy(mymsg.symbol,instr,SYMBOL_SIZE);
+  struct BookData bid[5];
+  struct BookData offer[5];
+  list<OrderList>::iterator it;
+  it = buybook.begin();
+  int i;
+  for (i =0;i < 5 && it != buybook.end(); it++){
+    nstrcpy(bid[i].price, it->orders.front().price, PRICE_SIZE);
+    bid[i].quantity = it->Quantity();
+    i++;
+  };
+  while(i<5){
+    nstringcpy(bid[i].price,"",PRICE_SIZE);
+    bid[i].quantity = 0;
+    i++;
+  };
+  
+  it = sellbook.begin();
+  for (i =0;i < 5 && it != sellbook.end(); it++){
+      nstrcpy(offer[i].price, it->orders.front().price, PRICE_SIZE);
+      offer[i].quantity = it->Quantity();
+      i++;
+  };
+  while(i<5){
+    nstringcpy(offer[i].price,"",PRICE_SIZE);
+    offer[i].quantity = 0;
+    i++;
+  };
+  memcpy(mymsg.bid,bid,sizeof(bid));
+  memcpy(mymsg.offer,offer,sizeof(offer));
+  return mymsg;
+};
 
 
 // OrderBookView class: view of all books
@@ -331,8 +380,10 @@ class OrderBookView
 {
 public:
   int msqid; // message queue to write acks/nacks
-  int shmid; // shared memory to write trade messages
+  int shmid; // shared memory
   int semid;
+  int shmidrp; // shared memory to write reporting messages
+  int semidrp;
   int mysocket;
   struct sockaddr_in grp;
   map<string,OrderBook> mybooks; // books by instrument
@@ -351,6 +402,7 @@ public:
   // communicates trades to shared memory
   virtual void CommunicateBookMsg(struct BookMessage){};
   // broadcasts bookmessage via multicast
+  virtual void CommunicateReportingMsg(struct ReportingMessage){};
 };
 
 void OrderBookView::Process(OrderManagementMessage omm)
@@ -388,65 +440,39 @@ void OrderBookView::Process(Order myorder)
     cout << "* myBooks: added order to corresponding book" << endl;
     myorders[orderid] = myorder;
     cout << "* myBooks: added order into myorders" << endl;
-    CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    if (writetodatabase == 1){
+      CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    };
     // communicating OrderAck
   }else{
     cout << "* myBooks: didn't add order\n" << endl;
+    if (writetodatabase==1){
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
     CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     // communicating OrderNak
+    };
   };
-  cout << "Performing the matching algorithm." << endl;
-  struct TradeMessage tr_msg = mybooks[symbol].Match();
-  cout << "Performed matching once" << endl;
-  int k=0;
-  while(tr_msg.quantity >0){
-    CommunicateTrade(tr_msg);
-    tr_msg = mybooks[symbol].Match();
-    cout << "number of matching: " << k << endl;
+  struct BookMessage mybookmsg;
+  struct ReportingMessage rp_msg = mybooks[symbol].Match();
+  int matches = 0;
+  while(rp_msg.trademsg.quantity >0){
+    matches++;
+    CommunicateTrade(rp_msg.trademsg);
+    CommunicateReportingMsg(rp_msg);
+    rp_msg = mybooks[symbol].Match();
   };
   cout << "Performed the matching algorithm." << endl;
-  struct BookMessage mybookmsg;
   // generate bookmessage
-  CommunicateBookMsg(mybookmsg);
+  if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+    cout << "Compiling book message" << endl;
+    mybookmsg = mybooks[symbol].TopBook();
+    cout << "Compiled book message" << endl;
+    printBookMsg(&mybookmsg);
+    CommunicateBookMsg(mybookmsg);
+  };
 };
 
-void OrderBookView::ProcessDB(Order myorder)
-{
-  printf("* myBooks: processing Order\n");
-  string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
-  cout << "* myBooks: here is the symbol: " << symbol << "-\n";
-  string orderid = nstring(myorder.order_id,ORDERID_SIZE);
-  cout << "* myBooks: here is the order id: " << orderid << "-\n";
-  if(mybooks.count(symbol) < 1)
-  {
-    cout << "* myBooks: no book with that symbol" << endl;
-    OrderBook ob(myorder.symbol);
-    mybooks[symbol] = ob;
-    cout << "* myBooks: added book with that symbol" << endl;
-  }else{
-    cout<< "* myBooks: book already exists, so won't create new" << endl;
-  };
-  if(mybooks[symbol].AddOrder(myorder)==1)
-  {
-    cout << "* myBooks: added order to corresponding book" << endl;
-    myorders[orderid] = myorder;
-    cout << "* myBooks: added order into myorders" << endl;
-  }else{
-    cout << "* myBooks: didn't add order\n" << endl;
-  };
-  struct TradeMessage tr_msg = mybooks[symbol].Match();
-  cout << "Matching algorithim running" << endl;
-  while(tr_msg.quantity >0){
-    CommunicateTrade(tr_msg);
-    tr_msg = mybooks[symbol].Match();
-  };
-  cout << "Matching algorithm finished" << endl;
-  struct BookMessage mybookmsg;
-  // generate bookmessage
-  CommunicateBookMsg(mybookmsg);
-};
 
 void OrderBookView::Process(Modify mymodify)
 {
@@ -478,14 +504,26 @@ void OrderBookView::Process(Modify mymodify)
         CommunicateAck(MODIFY_ACK,mymodify.order_id,NULL,mymodify.quantity);
       };
     };
-    struct TradeMessage tr_msg = mybooks[symbol].Match();
-    while(tr_msg.quantity >0){
-      CommunicateTrade(tr_msg);
-      tr_msg = mybooks[symbol].Match();
+    struct BookMessage mybookmsg;
+    struct ReportingMessage rp_msg = mybooks[symbol].Match();
+    int matches = 0;
+    while(rp_msg.trademsg.quantity >0){
+      matches++;
+      CommunicateTrade(rp_msg.trademsg);
+      CommunicateReportingMsg(rp_msg);
+      rp_msg = mybooks[symbol].Match();
+    };
+    cout << "Performed the matching algorithm." << endl;
+  // generate bookmessage
+    if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+      cout << "Compiling book message" << endl;
+      mybookmsg = mybooks[symbol].TopBook();
+      cout << "Compiled book message" << endl;
+      printBookMsg(&mybookmsg);
+      CommunicateBookMsg(mybookmsg);
     };
   };
 };
-
 
 void OrderBookView::Process(Cancel mycancel)
 {
@@ -507,6 +545,24 @@ void OrderBookView::Process(Cancel mycancel)
       unsigned long quantity = myorders[orderid].quantity;
       myorders.erase(orderid);
       CommunicateAck(CANCEL_ACK,mycancel.order_id,NULL,quantity);
+    };
+        struct BookMessage mybookmsg;
+    struct ReportingMessage rp_msg = mybooks[symbol].Match();
+    int matches = 0;
+    while(rp_msg.trademsg.quantity >0){
+      matches++;
+      CommunicateTrade(rp_msg.trademsg);
+      CommunicateReportingMsg(rp_msg);
+      rp_msg = mybooks[symbol].Match();
+    };
+    cout << "Performed the matching algorithm." << endl;
+  // generate bookmessage
+    if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+      cout << "Compiling book message" << endl;
+      mybookmsg = mybooks[symbol].TopBook();
+      cout << "Compiled book message" << endl;
+      printBookMsg(&mybookmsg);
+      CommunicateBookMsg(mybookmsg);
     };
   };
 };

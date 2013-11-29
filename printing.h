@@ -10,6 +10,16 @@
 #include <sys/types.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
+
+struct ReportingMessage
+{
+  struct TradeMessage trademsg;
+  struct Order orderA;
+  struct Order orderB;
+};
+
+
+
 // functionality to deal with strings without null termination
 
 // compares two strings by adding null at end
@@ -312,5 +322,40 @@ void printTradeMsg(const struct TradeMessage *tr_msg)
   printf("\n  Quantity: %lu", tr_msg->quantity);
   printf("\n");
 };
+
+void printBookData(const struct BookData *bk_data) // print 5 bookdata messages
+{
+  for(int i=0; i<5; i++){
+    printf("Price: ");
+    printFixedLengthString(bk_data[i].price, PRICE_SIZE);
+    printf("\t Quantity: %llu\n", bk_data[i].quantity);
+  };
+};
+
+void printBookMsg(const struct BookMessage *bk_msg)
+{
+  printf(" BookMessage:");
+  printf("\n Symbol: ");
+  printFixedLengthString(bk_msg->symbol, SYMBOL_SIZE);
+  printf("\n Sellside: \n");
+  printBookData(bk_msg->offer);
+  printf("\n Buyside: \n");
+  printBookData(bk_msg->bid);
+};
+
+void printReportingMsg(const struct ReportingMessage *rp_msg)
+{
+  printf(" ReportingMessage: \n");
+  printf(" * TradeMessage: \n");
+  struct TradeMessage tr_msg = rp_msg->trademsg;
+  printTradeMsg(&tr_msg);
+  struct Order orderA = rp_msg->orderA;
+  printf(" * Order A: \n");
+  printOrder(&orderA);
+  struct Order orderB = rp_msg->orderB;
+  printf(" * Order B: \n");
+  printOrder(&orderB);
+};
+  
 
 #endif
