@@ -97,15 +97,11 @@ sops.sem_flg = 0;
 signal(SIGINT,intHandler);
 
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
-
-if ((tm = (struct TradeMessage*) shmat(shmid, NULL, 0)) == (struct TradeMessage*) -1) {
-        cout << "Error: shmat" << endl;
-}
  
 
   printTradeMsg(tm);
 
-//process(*tm);
+  process(*tm);
 
 
 
@@ -119,6 +115,13 @@ sops.sem_op=-1;
 
 };
 //shmctl(shmid, IPC_RMID, struct shmid_ds * buf);
+
+/*
+TradeMessage test = {"msft","1000",100};
+int z;
+for(z=0; z<1000; z++)
+process(test);
+*/
 return 0;
 
 };
