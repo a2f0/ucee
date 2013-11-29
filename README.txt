@@ -13,9 +13,10 @@ STARTING THE SIMULATION ENVIRONMENT:
 1) make clean; make
 2) ./connmgr
 2a)*
-3) ./matcheng
-4) ./tradepub
-5) ./bookpub
-6) ./rpteng
-7) ./simulate.sh
-8) ./rpt
+3) cd tradeBot & ./md_receiver -a 239.192.07.07 -p 1234
+4) ./matcheng
+5) ./tradepub
+6) ./bookpub
+7) ./rpteng
+8) ./simulate.sh
+9) ./rpt -a 1 -p OR ./rpt -a 2 -p OR ./rpt -a 3 -p (TRADER, INSTRUMENT, OR SUMMARY REPORT)
