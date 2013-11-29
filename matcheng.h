@@ -4,12 +4,6 @@
 #include "printing.h"
 #include "orderbookview.h"
 
-//This is used to send the message through a System V message queue
-struct message_msgbuf {
-  long mtype;  /* must be positive */
-  struct OrderManagementMessage omm;
-};
-
 // derived class from OrderBookView, implements communication to ConnMgr
 class MatchEngOBV : public OrderBookView
 {
@@ -19,10 +13,11 @@ public:
   void CommunicateReportingMsg(struct ReportingMessage);
 };
 
+// communicate trademessage to trade publisher
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   struct sembuf sops;
   sops.sem_num = 0;
-  sops.sem_op = -1; // set to -1 later
+  sops.sem_op = -1;
   sops.sem_flg = 0;
   if(semop(semid,&sops,1)!=-1){
   struct TradeMessage* ptr = (struct TradeMessage*) shmat(shmid,NULL,0);
@@ -30,32 +25,31 @@ void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   nstrcpy(ptr->price, tr_msg.price, PRICE_SIZE);
   ptr->quantity = tr_msg.quantity;
   sops.sem_num = 1;
-  sops.sem_op = 1; // set to 1 later
+  sops.sem_op = 1;
   semop(semid,&sops,1);
   printTradeMsg(ptr);
   };
 };
 
+// communicate reportingmessage to reporting engine
 void MatchEngOBV::CommunicateReportingMsg(struct ReportingMessage rp_msg){
   struct sembuf sops;
   sops.sem_num = 0;
-  sops.sem_op = -1; // set to -1 later
+  sops.sem_op = -1;
   sops.sem_flg = 0;
   if(semop(semidrp,&sops,1)!=-1){
   struct ReportingMessage* ptr=(struct ReportingMessage*)shmat(shmidrp,NULL,0);
   memcpy(ptr,&rp_msg,sizeof(rp_msg));
   sops.sem_num = 1;
-  sops.sem_op = 1; // set to 1 later
+  sops.sem_op = 1;
   printReportingMsg(ptr);
   semop(semidrp,&sops,1);
   };
 };
 
-
-
-void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason, unsigned long quantity)
-{
-//  printf("* myBooks: trying to communicate\n");
+// communicate ack/nacks to connection manager
+void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id,
+                                 char* reason, unsigned long quantity){
   struct OrderManagementMessage myomm;
   struct timeval tmv;
   gettimeofday(&tmv,NULL);
@@ -108,11 +102,8 @@ void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id, char* reason,
       break;
   };
   struct message_msgbuf mmb = {2,myomm};
-//    printf("* myBooks: about to send message to message queue id: %d\n",msqid);
-    msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
-//    printf("* myBooks: sent message\n");
+  msgsnd(msqid,&mmb,sizeof(struct OrderManagementMessage),0);
   return;
 };
-
 
 #endif

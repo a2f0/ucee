@@ -11,6 +11,13 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 
+
+//This is used to send the message through a System V message queue
+struct message_msgbuf {
+  long mtype;  /* must be positive */
+  struct OrderManagementMessage omm;
+};
+
 // structure passed to the reporting engine:
 
 struct ReportingMessage
