@@ -49,10 +49,10 @@ int receivedfromtradebots = 0;
 int copiedthroughsharedmemory = 0;
 
 //This is used to send the message through a System V message queue
-struct message_msgbuf {
-    long mtype;  /* must be positive */
-    struct OrderManagementMessage omm;
-};
+//struct message_msgbuf {
+//    long mtype;  /* must be positive */
+//    struct OrderManagementMessage omm;
+//};
 
 int semid;
 int shmid;
