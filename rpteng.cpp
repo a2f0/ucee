@@ -33,6 +33,8 @@ using namespace std;
 int mysocket;
 int sem_id;
 int shmid;
+int keydb;
+int semiddb;
 void intHandler(int dummy=0){
   // closing IPCs
   shmctl(shmid,IPC_RMID,NULL);
@@ -117,7 +119,22 @@ unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
 //
 
-//SEM SETUP:
+//SEM SETUP for DATABASE
+keydb = ftok(SEMDB,'b');
+if ((semiddb = semget(keydb,1,0666|IPC_CREAT)) <0){
+  printf("main: semget() failed\n");
+  printf("%s",strerror(errno));
+  exit(0);
+};
+
+struct sembuf sop;
+sop.sem_num =0;
+sop.sem_flg=0;
+
+
+
+
+//SEM SETUP for MATCHING ENGINE:
 //
 struct sembuf sops;
 sem_id = semget(ftok(METORESEM,'b'), 2, 0666 | IPC_CREAT );
@@ -143,8 +160,18 @@ while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
   cout << "* reporting engine: receiving reporting message n. "<< j++;
   cout << " from ME" << endl;
 printReportingMsg(rm);
-add_row(*rm);
 
+sop.sem_op = -1;
+printf("semval 0: %d\n", semctl(semiddb, 0, GETVAL, 0));
+cout << "blocking database" << endl;
+semop(semiddb,&sop,1);
+cout << "blocked database" << endl;
+add_row(*rm);
+//sleep(10);
+sop.sem_op=1;
+cout << "unblocking database" << endl;
+semop(semiddb,&sop,1);
+cout << "unblocked database" << endl;
 
 
 sops.sem_num = 0;

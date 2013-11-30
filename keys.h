@@ -9,6 +9,7 @@
 #define SEMKEY1 "/etc/locale.gen"
 #define SEMKEY2 "/etc/gssapi_mech.conf"
 #define SEMKEY3 "/etc/golang"
+#define SEMDB "/etc/xodim.conf"
 #define METORESEM "/etc/groovy"
 #define MULTICAST_ADDRESS "128.135.164.172"
 #define MULTICAST_PORT "50333"

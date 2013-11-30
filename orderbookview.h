@@ -35,6 +35,9 @@ typedef struct CancelNak CancelNak;
 // variable that indicates whether to write to database
 int writetodatabase;
 
+// semaphore to control access to database
+int semiddb;
+
 //list of Orders for each price level:
 class OrderList
 {
@@ -70,8 +73,16 @@ int OrderList::AddOrder(Order myorder)
   if (orders.empty())
   {
     orders.push_front(myorder);
-    if (writetodatabase==1)
+    if (writetodatabase==1){
+      struct sembuf sop;
+      sop.sem_num =0;
+      sop.sem_op = -1;
+      sop.sem_flg =0;
+      semop(semiddb,&sop,1);
       add_row(myorder);
+      sop.sem_op = 1;
+      semop(semiddb,&sop,1);
+    };
     return 1;
   };
   unsigned long long ts = myorder.timestamp;
@@ -80,8 +91,16 @@ int OrderList::AddOrder(Order myorder)
     it++;
   };
   orders.insert(it, myorder);
-  if(writetodatabase==1)
+  if(writetodatabase==1){
+    struct sembuf sop;
+    sop.sem_num =0;
+    sop.sem_op = -1;
+    sop.sem_flg =0;
+    semop(semiddb,&sop,1);
     add_row(myorder);
+    sop.sem_op = 1;
+    semop(semiddb,&sop,1);
+  }
   return 1;
 };
 
@@ -98,8 +117,16 @@ int OrderList::RemoveOrder(Order myorder)
     if (nstrcmp (it->order_id,myorder.order_id,ORDERID_SIZE)== 0)
     {
       orders.erase(it); // remove order
-      if(writetodatabase==1)
+      if(writetodatabase==1){
+        struct sembuf sop;
+        sop.sem_num =0;
+        sop.sem_op = -1;
+        sop.sem_flg =0;
+        semop(semiddb,&sop,1);
         delete_row(myorder.order_id);
+        sop.sem_op = 1;
+        semop(semiddb,&sop,1);
+      };
       return 1;
     };
     it++;

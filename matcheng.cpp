@@ -17,7 +17,7 @@
 using namespace std;
 
 // list of keys and ids for IPCs
-key_t key1,key2,key3,key4,key5,key6,key7;
+key_t key1,key2,key3,key4,key5,key6,key7,key8;
 int msqid1,msqid2,shmid3,semid4, semid5, shmid6rp, semid6rp;
 
 // message buffer to receive messages from ConnMgr
@@ -42,6 +42,10 @@ void intHandler(int dummy=0){
     printf("%s",strerror(errno));
   };
   if(semctl(semid6rp,0,IPC_RMID,NULL)==-1){
+    printf("main: semctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(semctl(semiddb,0,IPC_RMID,NULL)==-1){
     printf("main: semctl() remove id failed\n");
     printf("%s",strerror(errno));
   };
@@ -109,6 +113,16 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
+
+  key8 = ftok(SEMDB,'b'); // semaphore with reporting engine
+  semiddb = semget(key8,1,0666|IPC_CREAT);
+  semctl(semiddb,0,IPC_RMID,NULL);
+  if((semiddb = semget(key8,1,0666|IPC_CREAT))<0){
+    printf("main: semget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+
   
   struct sembuf sops;
   sops.sem_num = 0;
@@ -124,13 +138,18 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
+  if(semop(semiddb,&sops,1)<0){
+    printf("main: semop() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
   
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
   myBooks.semid = semid4;
   myBooks.shmidrp = shmid6rp;
   myBooks.semidrp = semid6rp;
-
+ 
   key5 = ftok(SEMKEY3,'b'); // semaphore with book publisher
   semid5 = semget(key5,1,0666| IPC_CREAT);
   semctl(semid5,0,IPC_RMID,NULL);
@@ -163,7 +182,7 @@ int main(){
   writetodatabase = 1;
   int j = 1;
   while(msgrcv(msqid1,&mmb,sizeof(struct OrderManagementMessage),2,0)!=-1
-        && j < 1111){
+        && j < 1001){
     cout << "\n* matching engine: receiving order n. "<< j++<< " from CM";
     cout << endl;
     struct OrderManagementMessage omm = mmb.omm;
