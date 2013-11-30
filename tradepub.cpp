@@ -43,7 +43,7 @@ grp2.sin_port = htons(atoi("1234"));
 ssize_t f = sendto(mysocket, &tm, sizeof(TradeMessage), 0, (struct sockaddr*) &grp2, sizeof(grp2));
 if(f<0){
         fprintf(stderr,"Message Not Sent.\n");
-	fprintf(stderr,strerror(errno));
+	printf("%s",strerror(errno));
         return -1;
 }
 
