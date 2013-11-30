@@ -441,6 +441,11 @@ void OrderBookView::Process(Order myorder)
     };
   };
   struct BookMessage mybookmsg;
+  // generate bookmessage and communicate it
+  if (myorder.order_type == LIMIT_ORDER){
+    mybookmsg = mybooks[symbol].TopBook();
+    CommunicateBookMsg(mybookmsg);
+  };
   struct ReportingMessage rp_msg = mybooks[symbol].Match();
   int matches = 0;
   while(rp_msg.trademsg.quantity >0){
@@ -458,9 +463,7 @@ void OrderBookView::Process(Order myorder)
     CommunicateTrade(rp_msg.trademsg);
     CommunicateReportingMsg(rp_msg);
     rp_msg = mybooks[symbol].Match();
-  };
-  // generate bookmessage and communicate it
-  if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+    // generate bookmessage and communicate it
     mybookmsg = mybooks[symbol].TopBook();
     CommunicateBookMsg(mybookmsg);
   };
@@ -498,6 +501,12 @@ void OrderBookView::Process(Modify mymodify)
       };
     };
     struct BookMessage mybookmsg;
+    // generate bookmessage and communicate it
+    if (myorder.order_type == LIMIT_ORDER){
+      mybookmsg = mybooks[symbol].TopBook();
+      CommunicateBookMsg(mybookmsg);
+    };
+    
     struct ReportingMessage rp_msg = mybooks[symbol].Match();
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
@@ -515,10 +524,7 @@ void OrderBookView::Process(Modify mymodify)
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
-    };
-    cout << "Performed the matching algorithm." << endl;
-    // generate bookmessage and communicate it
-    if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+      //generate bookmessage and communicate it
       mybookmsg = mybooks[symbol].TopBook();
       CommunicateBookMsg(mybookmsg);
     };
@@ -548,6 +554,12 @@ void OrderBookView::Process(Cancel mycancel)
       CommunicateAck(CANCEL_ACK,mycancel.order_id,NULL,quantity);
     };
     struct BookMessage mybookmsg;
+    // generate bookmessage and communicate it
+    if (myorder.order_type == LIMIT_ORDER){
+      mybookmsg = mybooks[symbol].TopBook();
+      CommunicateBookMsg(mybookmsg);
+    };
+ 
     struct ReportingMessage rp_msg = mybooks[symbol].Match();
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
@@ -565,10 +577,7 @@ void OrderBookView::Process(Cancel mycancel)
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
-    };
-    cout << "Performed the matching algorithm." << endl;
-    // generate bookmessage
-    if (matches > 0 || myorder.order_type == LIMIT_ORDER){
+      //generate bookmessage and communicate it
       mybookmsg = mybooks[symbol].TopBook();
       CommunicateBookMsg(mybookmsg);
     };
