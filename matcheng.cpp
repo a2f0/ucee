@@ -182,11 +182,7 @@ int main(){
   writetodatabase = 1;
   int j = 1;
   while(msgrcv(msqid1,&mmb,sizeof(struct OrderManagementMessage),2,0)!=-1
-<<<<<<< HEAD
         && j < 1001){
-=======
-        ){
->>>>>>> c24aec8daa3b13697f3f03910ad2b6bebbbf51dd
     cout << "\n* matching engine: receiving order n. "<< j++<< " from CM";
     cout << endl;
     struct OrderManagementMessage omm = mmb.omm;
