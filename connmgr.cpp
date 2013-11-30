@@ -19,6 +19,7 @@
 #include "keys.h"
 //#include <sys/sem.h>
 #include <mutex>
+#include <chrono>
 
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -40,19 +41,35 @@
 //http://beej.us/guide/bgipc/output/html/multipage/mq.html
 //http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Fapis%2Fapiexusmem.htm
 
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::milliseconds milliseconds;
+
 std::map<std::string, int> connectionmapper;
+std::map<std::string, Clock::time_point> order_start_time;
 std::mutex writetoken;
+
+
+//Clock::time_point t0 = Clock::now();
+//The time the first order was recieved from a tradebot
+Clock::time_point t0;
+//The time an individial message was received from a tradebot
+Clock::time_point i0;
+Clock::time_point i1;
 
 long long int found = 0;
 long long int notfound = 0;
 long long int receivedfromtradebots = 0;
 long long int copiedthroughsharedmemory = 0;
+<<<<<<< HEAD
+long long int total_miliseconds = 0;
+=======
 
 //This is used to send the message through a System V message queue
 //struct message_msgbuf {
 //    long mtype;  /* must be positive */
 //    struct OrderManagementMessage omm;
 //};
+>>>>>>> e6460099a47ac864e505b32d9498ef2415c4809c
 
 int semid;
 int shmid;
@@ -60,9 +77,13 @@ int msqid;
 int msqid2;
 struct shmid_ds shmid_struct;
 struct OrderManagementMessage* shm;
-  
+
+bool first_received = false;
+
 void my_handler(int s){
     printf("caught signal %d\n",s);
+    Clock::time_point t1 = Clock::now();
+    milliseconds msrun = std::chrono::duration_cast<milliseconds>(t1 - t0);
     int rc;
     rc = semctl( semid, 1, IPC_RMID );
     if (rc==-1)
@@ -92,7 +113,9 @@ void my_handler(int s){
     printf("found (and acknowledged) for reverse routing (to tradebot): %llu\n", found);
     printf("not found for reverse routing (to tradebot): %llu\n",notfound);
     printf("total messages received from trade bots: %llu\n",receivedfromtradebots);
-    printf("messages copied through shared memory: %llu", copiedthroughsharedmemory);
+    printf("messages copied through shared memory: %llu\n", copiedthroughsharedmemory);
+    printf("total milliseconds runtime: %d\n", (int)msrun.count());
+    //std::cout << ms.count() << "ms\n";
     printf("******** end connection manager performance summary ********\n");
     exit(1);
 }
@@ -149,17 +172,12 @@ void readfrommatchingengine() {
             default:
                 printf("**warning** this should never occur.\n");
         };
-
-        writetoken.lock();
-        //This was the original
-        //strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
-        printf("======message received from matching enginee======\n"); 
-        printf("received: %d bytes from matching engine\n", rcv_bytes);
-        printf("receiver mmb type: %lu\n", mmb.mtype);
-        printf("receiver omm type: %d\n", mmb.omm.type);
-        printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
-        printf("receiver omm order_id: %s.\n", order_id); 
+ 
         std::string ordr(order_id);
+        std::string connectionmapperresult;
+        std::string ordertimeresult; 
+        
+        auto it2 = order_start_time.find(order_id);
         auto it = connectionmapper.find(order_id);
         if (it != connectionmapper.end()) {
             printf("descriptor matched for reverse routing: %d\n", it->second);
@@ -171,6 +189,25 @@ void readfrommatchingengine() {
             printf("**warning: no file descripter matched for reverse routing**: %d\n", it->second);
             notfound++;
         }
+        if (it2 != order_start_time.end()) {
+            i1 = Clock::now();
+            //printf("second: %d\n**", it->second);
+            milliseconds msrun = std::chrono::duration_cast<milliseconds>(i1 - it2->second);
+            printf("rtt for acknowledgement: %d\n", (int)msrun.count());
+        } else {
+            printf("**warning: start time not found for incoming acknowledgement\n**");
+        } 
+
+        //This was the original
+        //strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
+        writetoken.lock();
+        printf("======message received from matching enginee======\n"); 
+        printf("received: %d bytes from matching engine\n", rcv_bytes);
+        printf("receiver mmb type: %lu\n", mmb.mtype);
+        printf("receiver omm type: %d\n", mmb.omm.type);
+        printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
+        printf("receiver omm order_id: %s.\n", order_id); 
+        printf("receiver omm order_id: %s.\n", order_id); 
         printf("======end message received from matching engine======\n"); 
         writetoken.unlock();
         //printOrderManagementMessage(&mmb.omm);
@@ -387,6 +424,13 @@ int main(){
                 close_conn = FALSE;
                 struct OrderManagementMessage omm;
                 rc = recv(fds[i].fd, &omm, sizeof(omm), 0);
+                //the start of this iteration
+                i0 = Clock::now();
+                //if this is the first message received start the metrics timer
+                if(first_received == false) {
+                    first_received = true;
+                    t0 = Clock::now();
+                }
                 receivedfromtradebots++;
                 std::string error = isommvalid(omm);
                 char order_id[33];
@@ -453,14 +497,16 @@ int main(){
                 //Insert the entry in to the connection mapper.
                 printf("inserting %d as file descriptor for order %s.\n", fds[i].fd, ordr.c_str());
                 connectionmapper.insert(std::pair<std::string,int>(ordr ,fds[i].fd ));
-
+                //Insert the time the order was received
+                order_start_time.insert(std::pair<std::string,Clock::time_point>(ordr, i0));
+                
                 //Send the message to the MatchingEngine 
                 struct message_msgbuf mmb = {2, omm};
                 printf("sending message to queue with queue id: %d\n", msqid);
                 msgsnd(msqid, &mmb, sizeof(struct OrderManagementMessage ), 0);
                 printf("successfully sent message to queue.\n");
 
-                /* that the shared memory segment is busy.                   */
+                //the shared memory segment is busy.
                 sops.sem_num = 0;
                 sops.sem_op = -1;
                 sops.sem_flg = 0;
@@ -475,7 +521,7 @@ int main(){
                 
                 memcpy(shm,&omm,sizeof(omm));
                 printf("successfully copied message to shared memory with order type %d\n", omm.type);
-                printf("%d\n",copiedthroughsharedmemory++);
+                printf("%llu\n",copiedthroughsharedmemory++);
                 sops.sem_num = 1;
                 sops.sem_op = 1;
                 printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid);
