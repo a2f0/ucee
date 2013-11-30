@@ -53,8 +53,14 @@ int main(){
   semctl(semid4,0,IPC_RMID,NULL);
   semid4 = semget(key4,2,0666| IPC_CREAT);
   
+  //key6 = ftok(METOREKEY1,'b');
+  key6 = 1338;
+  printf("key6 %d\n", (int)key6);
   key6 = ftok(METOREKEY1,'b');
+  printf("key6 (ftok) %d\n", (int)key6);
+  printf("METOREKEY1: %s\n", METOREKEY1);
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
+  printf("shmid: %d\n", shmid6rp);
   shmctl(shmid6rp,IPC_RMID,NULL);
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
 
