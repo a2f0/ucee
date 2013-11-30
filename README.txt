@@ -25,6 +25,6 @@ B. STARTING THE SIMULATION ENVIRONMENT:
 C. USING THE REPORTING ENVIRONMENT:
 
 To run reports after the environment is shut down, you can use the following:
-1) Trader Report:     prompt>./rpt -a 1
-2) Instrument Report: prompt>./rpt -a 2
-3) Summary Report:    prompt>./rpt -a 3
+1) Trader Report:       ./rpt -r 1
+2) Instrument Report:   ./rpt -r 2
+3) Summary Report:      ./rpt -r 3
