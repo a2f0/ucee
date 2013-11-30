@@ -60,7 +60,16 @@ long long int found = 0;
 long long int notfound = 0;
 long long int receivedfromtradebots = 0;
 long long int copiedthroughsharedmemory = 0;
+<<<<<<< HEAD
 long long int total_miliseconds = 0;
+=======
+
+//This is used to send the message through a System V message queue
+//struct message_msgbuf {
+//    long mtype;  /* must be positive */
+//    struct OrderManagementMessage omm;
+//};
+>>>>>>> e6460099a47ac864e505b32d9498ef2415c4809c
 
 int semid;
 int shmid;
