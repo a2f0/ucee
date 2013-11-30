@@ -46,7 +46,7 @@ public:
   OrderList(){price = 0;}; // constructor
   int AddOrder(Order); // returns 1 for success, 0 for failure
   int RemoveOrder(Order); // returns 1 for success, 0 for failure
-  unsigned long long Quantity();
+  unsigned long long Quantity(); // returns total quantity for price level
   void Print(); // prints orderlist;
 };
 
@@ -401,6 +401,7 @@ public:
   // communicates reportingmessage via shmidrp
 };
 
+// processes ordermanagement message accoriding to MESSAGE_TYPE
 void OrderBookView::Process(OrderManagementMessage omm)
 {
   if (omm.type == NEW_ORDER){
@@ -414,10 +415,12 @@ void OrderBookView::Process(OrderManagementMessage omm)
   };
 };
 
+// processes new order
 void OrderBookView::Process(Order myorder)
 {
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
+  // adding order to the orderbook
   if(mybooks.count(symbol) < 1)
   {
     OrderBook ob(myorder.symbol);
@@ -433,9 +436,8 @@ void OrderBookView::Process(Order myorder)
     if (writetodatabase==1){
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
-    if (writetodatabase == 1)
+    if (writetodatabase == 1)// communicating OrderNak
       CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
-    // communicating OrderNak
     };
   };
   struct BookMessage mybookmsg;
@@ -443,6 +445,7 @@ void OrderBookView::Process(Order myorder)
   int matches = 0;
   while(rp_msg.trademsg.quantity >0){
     matches++;
+    // update myorders map
     string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
     string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
     myorders.erase(orderidA);
@@ -451,11 +454,12 @@ void OrderBookView::Process(Order myorder)
       myorders[orderidA]= rp_msg.orderA;
     if (rp_msg.orderB.quantity > 0)
       myorders[orderidB]= rp_msg.orderB;
+    // communicate
     CommunicateTrade(rp_msg.trademsg);
     CommunicateReportingMsg(rp_msg);
     rp_msg = mybooks[symbol].Match();
   };
-  // generate bookmessage
+  // generate bookmessage and communicate it
   if (matches > 0 || myorder.order_type == LIMIT_ORDER){
     cout << "Compiling book message" << endl;
     mybookmsg = mybooks[symbol].TopBook();
@@ -465,7 +469,7 @@ void OrderBookView::Process(Order myorder)
   };
 };
 
-
+// processes modify order
 void OrderBookView::Process(Modify mymodify)
 {
   string orderid = nstring(mymodify.order_id,ORDERID_SIZE);
@@ -501,6 +505,7 @@ void OrderBookView::Process(Modify mymodify)
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
       matches++;
+      // update myorders map
       string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
       string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
       myorders.erase(orderidA);
@@ -509,12 +514,13 @@ void OrderBookView::Process(Modify mymodify)
         myorders[orderidA]= rp_msg.orderA;
       if (rp_msg.orderB.quantity > 0)
         myorders[orderidB]= rp_msg.orderB;
+      // communicate
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
     };
     cout << "Performed the matching algorithm." << endl;
-  // generate bookmessage
+    // generate bookmessage and communicate it
     if (matches > 0 || myorder.order_type == LIMIT_ORDER){
       cout << "Compiling book message" << endl;
       mybookmsg = mybooks[symbol].TopBook();
@@ -525,6 +531,7 @@ void OrderBookView::Process(Modify mymodify)
   };
 };
 
+// process cancel order
 void OrderBookView::Process(Cancel mycancel)
 {
   string orderid = nstring(mycancel.order_id,ORDERID_SIZE);
@@ -551,6 +558,7 @@ void OrderBookView::Process(Cancel mycancel)
     int matches = 0;
     while(rp_msg.trademsg.quantity >0){
       matches++;
+      // update myorders map
       string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
       string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
       myorders.erase(orderidA);
@@ -559,12 +567,13 @@ void OrderBookView::Process(Cancel mycancel)
         myorders[orderidA]= rp_msg.orderA;
       if (rp_msg.orderB.quantity > 0)
         myorders[orderidB]= rp_msg.orderB;
+      // communicate
       CommunicateTrade(rp_msg.trademsg);
       CommunicateReportingMsg(rp_msg);
       rp_msg = mybooks[symbol].Match();
     };
     cout << "Performed the matching algorithm." << endl;
-  // generate bookmessage
+    // generate bookmessage
     if (matches > 0 || myorder.order_type == LIMIT_ORDER){
       cout << "Compiling book message" << endl;
       mybookmsg = mybooks[symbol].TopBook();
@@ -575,6 +584,7 @@ void OrderBookView::Process(Cancel mycancel)
   };
 };
 
+// print all orderbooks in orderbookview
 void OrderBookView::Print()
 {
   printf("\n*** Order Book View ***\n");
@@ -582,7 +592,6 @@ void OrderBookView::Print()
   for (it = mybooks.begin();it!=mybooks.end();++it)
   {
     (it->second).Print();
-//    printf("finished this book\n");
   };
 };
 
