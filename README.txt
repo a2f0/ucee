@@ -7,13 +7,9 @@ Dan Sullivan (dansully@uchicago.edu)
 The most recent version of this source tree can be pulled down (with authentication):
 git clone git@bitbucket.org:mpcs51025gamma/ucee.git
 
-A. ONE-TIME SETUP OF THE DATABASE ENVIRONMENT:
+STARTING THE SIMULATION ENVIRONMENT:
 
-Before starting the environment for the first time, please run ./database.sh in order to create the tables and set up the trigger.  If you shut the environment down and bring it up again, database.sh should not be run a second time as it will drop and re-create the tables.
-
-B. STARTING THE SIMULATION ENVIRONMENT:
-
-1) make clean; make
+1) make clean; make; ./database.sh
 2) ./connmgr
 3) ./tradeBot/md_receiver -a 239.192.07.07 -p 1234;
 4) ./matcheng
@@ -22,7 +18,7 @@ B. STARTING THE SIMULATION ENVIRONMENT:
 7) ./rpteng
 8) ./simulate.sh
 
-C. USING THE REPORTING ENVIRONMENT:
+USING THE REPORTING ENVIRONMENT:
 
 To run reports after the environment is shut down, you can use the following:
 1) Trader Report:       ./rpt -r 1
