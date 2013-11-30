@@ -18,7 +18,8 @@ void BookPubOBV::CommunicateBookMsg(struct BookMessage bk_msg){
     bk_msg.bid[i].quantity = htobe64(bk_msg.bid[i].quantity);
     bk_msg.offer[i].quantity = htobe64(bk_msg.offer[i].quantity);
   };
-  ssize_t f=sendto(mysocket,&bk_msg,sizeof(struct BookMessage),0,(struct sockaddr*) &grp, sizeof(grp));
+  ssize_t f=sendto(mysocket,&bk_msg,sizeof(struct BookMessage),0,
+                   (struct sockaddr*) &grp, sizeof(grp));
   if(f<0){
         printf("Message Not Sent.\n");
         printf("%s",strerror(errno));
