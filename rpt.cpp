@@ -12,8 +12,26 @@ sqlite3_open("OrderBook.db",&mydb);
 if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt3)) == 100 ){
-      for(int j=0; j<10; j++)
-		printf("%16s   ",(char*)sqlite3_column_text(stmt3,j));
+//      for(int j=0; j<10; j++)
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,0));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,1));
+		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+		printf("|");
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,2));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,3));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,4));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,5));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,6));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,7));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,8));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,9));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,10));
+		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+		printf("|");
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,11));
+//		printf("%02s|",(char*)sqlite3_column_text(stmt3,12));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,13));
+		printf("%02s|",(char*)sqlite3_column_text(stmt3,14));
       printf("\n");
 }
 
