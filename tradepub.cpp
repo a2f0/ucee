@@ -108,8 +108,10 @@ sops.sem_flg = 0;
 
 signal(SIGINT,intHandler);
 
+int j=1;
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
- 
+  cout << "\n* trade publisher: receiving trade n. " <<j++<<" from ME";
+  cout << endl;
 
   printTradeMsg(tm);
   tm->quantity = htobe64(tm->quantity);

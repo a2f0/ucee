@@ -76,7 +76,7 @@ int main(){
   key3 = ftok(METOTPKEY1,'b'); // shared memory with tradepub
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
   shmctl(shmid3,IPC_RMID,NULL);
-  if((shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT))<0){
+  if((shmid3 =shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT))<0){
     printf("main: shmget() failed\n");
     printf("%s",strerror(errno));
     exit(0);
@@ -94,7 +94,8 @@ int main(){
   key6 = ftok(METOREKEY1,'b'); // shared memory with reporting engine
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
   shmctl(shmid6rp,IPC_RMID,NULL);
-  if((shmid6rp=shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT))<0){
+  if((shmid6rp=shmget(key6,sizeof(struct ReportingMessage),
+                      0666|IPC_CREAT))<0){
     printf("main: shmget() failed\n");
     printf("%s",strerror(errno));
     exit(0);
@@ -142,7 +143,7 @@ int main(){
   // loading database
   writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
-  for(list<Order>::const_iterator it = mylist.begin();it!=mylist.end();it++)
+  for(list<Order>::const_iterator it=mylist.begin();it!=mylist.end();it++)
     myBooks.Process(*it);
   // wait for BookPub to load database
   sops.sem_num =0;
@@ -161,9 +162,10 @@ int main(){
   signal(SIGINT,intHandler);
   writetodatabase = 1;
   int j = 1;
-  while(msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0)!=-1
-        && j < 11){
-    cout << "\n* matching Engine: receiving order n. "<< j++ << " from CM"<< endl;
+  while(msgrcv(msqid1,&mmb,sizeof(struct OrderManagementMessage),2,0)!=-1
+        && j < 1111){
+    cout << "\n* matching engine: receiving order n. "<< j++<< " from CM";
+    cout << endl;
     struct OrderManagementMessage omm = mmb.omm;
     printOrderManagementMessage(&omm);
     myBooks.Process(omm);

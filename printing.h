@@ -353,16 +353,16 @@ void printBookMsg(const struct BookMessage *bk_msg)
 
 void printReportingMsg(const struct ReportingMessage *rp_msg)
 {
-  printf(" ReportingMessage: \n");
-  printf(" * Timestamp: %llu \n", rp_msg->timestamp);
-  printf(" * TradeMessage: \n");
+  printf("\n ReportingMessage: \n");
+  printf("\n * Timestamp: %llu \n", rp_msg->timestamp);
+  printf("\n * TradeMessage: \n");
   struct TradeMessage tr_msg = rp_msg->trademsg;
   printTradeMsg(&tr_msg);
   struct Order orderA = rp_msg->orderA;
-  printf(" * Order A: \n");
+  printf("\n * Order A: \n");
   printOrder(&orderA);
   struct Order orderB = rp_msg->orderB;
-  printf(" * Order B: \n");
+  printf("\n * Order B: \n");
   printOrder(&orderB);
   printf("\n");
 };
