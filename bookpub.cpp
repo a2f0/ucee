@@ -27,7 +27,7 @@
 #include <arpa/inet.h>
 using namespace std;
 
-// 
+// setting up sockets
 int mysocket;
 struct sockaddr_in grp;
 
@@ -42,7 +42,7 @@ void intHandler(int dummy=0){
   shmctl(shmid3, IPC_RMID,NULL);
   semctl(semid4,0, IPC_RMID,NULL);
   semctl(semid5,0, IPC_RMID,NULL);
-//  myBooks.Print();
+  // myBooks.Print();
 };
 
 int main(){
@@ -75,7 +75,7 @@ myBooks.mysocket=mysocket;
   // loading database
   writetodatabase=0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
-  for (std::list<Order>::const_iterator it = mylist.begin(); it!=mylist.end();it++)
+  for(std::list<Order>::const_iterator it=mylist.begin();it!=mylist.end();it++)
     myBooks.Process(*it);
   // allow Matching engine to continue
   struct OrderManagementMessage omm;
@@ -91,12 +91,10 @@ myBooks.mysocket=mysocket;
   printf("blocking due to semop\n");
   sops.sem_num = 1;
   sops.sem_op = -1;
-  int j =0;
+  int j =1;
   while(semop(semid4,&sops,1)!=-1){
-    cout << "Number of messages received from ConnMgr = " << j++ << endl;
-    cout << "* Book Publisher: received order:" << endl;
+    cout << "\n* book publisher: receiving order n. "<< j++ <<" from CM"<<endl;
     printOrderManagementMessage(ptr);
-    cout << "* Book Publisher: sending order for processing" << endl;
     memcpy(&omm,ptr,sizeof(omm));
     myBooks.Process(omm);
     sops.sem_num =0;
@@ -104,9 +102,7 @@ myBooks.mysocket=mysocket;
     semop(semid4,&sops,1);
     sops.sem_num = 1;
     sops.sem_op = -1;
-    printf("semval 0: %d\n", semctl(semid4, 0, GETVAL, 0));
-    printf("semval 1: %d\n", semctl(semid4, 1, GETVAL, 0));
   };
-//  myBooks.Print();
+  // myBooks.Print();
   return 0;
 };

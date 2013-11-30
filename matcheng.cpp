@@ -148,7 +148,7 @@ int main(){
   sops.sem_num =0;
   sops.sem_op = -1;
   sops.sem_flg = 0;
-  printf("* blocking while we wait for bookpub to read database\n");
+  printf("\n* blocking while we wait for bookpub to read database\n");
   if(semop(semid5,&sops,1)<0){
     printf("main: semop() failed\n");
     printf("%s",strerror(errno));
@@ -156,14 +156,14 @@ int main(){
   };
 
   // setting up
-  printf("* ready to receive messages\n");
+  printf("\n* ready to receive messages\n");
   // reading from message queue
   signal(SIGINT,intHandler);
   writetodatabase = 1;
   int j = 1;
   while(msgrcv(msqid1, &mmb, sizeof(struct OrderManagementMessage), 2, 0)!=-1
         && j < 11){
-    cout << "* Matching Engine: received order n. "<< j++ << " from CM"<< endl;
+    cout << "\n* matching Engine: receiving order n. "<< j++ << " from CM"<< endl;
     struct OrderManagementMessage omm = mmb.omm;
     printOrderManagementMessage(&omm);
     myBooks.Process(omm);
