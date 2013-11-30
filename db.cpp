@@ -47,6 +47,10 @@ return 0;
 int add_row(Order myorder){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
+//sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s','%s',%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),nnstring(myorder.account, ACCOUNT_SIZE).c_str(),nnstring(myorder.user,USER_SIZE).c_str(),(int)myorder.order_type,myorder.timestamp,myorder.buysell,nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
+if(myorder.price==NULL){
+	snprintf(myorder.price,"%s","0");
+}
 sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s','%s',%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),nnstring(myorder.account, ACCOUNT_SIZE).c_str(),nnstring(myorder.user,USER_SIZE).c_str(),(int)myorder.order_type,myorder.timestamp,myorder.buysell,nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
 //sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s',%f,%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),myorder.account,myorder.user,(int)myorder.order_type,myorder.timestamp,myorder.buysell,myorder.symbol,atof(myorder.price),myorder.quantity);
 
