@@ -29,6 +29,7 @@ int process(TradeMessage tm);
 int mysocket;
 struct sockaddr_in grp;
 
+//process function below sends multicast messages
 int process(TradeMessage tm){
 struct sockaddr_in grp2;
 memset((char *) &grp2, 0, sizeof(grp));
@@ -47,6 +48,8 @@ return 0;
 
 
 
+
+
 int shmid;
 int sem_id;
 
@@ -62,8 +65,7 @@ void intHandler(int dummy=0){
 
 int main(){
 
-//SHM SETUP:
-//
+//shared memory setup
 key_t mykey;
 mykey = ftok(METOTPKEY1,'b'); // shared memory with matcheng
 size_t mysize = sizeof(struct TradeMessage);
@@ -73,8 +75,7 @@ struct TradeMessage* tm = (struct TradeMessage*) shmat(shmid, NULL, 0);
 
 
 
-//SEM SETUP:
-//
+//semaphore setup
 struct sembuf sops;
 // semaphore with matcheng
 sem_id = semget(ftok(SEMKEY1,'b'), 2, 0666 | IPC_CREAT );
@@ -84,11 +85,10 @@ exit(EXIT_FAILURE);
 }
 
 
-
+//multicast setup
 mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
-
 grp.sin_family = AF_INET;
 grp.sin_addr.s_addr = inet_addr("239.192.07.07");
 grp.sin_port = htons(1234);
