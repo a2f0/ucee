@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <endian.h>
 
 using namespace std;
 int process(TradeMessage tm);
@@ -111,6 +112,7 @@ while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
  
 
   printTradeMsg(tm);
+  tm->quantity = htobe64(tm->quantity);
 
   process(*tm);
 
