@@ -5,7 +5,7 @@
 #define METOCMKEY1 "/etc/usb_modeswitch.conf"
 #define METOTPKEY1 "/etc/sensors3.conf"
 #define CMTOBPKEY1 "/etc/smartd.conf"
-#define METOREKEY1 "/etc/groff"
+#define METOREKEY1 "/etc/gai.conf"
 #define SEMKEY1 "/etc/locale.gen"
 #define SEMKEY2 "/etc/gssapi_mech.conf"
 #define SEMKEY3 "/etc/golang"

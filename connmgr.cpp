@@ -43,10 +43,10 @@
 std::map<std::string, int> connectionmapper;
 std::mutex writetoken;
 
-int found = 0;
-int notfound = 0;
-int receivedfromtradebots = 0;
-int copiedthroughsharedmemory = 0;
+long long int found = 0;
+long long int notfound = 0;
+long long int receivedfromtradebots = 0;
+long long int copiedthroughsharedmemory = 0;
 
 //This is used to send the message through a System V message queue
 struct message_msgbuf {
@@ -56,6 +56,8 @@ struct message_msgbuf {
 
 int semid;
 int shmid;
+int msqid;
+int msqid2;
 struct shmid_ds shmid_struct;
 struct OrderManagementMessage* shm;
   
@@ -77,13 +79,22 @@ void my_handler(int s){
     {
         printf("main: shmctl() failed\n");
     }
-
-    printf("connection manager operational summary:");
-    printf("found (and acknowledged) for reverse routing (to tradebot): %d\n", found);
-    printf("not found for reverse routing (to tradebot): %d\n",notfound);
-    printf("total messages received from trade bots: %d\n",receivedfromtradebots);
-    printf("%d", copiedthroughsharedmemory);
-    exit(1); 
+    if ((msgctl(msqid2,IPC_RMID,NULL)) == -1)
+    {
+        printf("error removing message queue with id %d: %s\n", msqid2, strerror(errno));
+    }
+    if ((msgctl(msqid,IPC_RMID,NULL)) == -1)
+    {
+        printf("error removing message queue with id %d: %s\n", msqid, strerror(errno));
+    }
+    
+    printf("******** begin connection manager performance summary ********\n");
+    printf("found (and acknowledged) for reverse routing (to tradebot): %llu\n", found);
+    printf("not found for reverse routing (to tradebot): %llu\n",notfound);
+    printf("total messages received from trade bots: %llu\n",receivedfromtradebots);
+    printf("messages copied through shared memory: %llu", copiedthroughsharedmemory);
+    printf("******** end connection manager performance summary ********\n");
+    exit(1);
 }
 
 //This should be called from a separate thread.
@@ -91,10 +102,13 @@ void readfrommatchingengine() {
 
     printf("thread to read from matching engine system v message queue spawned.\n");
     key_t key2;
-    int msqid2;
     key2 = ftok(METOCMKEY1, 'b');
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
-    msgctl(msqid2,IPC_RMID,NULL);
+    printf("message queue id after creation: %d\n", msqid2);
+    int rc = msgctl(msqid2,IPC_RMID,NULL);
+    if (rc == -1 ) {
+        printf("error removing message queue with id %d: %s\n", msqid2, strerror(errno));
+    }
     msqid2 = msgget(key2, 0666 | IPC_CREAT);
     printf("getting ready to read order acknowledgement messages from message queue...\n");
     //char *order_id
@@ -108,8 +122,37 @@ void readfrommatchingengine() {
         /*
         printf("Matcheng listening on msqi2d: %d\n", msqid2);
         */
+        //Extract the OrderIDs for routing:
+        switch (mmb.omm.type) {
+            case NEW_ORDER_ACK:
+                strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
+                break;
+            case NEW_ORDER_NAK:
+                strncpy( order_id, mmb.omm.payload.orderNak.order_id, 32);
+                break;
+            case CANCEL_ACK:
+                strncpy( order_id, mmb.omm.payload.cancelAck.order_id, 32);
+                break;
+            case CANCEL_NAK:
+                strncpy( order_id, mmb.omm.payload.cancelNak.order_id, 32);
+                break;
+            case MODIFY_ACK:
+                strncpy( order_id, mmb.omm.payload.modifyAck.order_id, 32);
+                break;
+            case MODIFY_NAK:
+                strncpy( order_id, mmb.omm.payload.modifyNak.order_id, 32);
+                break;
+            case NEW_ORDER:
+            case MODIFY_REQ:
+            case CANCEL_REQ:
+                break;
+            default:
+                printf("**warning** this should never occur.\n");
+        };
+
         writetoken.lock();
-        strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
+        //This was the original
+        //strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
         printf("======message received from matching enginee======\n"); 
         printf("received: %d bytes from matching engine\n", rcv_bytes);
         printf("receiver mmb type: %lu\n", mmb.mtype);
@@ -210,7 +253,6 @@ int main(){
     std::thread rfme(readfrommatchingengine);
     key_t key;
     key = ftok(CMTOMEKEY1, 'b');
-    int msqid;
     msqid = msgget(key, 0666 | IPC_CREAT);
     msgctl(msqid,IPC_RMID,NULL);
     msqid = msgget(key, 0666 | IPC_CREAT);
