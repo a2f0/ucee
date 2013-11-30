@@ -1,39 +1,135 @@
 #include "db.cpp"
+/*
+char* trader;
+char* ticker;
+char* otimestamp;
+char* oquantity;
+char* oprice;
+char* otype;
+char* side;
+char* ftimestamp;
+char* fquantity;
+char* fprice;
+char* account;
+char* space;
+*/
+//int counter;
+
+
+
 
 
 int trader_rpt(char* tr){
 printf("\n\nTRADER REPORT:\n\n");
 int rc,c;
 char* query3 = (char*) malloc (1024*sizeof(char));
-sprintf(query3,"%s","SELECT * FROM t3 b, t2 a WHERE (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account, a.user;");
+//sprintf(query3,"%s","SELECT * FROM t3 b, t2 a WHERE (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.user,b.timestamp;");
+sprintf(query3,"%s","SELECT * FROM t3 b, t2 a WHERE (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account,a.user;");
 sqlite3_stmt *stmt3;
 sqlite3* mydb = create_db();
 sqlite3_open("OrderBook.db",&mydb);
+//char trader[32]="trader";
+int counter=0;
+
+char* trader = (char*) malloc (50*sizeof(char));
+char* ticker = (char*) malloc (50*sizeof(char));
+char* otimestamp = (char*) malloc (50*sizeof(char));
+char* oquantity = (char*) malloc (50*sizeof(char));
+char* oprice = (char*) malloc (50*sizeof(char));
+char* otype = (char*) malloc (50*sizeof(char));
+char* side = (char*) malloc (50*sizeof(char));
+char* ftimestamp = (char*) malloc (50*sizeof(char));
+char* fquantity = (char*) malloc (50*sizeof(char));
+char* fprice = (char*) malloc (50*sizeof(char));
+char* account = (char*) malloc (50*sizeof(char));
+char* space = (char*) malloc (150*sizeof(char));
+//char* space = (char*) malloc (150*sizeof(char));
+int count=0;
+nstringcpy(trader, "trader", 32);
+nstringcpy(ticker, "ticker", 16);
+nstringcpy(otimestamp, "order timestamp", 26);
+nstringcpy(oquantity, "quant.", 6);
+nstringcpy(oprice, "price", 6);
+nstringcpy(otype, "type", 6);
+nstringcpy(side, "side", 6);
+nstringcpy(ftimestamp, "fill timestamp", 19);
+nstringcpy(fquantity, "f.quantity", 6);
+nstringcpy(fprice, "f.price", 6);
+nstringcpy(account, "account", 16);
+nstringcpy(space, "", 48);
+//nstringcpy(space, "", 145);
+
+//printf("%s\n%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n%s\n",space,trader,ticker,otimestamp, oquantity, oprice, otype, side, ftimestamp, fquantity, fprice, account,space);
 if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt3)) == 100 ){
-//      for(int j=0; j<10; j++)
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,0));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,1));
-		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+
+                printf("\n\n");
+                printf("%2s",(char*)sqlite3_column_text(stmt3,7)); //trader
+                printf("%2s",(char*)sqlite3_column_text(stmt3,0)); //ticker
+                printf("Order:  ");
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10)); //order timestamp
+                printf("|");
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,14)); //order quantity
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,13)); //order price
+                printf("Type: %2s|",(char*)sqlite3_column_text(stmt3,9)); //order type
+                printf("Side: %2s\n",(char*)sqlite3_column_text(stmt3,11)); //side
+                printf("%2s",space);
+                printf("Fill :  ");
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10)); //fill timestamp
+                printf("|");
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
+                printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
+                printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
+                printf("\n\n");
+
+		/*
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,7)); //trader
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,0)); //ticker
+		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10)); //order timestamp
 		printf("|");
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,2));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,3));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,4));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,5));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,6));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,7));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,8));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,9));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,10));
-		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,14)); //order quantity
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,13)); //order price
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,9)); //order type
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,11)); //side
+		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10)); //fill timestamp
 		printf("|");
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,11));
-//		printf("%02s|",(char*)sqlite3_column_text(stmt3,12));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,13));
-		printf("%02s|",(char*)sqlite3_column_text(stmt3,14));
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
+		printf("%2s|",(char*)sqlite3_column_text(stmt3,2)); //fill price
+		printf("%2s",(char*)sqlite3_column_text(stmt3,8)); //account
+      		printf("\n");
+		*/
+		//counter++;
+		//if((counter%25)==0)
+		//printf("%s\n%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n%s\n",space,trader,ticker,otimestamp, oquantity, oprice, otype, side, ftimestamp, fquantity, fprice, account,space);
+		//printf("%2s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n",trader,ticker,otimestamp, oquantity, oprice, otype, side, ftimestamp, fquantity, fprice, account);
+}
+
+
+
+/*
+while ( (c=sqlite3_step(stmt3)) == 100 ){
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,0));
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+                printf("|");
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,2));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,3));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,7));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,8));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,9));
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+                printf("|");
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,11));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,13));
+                printf("%02s|",(char*)sqlite3_column_text(stmt3,14));
       printf("\n");
 }
+*/
+
+
+
+
+
 
 sqlite3_finalize(stmt3);
 sqlite3_close(mydb);
@@ -45,29 +141,72 @@ int instrument_rpt(char* in){
 printf("\n\nINSTRUMENT REPORT:\n\n");
 int rc,c;
 char* query3 = (char*) malloc (1024*sizeof(char));
-sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol,b.timestamp;");
+sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol,a.timestamp;");
+//sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol,b.orderid1;");
 sqlite3_stmt *stmt3;
 sqlite3* mydb = create_db();
 sqlite3_open("OrderBook.db",&mydb);
+int counter=0;
+
+
+
+
+char* trader = (char*) malloc (50*sizeof(char));
+char* ticker = (char*) malloc (50*sizeof(char));
+char* otimestamp = (char*) malloc (50*sizeof(char));
+char* oquantity = (char*) malloc (50*sizeof(char));
+char* oprice = (char*) malloc (50*sizeof(char));
+char* otype = (char*) malloc (50*sizeof(char));
+char* side = (char*) malloc (50*sizeof(char));
+char* ftimestamp = (char*) malloc (50*sizeof(char));
+char* fquantity = (char*) malloc (50*sizeof(char));
+char* fprice = (char*) malloc (50*sizeof(char));
+char* account = (char*) malloc (50*sizeof(char));
+char* space = (char*) malloc (150*sizeof(char));
+int count=0;
+nstringcpy(trader, "trader", 32);
+nstringcpy(ticker, "ticker", 16);
+nstringcpy(otimestamp, "order timestamp", 26);
+nstringcpy(oquantity, "quant.", 6);
+nstringcpy(oprice, "price", 6);
+nstringcpy(otype, "type", 6);
+nstringcpy(side, "side", 6);
+nstringcpy(ftimestamp, "fill timestamp", 19);
+nstringcpy(fquantity, "f.quantity", 6);
+nstringcpy(fprice, "f.price", 6);
+nstringcpy(account, "account", 16);
+nstringcpy(space, "", 49);
+
+
+
+
 
 if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt3)) == 100 ){
+		printf("\n\n");
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,0)); //ticker
+                printf("%2s",(char*)sqlite3_column_text(stmt3,7)); //trader
+		printf("Order:  ");
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10)); //order timestamp
+                printf("|");
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,14)); //order quantity
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,13)); //order price
+                printf("Type: %2s|",(char*)sqlite3_column_text(stmt3,9)); //order type
+                printf("Side: %2s\n",(char*)sqlite3_column_text(stmt3,11)); //side
+		printf("%2s",space);
+		printf("Fill :  ");
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10)); //fill timestamp
+                printf("|");
+                printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
+                printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
+                printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
+                printf("\n\n");
+//                counter++;
+//                if((counter%25)==0)
+//                printf("%s\n%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n%s\n",space,ticker,trader,otimestamp, oquantity, oprice, otype, side, ftimestamp, fquantity, fprice, account,space);
 
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,0));
-		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
-		printf("|");
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,2));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,3));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,7));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,8));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,9));
-		printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
-		printf("|");
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,11));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,13));
-                printf("%4s|",(char*)sqlite3_column_text(stmt3,14));
-		printf("\n");
+
 }
 
 sqlite3_finalize(stmt3);
@@ -75,6 +214,24 @@ sqlite3_close(mydb);
 return 0;
 }
 
+
+
+/*              
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,0));
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+                printf("|");
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,2));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,3));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,7));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,8));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,9));
+                printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+                printf("|");
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,11));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,13));
+                printf("%4s|",(char*)sqlite3_column_text(stmt3,14));
+                printf("\n");
+*/
 
 
 int trade_values(char* in){
@@ -219,6 +376,33 @@ if (argc==5){
 } else {
 printf("\n\nUsage:  ./rpt -a [Report Type as an Int: 1,2, or 3 (1=Trader, 2=Instrument, 3=Summary)] -p [Parameter (ie, trader id or instrument type) ]\n\n");
 }
+
+/*
+trader = (char*) malloc (50*sizeof(char));
+ticker = (char*) malloc (50*sizeof(char));
+otimestamp = (char*) malloc (50*sizeof(char));
+oquantity = (char*) malloc (50*sizeof(char));
+oprice = (char*) malloc (50*sizeof(char));
+otype = (char*) malloc (50*sizeof(char));
+side = (char*) malloc (50*sizeof(char));
+ftimestamp = (char*) malloc (50*sizeof(char));
+fquantity = (char*) malloc (50*sizeof(char));
+fprice = (char*) malloc (50*sizeof(char));
+account = (char*) malloc (50*sizeof(char));
+space = (char*) malloc (150*sizeof(char));
+nstringcpy(trader, "trader", 32);
+nstringcpy(ticker, "ticker", 16);
+nstringcpy(otimestamp, "order timestamp", 26);
+nstringcpy(oquantity, "quant", 6);
+nstringcpy(oprice, "price", 6);
+nstringcpy(otype, "type", 6);
+nstringcpy(side, "side", 6);
+nstringcpy(ftimestamp, "fill timestamp", 19);
+nstringcpy(fquantity, "f.quantity", 6);
+nstringcpy(fprice, "f.price", 6);
+nstringcpy(account, "account", 16);
+nstringcpy(space, "", 145);
+*/
 
 if(atoi(arga)==1){
 char* mychars = (char*) malloc (150*sizeof(char));

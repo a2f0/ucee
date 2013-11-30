@@ -133,12 +133,15 @@ sops.sem_flg = 0;
 
 signal(SIGINT,intHandler);
 
+int j =1;
 while(semop(sem_id, &sops, 1)!=-1){ //RESERVE SEMAPHORE
 //if ((rm = (struct ReportingMessage*) shmat(shmid, NULL, 0)) == (struct ReportingMessage*) -1) {
 //        cout << "Error: shmat" << endl;
 //}
 
 //add_row(*rm);
+  cout << "* reporting engine: receiving reporting message n. "<< j++;
+  cout << " from ME" << endl;
 printReportingMsg(rm);
 add_row(*rm);
 
