@@ -43,13 +43,13 @@ grp2.sin_addr.s_addr = inet_addr("239.192.07.07");
 grp2.sin_port = htons(atoi("1234"));
 ssize_t f = sendto(mysocket, &tm, sizeof(TradeMessage), 0, (struct sockaddr*) &grp2, sizeof(grp2));
 if(f<0){
-        fprintf(stderr,"Message Not Sent.\n");
-	printf("%s",strerror(errno));
-        return -1;
-}
+  fprintf(stderr,"Message Not Sent.\n");
+  printf("%s",strerror(errno));
+  return -1;
+};
 
 return 0;
-}
+};
 
 
 

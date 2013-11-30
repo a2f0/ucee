@@ -26,15 +26,33 @@ struct message_msgbuf mmb;
 // Order Book View for matching engine
 MatchEngOBV myBooks;
 
-/*intHandler closes queue and exits*/
+// intHandler closes queue and exits
 void intHandler(int dummy=0){
   // closing IPCs
-  shmctl(shmid3,IPC_RMID,NULL);
-  semctl(semid4,0,IPC_RMID,NULL);
-  shmctl(shmid6rp,IPC_RMID,NULL);
-  semctl(semid6rp,0,IPC_RMID,NULL);
-  msgctl(msqid1,IPC_RMID,NULL);
-  msgctl(msqid2,IPC_RMID,NULL);
+  if(shmctl(shmid3,IPC_RMID,NULL)==-1){
+    printf("main: shmctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(semctl(semid4,0,IPC_RMID,NULL)==-1){
+    printf("main: semctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(shmctl(shmid6rp,IPC_RMID,NULL)==-1){
+    printf("main: shmctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(semctl(semid6rp,0,IPC_RMID,NULL)==-1){
+    printf("main: semctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(msgctl(msqid1,IPC_RMID,NULL)==-1){
+    printf("main: msgctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
+  if(msgctl(msqid2,IPC_RMID,NULL)==-1){
+    printf("main: msqctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
   // myBooks.Print();
   exit(0);
 };
@@ -42,36 +60,69 @@ void intHandler(int dummy=0){
 int main(){
   // set up queues
   key1 = ftok(CMTOMEKEY1, 'b'); // key from connection manager
-  msqid1 = msgget(key1, 0666 | IPC_CREAT);
+  if((msqid1 = msgget(key1, 0666 | IPC_CREAT))<0){
+    printf("main: msgget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+  
   key2 = ftok(METOCMKEY1, 'b'); // key to conn mgr with acks
-  msqid2 = msgget(key2, 0666 | IPC_CREAT);
+  if((msqid2 = msgget(key2, 0666 | IPC_CREAT))<0){
+    printf("main: msgget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
   
   key3 = ftok(METOTPKEY1,'b'); // shared memory with tradepub
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
   shmctl(shmid3,IPC_RMID,NULL);
-  shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
-
+  if((shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT))<0){
+    printf("main: shmget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+  
   key4 = ftok(SEMKEY1,'b'); // semaphore with tradepub
   semid4 = semget(key4,2,0666| IPC_CREAT);
   semctl(semid4,0,IPC_RMID,NULL);
-  semid4 = semget(key4,2,0666| IPC_CREAT);
+  if((semid4 = semget(key4,2,0666| IPC_CREAT))<0){
+    printf("main: semget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
   
   key6 = ftok(METOREKEY1,'b'); // shared memory with reporting engine
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
   shmctl(shmid6rp,IPC_RMID,NULL);
-  shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
+  if((shmid6rp=shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT))<0){
+    printf("main: shmget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
 
   key7 = ftok(METORESEM,'b'); // semaphore with reporting engine
   semid6rp = semget(key7,2,0666|IPC_CREAT);
   semctl(semid6rp,0,IPC_RMID,NULL);
-  semid6rp = semget(key7,2,0666|IPC_CREAT);
-
+  if((semid6rp = semget(key7,2,0666|IPC_CREAT))<0){
+    printf("main: semget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+  
   struct sembuf sops;
   sops.sem_num = 0;
   sops.sem_op = 1;
   sops.sem_flg =0;
-  semop(semid4,&sops,1);
-  semop(semid6rp,&sops,1);
+  if(semop(semid4,&sops,1)<0){
+    printf("main: semop() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);   
+  };
+  if(semop(semid6rp,&sops,1)<0){
+    printf("main: semop() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
   
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
@@ -82,8 +133,12 @@ int main(){
   key5 = ftok(SEMKEY3,'b'); // semaphore with book publisher
   semid5 = semget(key5,1,0666| IPC_CREAT);
   semctl(semid5,0,IPC_RMID,NULL);
-  semid5 = semget(key5,1,0666| IPC_CREAT);
-
+  if((semid5 = semget(key5,1,0666| IPC_CREAT))<0){
+    printf("main: semget() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+  
   // loading database
   writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));
@@ -94,7 +149,12 @@ int main(){
   sops.sem_op = -1;
   sops.sem_flg = 0;
   printf("* blocking while we wait for bookpub to read database\n");
-  semop(semid5,&sops,1);
+  if(semop(semid5,&sops,1)<0){
+    printf("main: semop() failed\n");
+    printf("%s",strerror(errno));
+    exit(0);
+  };
+
   // setting up
   printf("* ready to receive messages\n");
   // reading from message queue
