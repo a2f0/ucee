@@ -11,7 +11,7 @@ STARTING THE SIMULATION ENVIRONMENT:
 
 1) make clean; make; ./database.sh
 2) ./connmgr
-3) ./tradeBot/md_receiver -a 239.192.07.07 -p 1234;
+3) ./tradeBot/md_receiver -a 239.192.07.07 -p 1234
 4) ./matcheng
 5) ./tradepub
 6) ./bookpub
