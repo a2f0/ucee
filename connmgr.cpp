@@ -48,7 +48,6 @@ std::map<std::string, int> connectionmapper;
 std::map<std::string, Clock::time_point> order_start_time;
 std::mutex writetoken;
 
-
 //Clock::time_point t0 = Clock::now();
 //The time the first order was recieved from a tradebot
 Clock::time_point t0;
@@ -60,8 +59,8 @@ long long int found = 0;
 long long int notfound = 0;
 long long int receivedfromtradebots = 0;
 long long int copiedthroughsharedmemory = 0;
-
-long long int total_miliseconds = 0;
+long long int total_milliseconds_latency = 0;
+long long int orders_matched_latency = 0;
 
 //This is used to send the message through a System V message queue
 //struct message_msgbuf {
@@ -108,11 +107,13 @@ void my_handler(int s){
     }
     
     printf("******** begin connection manager performance summary ********\n");
-    printf("found (and acknowledged) for reverse routing (to tradebot): %llu\n", found);
-    printf("not found for reverse routing (to tradebot): %llu\n",notfound);
     printf("total messages received from trade bots: %llu\n",receivedfromtradebots);
-    printf("messages copied through shared memory: %llu\n", copiedthroughsharedmemory);
-    printf("total milliseconds runtime: %d\n", (int)msrun.count());
+    printf("found (and acknowledged) for reverse routing (to tradebot from matching engine): %llu\n", found);
+    printf("not found for reverse routing (to tradebot from matching engine): %llu\n",notfound);
+    printf("messages copied through shared memory to book publisher: %llu\n", copiedthroughsharedmemory);
+    printf("total runtime since first order was received from tradebot: %dms\n", (int)msrun.count());
+    printf("sum of latency for %llu orders: %llums\n", orders_matched_latency, total_milliseconds_latency);
+    printf("average per order latency %fms\n", (double)((double)(total_milliseconds_latency / (double)orders_matched_latency)));
     //std::cout << ms.count() << "ms\n";
     printf("******** end connection manager performance summary ********\n");
     exit(1);
@@ -173,39 +174,50 @@ void readfrommatchingengine() {
  
         std::string ordr(order_id);
         std::string connectionmapperresult;
-        std::string ordertimeresult; 
-        
+        std::string ordertimerresult; 
+        char* tmp = (char*) malloc (1024*sizeof(char));
+        char* tmp2 = (char*) malloc (1024*sizeof(char));
         auto it2 = order_start_time.find(order_id);
         auto it = connectionmapper.find(order_id);
         if (it != connectionmapper.end()) {
-            printf("descriptor matched for reverse routing: %d\n", it->second);
+            //printf("descriptor matched for reverse routing: %d\n", it->second);
+            sprintf(tmp, "descriptor matched for reverse routing: %d\n",it->second);
+            connectionmapperresult = std::string(tmp);
             send(it->second, &mmb.omm, sizeof(mmb.omm), 0);
             connectionmapper.erase(it);
-            printf("removed map entry from connection manager.\n");
             found++;
         } else {
-            printf("**warning: no file descripter matched for reverse routing**: %d\n", it->second);
+            //printf("**warning: no file descripter matched for reverse routing**: %d\n", it->second);
+            sprintf(tmp, "**warning: no file descripter matched for reverse routing**: %d\n",it->second);
+            connectionmapperresult = std::string(tmp);
             notfound++;
         }
         if (it2 != order_start_time.end()) {
             i1 = Clock::now();
             //printf("second: %d\n**", it->second);
             milliseconds msrun = std::chrono::duration_cast<milliseconds>(i1 - it2->second);
-            printf("rtt for acknowledgement: %d\n", (int)msrun.count());
+            sprintf(tmp2, "successfully calculated time for acknowledgement as %dms\n", (int)msrun.count() );
+            ordertimerresult = std::string(tmp2);
+            total_milliseconds_latency += (int)msrun.count();
+            orders_matched_latency++;
         } else {
-            printf("**warning: start time not found for incoming acknowledgement\n**");
-        } 
+            //printf("**warning: start time not found for incoming acknowledgement\n**");
+            sprintf(tmp2,"**warning: start time not found for incoming acknowledgement\n**");
+            ordertimerresult = std::string(tmp2);
+        }
 
         //This was the original
         //strncpy( order_id, mmb.omm.payload.orderAck.order_id, 32);
         writetoken.lock();
-        printf("======message received from matching enginee======\n"); 
+        printf("======message received from matching engine======\n"); 
         printf("received: %d bytes from matching engine\n", rcv_bytes);
         printf("receiver mmb type: %lu\n", mmb.mtype);
         printf("receiver omm type: %d\n", mmb.omm.type);
         printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
         printf("receiver omm order_id: %s.\n", order_id); 
-        printf("receiver omm order_id: %s.\n", order_id); 
+        printf("rtt map result: %s", ordertimerresult.c_str()); 
+        printf("connection mapper result: %s", connectionmapperresult.c_str()); 
+        //printf("receiver mapper rtt result: %s", ordertimerresult.c_str()); 
         printf("======end message received from matching engine======\n"); 
         writetoken.unlock();
         //printOrderManagementMessage(&mmb.omm);
