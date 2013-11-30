@@ -41,18 +41,14 @@
 //http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Fapis%2Fapiexusmem.htm
 
 std::map<std::string, int> connectionmapper;
+std::map<std::string, int> latencytimer;
 std::mutex writetoken;
 
 long long int found = 0;
 long long int notfound = 0;
 long long int receivedfromtradebots = 0;
 long long int copiedthroughsharedmemory = 0;
-
-//This is used to send the message through a System V message queue
-struct message_msgbuf {
-    long mtype;  /* must be positive */
-    struct OrderManagementMessage omm;
-};
+long long int total_seconds = 0;
 
 int semid;
 int shmid;
@@ -475,7 +471,7 @@ int main(){
                 
                 memcpy(shm,&omm,sizeof(omm));
                 printf("successfully copied message to shared memory with order type %d\n", omm.type);
-                printf("%d\n",copiedthroughsharedmemory++);
+                printf("%llu\n",copiedthroughsharedmemory++);
                 sops.sem_num = 1;
                 sops.sem_op = 1;
                 printf("calling semop with semid %d and blocking until desired condition can be reached.\n", semid);
