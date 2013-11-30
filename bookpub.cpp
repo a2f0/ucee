@@ -31,8 +31,8 @@ using namespace std;
 int mysocket;
 struct sockaddr_in grp;
 
-key_t key1, key2, key3, key4,key5;
-int msqid1, msqid2, shmid3, semid4,semid5;
+key_t key1, key2, key3, key4,key5; //keys for shared memory and semaphores
+int msqid1, msqid2, shmid3, semid4,semid5; //ids for shared memory and semaphores
 struct message_msgbuf mmb;
 
 BookPubOBV myBooks;
@@ -47,15 +47,18 @@ void intHandler(int dummy=0){
 
 int main(){
   
+//Multicast Setup
+//
 mysocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
-
 myBooks.grp.sin_family = AF_INET;
 myBooks.grp.sin_addr.s_addr = inet_addr("239.192.07.07");
 myBooks.grp.sin_port = htons(12345);
 //myBooks.grp.sin_port = htons(1234);
 myBooks.mysocket=mysocket;
+//
+//end Multicast Setup
 
 
 
