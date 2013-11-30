@@ -110,6 +110,86 @@ return 0;
 }
 
 
+
+int trade_values(char* in){
+//printf("TRADE VALUES: %s\n",in);
+int rc,c;
+char* query1 = (char*) malloc (1024*sizeof(char));
+char* query2 = (char*) malloc (1024*sizeof(char));
+char* query3 = (char*) malloc (1024*sizeof(char));
+sprintf(query1,"SELECT symbol, MIN(price) as 'Minimum' FROM t3 GROUP BY symbol;");
+sprintf(query2,"SELECT symbol, MAX(price) as 'Maximum' FROM t3 GROUP BY symbol;");
+sprintf(query3,"SELECT symbol, price, MAX(timestamp) as 'Close' FROM t3 GROUP BY symbol;");
+//sprintf(query1,"SELECT MIN(price) FROM t3 WHERE symbol='GOOG';");
+//sprintf(query2,"SELECT MAX(price) FROM t3 WHERE symbol='GOOG';");
+//sprintf(query3,"SELECT price,MAX(timestamp) FROM t3 WHERE symbol='GOOG';");
+/*sprintf(query1,"SELECT MIN(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query2,"SELECT MAX(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query3,"SELECT price,MAX(timestamp) FROM t3 WHERE symbol='%s';",in);*/
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+//sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol;");
+sqlite3_stmt *stmt1;
+sqlite3_stmt *stmt2;
+sqlite3_stmt *stmt3;
+sqlite3* mydb = create_db();
+sqlite3_open("OrderBook.db",&mydb);
+if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+/*
+while ( (c=sqlite3_step(stmt1)) == 100 ){
+	printf("%s : ",(char*)sqlite3_column_text(stmt1,0));
+	printf("Min: %16s   \n",(char*)sqlite3_column_text(stmt1,1));
+}
+*/
+//sqlite3_finalize(stmt1);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+/*
+while ( (c=sqlite3_step(stmt2)) == 100 ){
+	printf("%s : ",(char*)sqlite3_column_text(stmt2,0));
+	printf("Max: %16s   \n",(char*)sqlite3_column_text(stmt2,1));
+        //        printf("MAX: %16s   \n",(char*)sqlite3_column_text(stmt2,0));
+}
+*/
+//sqlite3_finalize(stmt2);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+
+//while ( ((c=sqlite3_step(stmt3)) == 100 ) && ( (c=sqlite3_step(stmt3)) == 100 ) && ( (c=sqlite3_step(stmt3)) == 100 )){
+//int z;
+//for(z=0; z<10; z++{
+while ( ((c=sqlite3_step(stmt1)) == 100 ) && ( (c=sqlite3_step(stmt2)) == 100 ) && ( (c=sqlite3_step(stmt3)) == 100 )){
+	
+	printf("%s\n",(char*)sqlite3_column_text(stmt1,0));
+	printf("Min: %s\n",(char*)sqlite3_column_text(stmt1,1));
+//	printf("%s",(char*)sqlite3_column_text(stmt1,2));
+//	printf("%s",(char*)sqlite3_column_text(stmt2,0));
+	printf("Max: %s\n",(char*)sqlite3_column_text(stmt2,1));
+//	printf("%s",(char*)sqlite3_column_text(stmt3,0));
+	printf("Close: %s\n",(char*)sqlite3_column_text(stmt3,1));
+//	printf("%16s\n",(char*)sqlite3_column_text(stmt3,1));
+	printf("\n\n");
+}
+
+//      for(int j=0; j<6; j++) //number of columns in the database as defined in database.sh
+//                printf("CLOSE: %16s   \n",(char*)sqlite3_column_text(stmt3,0));
+//      printf("\n");
+
+
+sqlite3_finalize(stmt1);
+sqlite3_finalize(stmt2);
+sqlite3_finalize(stmt3);
+sqlite3_close(mydb);
+return 0;
+}
+
+
+
+
 int summary_rpt(){
 printf("\n\nSUMMARY REPORT:\n\n");
 int rc,c;
@@ -174,7 +254,7 @@ while ( (c=sqlite3_step(stmt4)) == 100 ){
 }
 sqlite3_finalize(stmt4);
 
-printf("%s: ","Side 0 Volume");
+printf("%s: ","Buy Side Volume");
 if ( (rc = sqlite3_prepare_v2(mydb, query5,-1, &stmt5, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt5)) == 100 ){
@@ -186,7 +266,7 @@ while ( (c=sqlite3_step(stmt5)) == 100 ){
 sqlite3_finalize(stmt5);
 
 
-printf("%s: ","Side 1 Volume");
+printf("%s: ","Sell Side Volume");
 if ( (rc = sqlite3_prepare_v2(mydb, query6,-1, &stmt6, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
 while ( (c=sqlite3_step(stmt6)) == 100 ){
@@ -211,9 +291,104 @@ while ( (c=sqlite3_step(stmt7)) == 100 ){
 
 sqlite3_finalize(stmt7);
 sqlite3_close(mydb);
+char* myinst = (char*) malloc (250*sizeof(char));
+sprintf(myinst,"%s","GOOG");
+printf("\n");
+trade_values(myinst);
 return 0;
 }
 
+
+
+int trade_values2(char* in){
+printf("TRADE VALUES: %s\n",in);
+int rc,c;
+char* query1 = (char*) malloc (1024*sizeof(char));
+char* query2 = (char*) malloc (1024*sizeof(char));
+char* query3 = (char*) malloc (1024*sizeof(char));
+sprintf(query1,"SELECT MIN(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query2,"SELECT MAX(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query3,"SELECT price,MAX(timestamp) FROM t3 WHERE symbol='%s';",in);
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+//sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol;");
+sqlite3_stmt *stmt1;
+sqlite3_stmt *stmt2;
+sqlite3_stmt *stmt3;
+sqlite3* mydb = create_db();
+sqlite3_open("OrderBook.db",&mydb);
+if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt1)) == 100 ){
+;
+}
+sqlite3_finalize(stmt1);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt2)) == 100 ){
+;
+}
+sqlite3_finalize(stmt2);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt3)) == 100 ){
+      for(int j=0; j<6; j++) //number of columns in the database as defined in database.sh
+                printf("%16s   ",(char*)sqlite3_column_text(stmt3,j));
+      printf("\n");
+}
+
+sqlite3_finalize(stmt3);
+sqlite3_close(mydb);
+return 0;
+}
+
+int trade_values3(char* in){
+printf("TRADE VALUES: %s\n",in);
+int rc,c;
+char* query1 = (char*) malloc (1024*sizeof(char));
+char* query2 = (char*) malloc (1024*sizeof(char));
+char* query3 = (char*) malloc (1024*sizeof(char));
+sprintf(query1,"SELECT MIN(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query2,"SELECT MAX(price) FROM t3 WHERE symbol='%s';",in);
+sprintf(query3,"SELECT price,MAX(timestamp) FROM t3 WHERE symbol='%s';",in);
+//sprintf(query2,"%s","ATTACH 'Reporting.db' as rdb;");
+//sprintf(query3,"%s","SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol;");
+sqlite3_stmt *stmt1;
+sqlite3_stmt *stmt2;
+sqlite3_stmt *stmt3;
+sqlite3* mydb = create_db();
+sqlite3_open("OrderBook.db",&mydb);
+if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt1)) == 100 ){
+;
+}
+sqlite3_finalize(stmt1);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt2)) == 100 ){
+;
+}
+sqlite3_finalize(stmt2);
+
+
+if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
+        cout << sqlite3_errmsg(mydb);
+while ( (c=sqlite3_step(stmt3)) == 100 ){
+      for(int j=0; j<6; j++) //number of columns in the database as defined in database.sh
+                printf("%16s   ",(char*)sqlite3_column_text(stmt3,j));
+      printf("\n");
+}
+
+sqlite3_finalize(stmt3);
+sqlite3_close(mydb);
+return 0;
+}
 
 
 
