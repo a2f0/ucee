@@ -39,10 +39,13 @@ return 0;
 int add_row(Order myorder){
 int rc,c;
 char* order_to_sql = (char*) malloc (1024*sizeof(char));
-if(myorder.price==NULL){
+
+if(myorder.order_type==MARKET_ORDER){
 	nstringcpy(myorder.price,"",PRICE_SIZE);
-}
+};
+
 sprintf(order_to_sql,"INSERT INTO t1 VALUES ('%s','%s','%s',%d,%llu,%d,'%s','%s',%lu);",nnstring(myorder.order_id, ORDERID_SIZE).c_str(),nnstring(myorder.account, ACCOUNT_SIZE).c_str(),nnstring(myorder.user,USER_SIZE).c_str(),(int)myorder.order_type,myorder.timestamp,myorder.buysell,nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
+
 
 sqlite3_stmt *stmt2;
 sqlite3* mydb = create_db();

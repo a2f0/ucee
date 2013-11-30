@@ -461,10 +461,7 @@ void OrderBookView::Process(Order myorder)
   };
   // generate bookmessage and communicate it
   if (matches > 0 || myorder.order_type == LIMIT_ORDER){
-    cout << "Compiling book message" << endl;
     mybookmsg = mybooks[symbol].TopBook();
-    cout << "Compiled book message" << endl;
-    printBookMsg(&mybookmsg);
     CommunicateBookMsg(mybookmsg);
   };
 };
@@ -522,10 +519,7 @@ void OrderBookView::Process(Modify mymodify)
     cout << "Performed the matching algorithm." << endl;
     // generate bookmessage and communicate it
     if (matches > 0 || myorder.order_type == LIMIT_ORDER){
-      cout << "Compiling book message" << endl;
       mybookmsg = mybooks[symbol].TopBook();
-      cout << "Compiled book message" << endl;
-      printBookMsg(&mybookmsg);
       CommunicateBookMsg(mybookmsg);
     };
   };
@@ -575,10 +569,7 @@ void OrderBookView::Process(Cancel mycancel)
     cout << "Performed the matching algorithm." << endl;
     // generate bookmessage
     if (matches > 0 || myorder.order_type == LIMIT_ORDER){
-      cout << "Compiling book message" << endl;
       mybookmsg = mybooks[symbol].TopBook();
-      cout << "Compiled book message" << endl;
-      printBookMsg(&mybookmsg);
       CommunicateBookMsg(mybookmsg);
     };
   };
