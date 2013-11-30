@@ -27,7 +27,7 @@ void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
   sops.sem_num = 1;
   sops.sem_op = 1;
   semop(semid,&sops,1);
-  printTradeMsg(ptr);
+  // printTradeMsg(ptr);
   };
 };
 
@@ -42,7 +42,7 @@ void MatchEngOBV::CommunicateReportingMsg(struct ReportingMessage rp_msg){
   memcpy(ptr,&rp_msg,sizeof(rp_msg));
   sops.sem_num = 1;
   sops.sem_op = 1;
-  printReportingMsg(ptr);
+  // printReportingMsg(ptr);
   semop(semidrp,&sops,1);
   };
 };
