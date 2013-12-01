@@ -11,7 +11,7 @@
 #define SEMKEY3 "/etc/golang"
 #define SEMDB "/etc/xodim.conf"
 #define METORESEM "/etc/groovy"
-#define MULTICAST_ADDRESS "128.135.164.172"
-#define MULTICAST_PORT "50333"
+#define MULTICAST_ADDRESS "239.192.07.07"
+#define MULTICAST_PORT "1234"
 
 #endif

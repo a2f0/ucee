@@ -34,6 +34,7 @@ int semiddb;
 void intHandler(int dummy=0){
   // closing IPCs
   shmctl(shmid,IPC_RMID,NULL);
+  semctl(semiddb,0,IPC_RMID,NULL);
   semctl(sem_id,0,IPC_RMID,NULL);
   exit(0);
 };
@@ -101,26 +102,25 @@ int main(){
   signal(SIGINT,intHandler);
 
   int j =1;
-  while(semop(sem_id, &sops, 1)!=-1){ //reserve semaphore
+  while(semop(sem_id, &sops, 1)!=-1){ //reserve shm semaphore
     cout << "* reporting engine: receiving reporting message n. "<< j++;
     cout << " from ME" << endl;
     printReportingMsg(rm);
 
-    sop.sem_op = -1;
+    sop.sem_op = -1; // lock database semaphore
     semop(semiddb,&sop,1);
     add_row(*rm);
     sop.sem_op=1;
-    semop(semiddb,&sop,1);
+    semop(semiddb,&sop,1); // release database semaphore
 
 
     sops.sem_num = 0;
     sops.sem_op = 1;
     sops.sem_flg = 0;
-    semop(sem_id, &sops, 1);//release semaphore
+    semop(sem_id, &sops, 1);//release shm semaphore
     sops.sem_num=1;
     sops.sem_op=-1;
 
   };
-
   return 0;
 };
