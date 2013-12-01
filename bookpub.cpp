@@ -54,8 +54,7 @@ unsigned char mc_ttl = 1;
 setsockopt(mysocket, IPPROTO_IP, IP_MULTICAST_TTL, (void*) &mc_ttl, sizeof(mc_ttl));
 myBooks.grp.sin_family = AF_INET;
 myBooks.grp.sin_addr.s_addr = inet_addr("239.192.07.07");
-myBooks.grp.sin_port = htons(12345);
-//myBooks.grp.sin_port = htons(1234);
+myBooks.grp.sin_port = htons(1234);
 myBooks.mysocket=mysocket;
 //
 //end Multicast Setup
