@@ -22,12 +22,16 @@
 #include <arpa/inet.h>
 #include "db.cpp"
 #include "keys.h"
+#include <thread>
+#include <mutex>
 
 // IPCs
 int mysocket;
 int sem_id;
 int shmid;
 int keydb;
+
+// semaphore to control access to database
 int semiddb;
 
 // intHandler closes IPCs and exits
@@ -63,6 +67,22 @@ int add_row(ReportingMessage myrm){
   return 0;
 };
 
+
+// database thread
+void thread_add(ReportingMessage rm)
+{
+  struct sembuf asop;
+  asop.sem_num=0;
+  asop.sem_op=-1;
+  asop.sem_flg =0; // lock database semaphore
+  semop(semiddb,&asop,1);
+  add_row(rm);
+  asop.sem_op=1;
+  semop(semiddb,&asop,1); // release database semaphore
+  return;
+};
+
+
 int main(){
   printf("starting reporting engine...\n");
 
@@ -83,9 +103,6 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  struct sembuf sop;
-  sop.sem_num =0;
-  sop.sem_flg=0;
 
   //setting up semaphore with matching engine
   struct sembuf sops;
@@ -100,19 +117,15 @@ int main(){
   sops.sem_flg = 0;
 
   signal(SIGINT,intHandler);
-
+  
   int j =1;
   while(semop(sem_id, &sops, 1)!=-1){ //reserve shm semaphore
     cout << "* reporting engine: receiving reporting message n. "<< j++;
     cout << " from ME" << endl;
     printReportingMsg(rm);
 
-    sop.sem_op = -1; // lock database semaphore
-    semop(semiddb,&sop,1);
-    add_row(*rm);
-    sop.sem_op=1;
-    semop(semiddb,&sop,1); // release database semaphore
-
+    thread t(thread_add,*rm);
+    t.detach();
 
     sops.sem_num = 0;
     sops.sem_op = 1;
@@ -120,7 +133,6 @@ int main(){
     semop(sem_id, &sops, 1);//release shm semaphore
     sops.sem_num=1;
     sops.sem_op=-1;
-
   };
   return 0;
 };

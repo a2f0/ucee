@@ -18,7 +18,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <time.h>
-
+#include <thread>
 using namespace std;
 
 // shorthand notation for structs in "messages.h"
@@ -74,6 +74,7 @@ void printStats(){
   cout << ((double)nofbchanges)/((double)nofmessages) << endl << endl;
 };
 
+
 // variable that indicates whether to write to database
 int writetodatabase;
 
@@ -117,14 +118,14 @@ int OrderList::AddOrder(Order myorder)
     orders.push_front(myorder);
     if (writetodatabase==1){
       nofdbadds++;
-      struct sembuf sop;
-      sop.sem_num =0;
-      sop.sem_op = -1;
-      sop.sem_flg =0;
-      semop(semiddb,&sop,1);
+      struct sembuf asop;
+      asop.sem_num =0;
+      asop.sem_op = -1;
+      asop.sem_flg =0;
+      semop(semiddb,&asop,1);
       add_row(myorder);
-      sop.sem_op = 1;
-      semop(semiddb,&sop,1);
+      asop.sem_op = 1;
+      semop(semiddb,&asop,1);
     };
     return 1;
   };
@@ -136,15 +137,15 @@ int OrderList::AddOrder(Order myorder)
   orders.insert(it, myorder);
   if(writetodatabase==1){
     nofdbadds++;
-    struct sembuf sop;
-    sop.sem_num =0;
-    sop.sem_op = -1;
-    sop.sem_flg =0;
-    semop(semiddb,&sop,1);
+    struct sembuf asop;
+    asop.sem_num =0;
+    asop.sem_op = -1;
+    asop.sem_flg =0;
+    semop(semiddb,&asop,1);
     add_row(myorder);
-    sop.sem_op = 1;
-    semop(semiddb,&sop,1);
-  }
+    asop.sem_op = 1;
+    semop(semiddb,&asop,1);
+  };
   return 1;
 };
 
@@ -163,14 +164,14 @@ int OrderList::RemoveOrder(Order myorder)
       orders.erase(it); // remove order
       if(writetodatabase==1){
         nofdbremoves++;
-        struct sembuf sop;
-        sop.sem_num =0;
-        sop.sem_op = -1;
-        sop.sem_flg =0;
-        semop(semiddb,&sop,1);
+        struct sembuf asop;
+        asop.sem_num =0;
+        asop.sem_op = -1;
+        asop.sem_flg =0;
+        semop(semiddb,&asop,1);
         delete_row(myorder.order_id);
-        sop.sem_op = 1;
-        semop(semiddb,&sop,1);
+        asop.sem_op = 1;
+        semop(semiddb,&asop,1);
       };
       return 1;
     };
