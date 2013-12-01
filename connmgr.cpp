@@ -105,6 +105,7 @@ void my_handler(int s){
     printf("not found for reverse routing (to tradebot from matching engine): %llu\n",notfound);
     printf("messages copied through shared memory to book publisher: %llu\n", copiedthroughsharedmemory);
     printf("total runtime since first order was received from tradebot: %dms\n", (int)msrun.count());
+    printf("messages processed per second: %f\n", ((double) found / ((double)msrun.count() / 1000)));
     printf("sum of latency for %llu orders: %llums\n", orders_matched_latency, total_milliseconds_latency);
     printf("average per order latency %fms\n", (double)((double)(total_milliseconds_latency / (double)orders_matched_latency)));
     printf("******** end connection manager performance summary ********\n");
@@ -200,7 +201,6 @@ void readfrommatchingengine() {
         printf("receiver omm timestamp: %llu\n", mmb.omm.payload.orderAck.timestamp);
         printf("receiver omm order_id: %s.\n", order_id);
         printf("rtt map result: %s", ordertimerresult.c_str());
-        printf("connection mapper result: %s", connectionmapperresult.c_str());
         printf("connection mapper result: %s", connectionmapperresult.c_str());
         printf("======end message received from matching engine======\n");
         writetoken.unlock();
