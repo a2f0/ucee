@@ -15,6 +15,7 @@ public:
 
 // communicate trademessage to trade publisher
 void MatchEngOBV::CommunicateTrade(struct TradeMessage tr_msg){
+  noftrades++;
   struct sembuf sops;
   sops.sem_num = 0;
   sops.sem_op = -1;
@@ -50,6 +51,7 @@ void MatchEngOBV::CommunicateReportingMsg(struct ReportingMessage rp_msg){
 // communicate ack/nacks to connection manager
 void MatchEngOBV::CommunicateAck(enum MESSAGE_TYPE type, char* id,
                                  char* reason, unsigned long quantity){
+  nofackssent++;
   struct OrderManagementMessage myomm;
   struct timeval tmv;
   gettimeofday(&tmv,NULL);

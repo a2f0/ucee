@@ -17,7 +17,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#include <time.h>
 
 using namespace std;
 
@@ -33,7 +33,46 @@ typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
 // metric variables
-int numberofmessagesprocessed;
+int nofmessages = 0;
+int nofneworders = 0;
+int nofcancels = 0;
+int nofmodifies = 0;
+int nofackssent = 0;
+int noftrades = 0;
+int nofdbadds = 0;
+int nofdbremoves = 0;
+int nofbchanges = 0;
+struct timeval starttime;
+
+// printing stats
+void printStats(){
+  struct timeval tmv2;
+  gettimeofday(&tmv2,NULL);
+  unsigned long long runtime = tmv2.tv_sec - starttime.tv_sec;
+  cout << "\n===== matching engine stats =====\n";
+  cout << "\n* Aggregates: " << endl;
+  cout << "Total running time in seconds: " << runtime << endl;
+  cout << "Total number of messages processed: "<<nofmessages<<endl;
+  cout << " - Total number of new orders: " << nofneworders << endl;
+  cout << " - Total number of cancels: " << nofcancels << endl;
+  cout << " - Total number of modifies: " << nofmodifies << endl;
+  cout << "Total number of acks sent: " << nofackssent << endl;
+  cout << "Total number of database adds: " << nofdbadds << endl;
+  cout << "Total number of database removes: " << nofdbremoves<<endl;
+  cout << "Total number of changes to book: " << nofbchanges << endl;
+  cout << "Total number of trades: " << noftrades<< endl;
+  cout << "\n* Stats: " << endl;
+  cout << "Processed messages per second: ";
+  cout << ((double)nofmessages)/((double)runtime) << endl;
+  cout << "Processed trades per second: ";
+  cout << ((double)noftrades)/((double)runtime) << endl;
+  cout << "Processed trades per order: ";
+  cout << ((double)noftrades)/((double)nofmessages) << endl;
+  cout << "Database operations per order: ";
+  cout << ((double)(nofdbadds+nofdbremoves))/((double)nofmessages) << endl;
+  cout << "Changes to book per order: ";
+  cout << ((double)nofbchanges)/((double)nofmessages) << endl << endl;
+};
 
 // variable that indicates whether to write to database
 int writetodatabase;
@@ -77,6 +116,7 @@ int OrderList::AddOrder(Order myorder)
   {
     orders.push_front(myorder);
     if (writetodatabase==1){
+      nofdbadds++;
       struct sembuf sop;
       sop.sem_num =0;
       sop.sem_op = -1;
@@ -95,6 +135,7 @@ int OrderList::AddOrder(Order myorder)
   };
   orders.insert(it, myorder);
   if(writetodatabase==1){
+    nofdbadds++;
     struct sembuf sop;
     sop.sem_num =0;
     sop.sem_op = -1;
@@ -121,6 +162,7 @@ int OrderList::RemoveOrder(Order myorder)
     {
       orders.erase(it); // remove order
       if(writetodatabase==1){
+        nofdbremoves++;
         struct sembuf sop;
         sop.sem_num =0;
         sop.sem_op = -1;
@@ -420,12 +462,13 @@ public:
   void Process(Order); // processes Order omm
   void Process(Modify); // processes Modify omm
   void Process(Cancel); // processes Cancel omm
+  void Update(string);
   void Print(); // prints all books
   virtual void CommunicateAck(enum MESSAGE_TYPE,char*,char*,unsigned long){};
   // communicates acks and naks to message queue
   virtual void CommunicateTrade(struct TradeMessage){};
   // communicates trades to shared memory
-  virtual void CommunicateBookMsg(struct BookMessage){};
+  virtual void CommunicateBookMsg(struct BookMessage){nofbchanges++;};
   // broadcasts bookmessage via multicast
   virtual void CommunicateReportingMsg(struct ReportingMessage){};
   // communicates reportingmessage via shmidrp
@@ -434,6 +477,7 @@ public:
 // processes ordermanagement message accoriding to MESSAGE_TYPE
 void OrderBookView::Process(OrderManagementMessage omm)
 {
+  nofmessages++;
   if (omm.type == NEW_ORDER){
     Process(omm.payload.order);
   } else if(omm.type == MODIFY_REQ){
@@ -448,6 +492,7 @@ void OrderBookView::Process(OrderManagementMessage omm)
 // processes new order
 void OrderBookView::Process(Order myorder)
 {
+  nofneworders++;
   string symbol = nstring(myorder.symbol,SYMBOL_SIZE);
   string orderid = nstring(myorder.order_id,ORDERID_SIZE);
   // adding order to the orderbook
@@ -460,14 +505,14 @@ void OrderBookView::Process(Order myorder)
   {
     if (myorder.order_type == LIMIT_ORDER)
       myorders[orderid] = myorder;
-    if (writetodatabase == 1) // communicating OrderAck
+    if (writetodatabase == 1){ // communicating OrderAck
       CommunicateAck(NEW_ORDER_ACK,myorder.order_id,NULL,0);
+    };
   }else{
-    if (writetodatabase==1){
+    if (writetodatabase==1){// communicating OrderNak
     char reason[REASON_SIZE];
     nstringcpy(reason,"unable to add to book",REASON_SIZE);
-    if (writetodatabase == 1)// communicating OrderNak
-      CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
+    CommunicateAck(NEW_ORDER_NAK,myorder.order_id,reason,0);
     };
   };
   struct BookMessage mybookmsg;
@@ -476,32 +521,14 @@ void OrderBookView::Process(Order myorder)
     mybookmsg = mybooks[symbol].TopBook();
     CommunicateBookMsg(mybookmsg);
   };
-  struct ReportingMessage rp_msg = mybooks[symbol].Match();
-  int matches = 0;
-  while(rp_msg.trademsg.quantity >0){
-    matches++;
-    // update myorders map
-    string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
-    string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
-    myorders.erase(orderidA);
-    myorders.erase(orderidB);
-    if (rp_msg.orderA.quantity > 0)
-      myorders[orderidA]= rp_msg.orderA;
-    if (rp_msg.orderB.quantity > 0)
-      myorders[orderidB]= rp_msg.orderB;
-    // communicate
-    CommunicateTrade(rp_msg.trademsg);
-    CommunicateReportingMsg(rp_msg);
-    rp_msg = mybooks[symbol].Match();
-    // generate bookmessage and communicate it
-    mybookmsg = mybooks[symbol].TopBook();
-    CommunicateBookMsg(mybookmsg);
-  };
+  Update(symbol);
 };
+
 
 // processes modify order
 void OrderBookView::Process(Modify mymodify)
 {
+  nofmodifies++;
   string orderid = nstring(mymodify.order_id,ORDERID_SIZE);
   if(myorders.count(orderid) < 1)
   {
@@ -536,34 +563,14 @@ void OrderBookView::Process(Modify mymodify)
       mybookmsg = mybooks[symbol].TopBook();
       CommunicateBookMsg(mybookmsg);
     };
-    
-    struct ReportingMessage rp_msg = mybooks[symbol].Match();
-    int matches = 0;
-    while(rp_msg.trademsg.quantity >0){
-      matches++;
-      // update myorders map
-      string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
-      string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
-      myorders.erase(orderidA);
-      myorders.erase(orderidB);
-      if (rp_msg.orderA.quantity > 0)
-        myorders[orderidA]= rp_msg.orderA;
-      if (rp_msg.orderB.quantity > 0)
-        myorders[orderidB]= rp_msg.orderB;
-      // communicate
-      CommunicateTrade(rp_msg.trademsg);
-      CommunicateReportingMsg(rp_msg);
-      rp_msg = mybooks[symbol].Match();
-      //generate bookmessage and communicate it
-      mybookmsg = mybooks[symbol].TopBook();
-      CommunicateBookMsg(mybookmsg);
-    };
+    Update(symbol);
   };
 };
 
 // process cancel order
 void OrderBookView::Process(Cancel mycancel)
 {
+  nofcancels++;
   string orderid = nstring(mycancel.order_id,ORDERID_SIZE);
   if(myorders.count(orderid) < 1)
   {
@@ -589,28 +596,33 @@ void OrderBookView::Process(Cancel mycancel)
       mybookmsg = mybooks[symbol].TopBook();
       CommunicateBookMsg(mybookmsg);
     };
- 
-    struct ReportingMessage rp_msg = mybooks[symbol].Match();
-    int matches = 0;
-    while(rp_msg.trademsg.quantity >0){
-      matches++;
-      // update myorders map
-      string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
-      string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
-      myorders.erase(orderidA);
-      myorders.erase(orderidB);
-      if (rp_msg.orderA.quantity > 0)
-        myorders[orderidA]= rp_msg.orderA;
-      if (rp_msg.orderB.quantity > 0)
-        myorders[orderidB]= rp_msg.orderB;
-      // communicate
-      CommunicateTrade(rp_msg.trademsg);
-      CommunicateReportingMsg(rp_msg);
-      rp_msg = mybooks[symbol].Match();
-      //generate bookmessage and communicate it
-      mybookmsg = mybooks[symbol].TopBook();
-      CommunicateBookMsg(mybookmsg);
-    };
+    Update(symbol);
+  };
+};
+
+
+void OrderBookView::Update(string symbol){
+  struct BookMessage mybookmsg;
+  struct ReportingMessage rp_msg = mybooks[symbol].Match();
+  int matches = 0;
+  while(rp_msg.trademsg.quantity >0){
+    matches++;
+    // update myorders map
+    string orderidA = nstring(rp_msg.orderA.order_id,ORDERID_SIZE);
+    string orderidB = nstring(rp_msg.orderB.order_id,ORDERID_SIZE);
+    myorders.erase(orderidA);
+    myorders.erase(orderidB);
+    if (rp_msg.orderA.quantity > 0)
+      myorders[orderidA]= rp_msg.orderA;
+    if (rp_msg.orderB.quantity > 0)
+      myorders[orderidB]= rp_msg.orderB;
+    // communicate
+    CommunicateTrade(rp_msg.trademsg);
+    CommunicateReportingMsg(rp_msg);
+    rp_msg = mybooks[symbol].Match();
+    //generate bookmessage and communicate it
+    mybookmsg = mybooks[symbol].TopBook();
+    CommunicateBookMsg(mybookmsg);
   };
 };
 
@@ -625,5 +637,5 @@ void OrderBookView::Print()
   };
 };
 
-
 #endif
+

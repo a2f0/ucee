@@ -57,11 +57,13 @@ void intHandler(int dummy=0){
     printf("main: msqctl() remove id failed\n");
     printf("%s",strerror(errno));
   };
+  printStats();
   // myBooks.Print();
   exit(0);
 };
 
 int main(){
+  gettimeofday(&starttime,NULL);
   // set up queues
   key1 = ftok(CMTOMEKEY1, 'b'); // key from connection manager
   if((msqid1 = msgget(key1, 0666 | IPC_CREAT))<0){
@@ -188,6 +190,7 @@ int main(){
     printOrderManagementMessage(&omm);
     myBooks.Process(omm);
   };
+  printStats();
   // myBooks.Print();
   return 0;
 };
