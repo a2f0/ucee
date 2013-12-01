@@ -12,14 +12,15 @@ int trader_rpt(char* tr){
     char* space = (char*) malloc (150*sizeof(char));
     nstringcpy(space, "", 48);
 
-    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
+    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL ))!= SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt3)) == 100 ){
         printf("\n\n");
         printf("%2s",(char*)sqlite3_column_text(stmt3,7)); //trader
         printf("%2s",(char*)sqlite3_column_text(stmt3,0)); //ticker
         printf("Order:  ");
-        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10)); //order timestamp
+        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+        //order timestamp
         printf("|");
         printf("%2s|",(char*)sqlite3_column_text(stmt3,14)); //order quantity
         printf("%2s|",(char*)sqlite3_column_text(stmt3,13)); //order price
@@ -27,20 +28,21 @@ int trader_rpt(char* tr){
         printf("Side: %2s\n",(char*)sqlite3_column_text(stmt3,11)); //side
         printf("%2s",space);
         printf("Fill :  ");
-        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10)); //fill timestamp
+        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+        //fill timestamp
         printf("|");
         printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
         printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
         printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
         printf("\n\n");
-    }
+    };
         
-        sqlite3_finalize(stmt3);
-        sqlite3_close(mydb);
-        free(query3);
-        free(space);
-        return 0;
-}
+    sqlite3_finalize(stmt3);
+    sqlite3_close(mydb);
+    free(query3);
+    free(space);
+    return 0;
+};
 
 
 int instrument_rpt(char* in){
@@ -56,14 +58,15 @@ int instrument_rpt(char* in){
     char* space = (char*) malloc (150*sizeof(char));
     nstringcpy(space, "", 49);
 
-    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
+    if((rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) != SQLITE_OK)
         cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt3)) == 100 ){
         printf("\n\n");
         printf("%2s|",(char*)sqlite3_column_text(stmt3,0)); //ticker
         printf("%2s",(char*)sqlite3_column_text(stmt3,7)); //trader
         printf("Order:  ");
-        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10)); //order timestamp
+        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,10),NULL,10));
+        //order timestamp
         printf("|");
         printf("%2s|",(char*)sqlite3_column_text(stmt3,14)); //order quantity
         printf("%2s|",(char*)sqlite3_column_text(stmt3,13)); //order price
@@ -71,20 +74,21 @@ int instrument_rpt(char* in){
         printf("Side: %2s\n",(char*)sqlite3_column_text(stmt3,11)); //side
         printf("%2s",space);
         printf("Fill :  ");
-        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10)); //fill timestamp
+        printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
+        //fill timestamp
         printf("|");
         printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
         printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
         printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
         printf("\n\n");
-    }
+    };
 
     sqlite3_finalize(stmt3);
     sqlite3_close(mydb);
     free(query3);
     free(space);
     return 0;
-}
+};
 
 int trade_values(char* in){
     int rc,c;
@@ -97,7 +101,8 @@ int trade_values(char* in){
     sprintf(query2,
     "SELECT symbol, MAX(price) as 'Maximum' FROM t3 GROUP BY symbol;");
     sprintf(query3,
-    "SELECT symbol, price, MAX(timestamp) as 'Close' FROM t3 GROUP BY symbol;");
+    "SELECT symbol, price, MAX(timestamp) as 'Close' FROM t3 GROUP BY symbol;")
+      ;
     sprintf(query4,
     "SELECT symbol, SUM(quantity) as 'Volume' FROM t3 GROUP BY symbol;");
     sqlite3_stmt *stmt1;
@@ -129,7 +134,7 @@ int trade_values(char* in){
         printf("Close: %s\n",(char*)sqlite3_column_text(stmt3,1));
         printf("Volume: %s\n",(char*)sqlite3_column_text(stmt4,1));
         printf("\n\n");
-    }
+    };
 
     sqlite3_finalize(stmt1);
     sqlite3_finalize(stmt2);
@@ -141,7 +146,7 @@ int trade_values(char* in){
     free(query3);
     free(query4);
     return 0;
-}
+};
 
 int summary_rpt(){
     printf("\n\nSUMMARY REPORT:\n\n");
@@ -170,7 +175,7 @@ int summary_rpt(){
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt3)) == 100 ){
                     printf("%s \n",(char*)sqlite3_column_text(stmt3,0));
-    }
+    };
     sqlite3_finalize(stmt3);
 
     printf("%s: ","Total Number of Trades");
@@ -188,7 +193,7 @@ int summary_rpt(){
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt5)) == 100 ){
                     printf("%s \n",(char*)sqlite3_column_text(stmt5,0));
-    }
+    };
     sqlite3_finalize(stmt5);
 
     printf("%s: ","Sell Side Volume");
@@ -197,7 +202,7 @@ int summary_rpt(){
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt6)) == 100 ){
                     printf("%s \n",(char*)sqlite3_column_text(stmt6,0));
-    }
+    };
     sqlite3_finalize(stmt6);
 
     printf("%s: ","Total Volume");
@@ -206,7 +211,7 @@ int summary_rpt(){
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt7)) == 100 ){	
                     printf("%s \n ",(char*)sqlite3_column_text(stmt7,0));
-    }
+    };
 
     sqlite3_finalize(stmt7);
     sqlite3_close(mydb);
@@ -221,7 +226,8 @@ int summary_rpt(){
     free(query7);
     free(myinst);
     return 0;
-}
+};
+
 int main(int argc, char* argv[]){
 
     int c;
@@ -257,4 +263,4 @@ int main(int argc, char* argv[]){
     }
     free(argr);
     return 0;
-}
+};

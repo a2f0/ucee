@@ -32,6 +32,9 @@ typedef struct OrderNak OrderNak;
 typedef struct ModifyNak ModifyNak;
 typedef struct CancelNak CancelNak;
 
+// metric variables
+int numberofmessagesprocessed;
+
 // variable that indicates whether to write to database
 int writetodatabase;
 
