@@ -31,7 +31,7 @@ int trader_rpt(char* tr){
         printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
         //fill timestamp
         printf("|");
-        printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
+        printf("%2.0s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
         printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
         printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
         printf("\n\n");
