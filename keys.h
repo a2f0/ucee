@@ -13,5 +13,7 @@
 #define METORESEM "/etc/groovy"
 #define MULTICAST_ADDRESS "239.192.07.07"
 #define MULTICAST_PORT "1234"
+#define SIMULATE_CONNMGR "0"
+#define NUM_SIMULATION "1000"
 
 #endif

@@ -67,6 +67,7 @@ struct shmid_ds shmid_struct;
 struct OrderManagementMessage* shm;
 
 bool first_received = false;
+int end_server = FALSE;
 
 void my_handler(int s){
     printf("caught signal %d\n",s);
@@ -173,8 +174,13 @@ void readfrommatchingengine() {
             sprintf(tmp, "descriptor matched for reverse routing: %d\n",it->second);
             connectionmapperresult = std::string(tmp);
             send(it->second, &mmb.omm, sizeof(mmb.omm), 0);
-            connectionmapper.erase(it);
             found++;
+            connectionmapper.erase(it);
+            //printf("SIMULATE_CONNMGR: %s\n", SIMULATE_CONNMGR);
+            //if (SIMULATE_CONNMGR == "1" && found >= NUM_SIMULATION) {
+            if ( atoi(SIMULATE_CONNMGR) == 1 && found >= atoi(NUM_SIMULATION)) {
+                end_server = TRUE;
+            }
         } else {
             sprintf(tmp, "**warning: no file descripter matched for reverse routing**: %d\n",it->second);
             connectionmapperresult = std::string(tmp);
@@ -352,7 +358,6 @@ int main(){
     timeout = (3 * 60 * 1000);
     int current_size;
     int new_sd;
-    int end_server = FALSE;
     int i;
     int close_conn;
     int compress_array = FALSE;
@@ -550,4 +555,6 @@ int main(){
             }
         }
     } while (end_server == FALSE);
+    printf("Ending server because end_server evaluated to be true.\n");
+    my_handler(1);
 }
