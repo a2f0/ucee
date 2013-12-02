@@ -41,7 +41,7 @@ int trader_rpt(char* tr){
     sqlite3_close(mydb);
     free(query3);
     free(space);
-    free(mydb);
+//    free(mydb);
     return 0;
 };
 
@@ -88,7 +88,7 @@ int instrument_rpt(char* in){
     sqlite3_close(mydb);
     free(query3);
     free(space);
-    free(mydb);
+//    free(mydb);
     return 0;
 };
 
@@ -147,7 +147,7 @@ int trade_values(char* in){
     free(query2);
     free(query3);
     free(query4);
-    free(mydb);
+ //   free(mydb);
     return 0;
 };
 
@@ -228,7 +228,7 @@ int summary_rpt(){
     free(query6);
     free(query7);
     free(myinst);
-    free(mydb);
+//    free(mydb);
     return 0;
 };
 

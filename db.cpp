@@ -61,7 +61,7 @@ int add_row(Order myorder){
     sqlite3_finalize(stmt2);
     sqlite3_close(mydb);
     free(order_to_sql);
-    free(mydb);
+//    free(mydb);
     return 0;
 };
 
@@ -96,7 +96,6 @@ list<Order> get_db(std::string dbname, std::string tablename){
   sqlite3_finalize(stmt);
   sqlite3_close(mydb);
   free(query1);
-
 //  free(mydb);
   return mylist;
 };
@@ -121,7 +120,7 @@ int delete_row(char* order_id){
   sqlite3_finalize(stmt2);
   sqlite3_close(mydb);
   free(order_to_sql);
-  free(mydb);
+//  free(mydb);
   return 0;
 };
 
