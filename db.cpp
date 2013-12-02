@@ -96,7 +96,8 @@ list<Order> get_db(std::string dbname, std::string tablename){
   sqlite3_finalize(stmt);
   sqlite3_close(mydb);
   free(query1);
-  free(mydb);
+
+//  free(mydb);
   return mylist;
 };
 
