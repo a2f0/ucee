@@ -65,7 +65,7 @@ int add_row(ReportingMessage myrm){
   sqlite3_finalize(stmt2);
   sqlite3_close(mydb);
   free(order_to_sql);
-  free(mydb);
+//  free(mydb);
   return 0;
 };
 
