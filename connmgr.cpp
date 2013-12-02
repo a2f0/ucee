@@ -212,6 +212,8 @@ void readfrommatchingengine() {
         writetoken.unlock();
         std::this_thread::yield();
         rcv_bytes = msgrcv(msqid2, &mmb, sizeof(struct message_msgbuf), 2, 0);
+        free(tmp);
+        free(tmp2);
     };
 };
 
