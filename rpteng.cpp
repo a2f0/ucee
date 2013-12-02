@@ -54,7 +54,7 @@ int add_row(ReportingMessage myrm){
           nnstring(myrm.orderA.order_id,ORDERID_SIZE).c_str(),
           nnstring(myrm.orderB.order_id, ORDERID_SIZE).c_str());
   sqlite3_stmt *stmt2;
-  sqlite3* mydb = create_db();
+  sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
   sqlite3_open("OrderBook.db",&mydb);
 
 
@@ -64,6 +64,8 @@ int add_row(ReportingMessage myrm){
   };
   sqlite3_finalize(stmt2);
   sqlite3_close(mydb);
+  free(order_to_sql);
+  free(mydb);
   return 0;
 };
 

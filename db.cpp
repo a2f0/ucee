@@ -6,17 +6,13 @@
 
 using namespace std;
 
-sqlite3* create_db(){
-  sqlite3 *db = (sqlite3*) malloc (1024*1000*10*sizeof(char));
-  return db;
-}
 
 
 int print_table(){
   int rc,c;
 
   sqlite3_stmt *stmt3;
-  sqlite3* mydb = create_db();
+  sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
   sqlite3_open("OrderBook.db",&mydb);
   //prepare query
   if ( (rc = sqlite3_prepare_v2(mydb, "SELECT * FROM t1;",-1, &stmt3, NULL ))
@@ -55,7 +51,7 @@ int add_row(Order myorder){
           nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
   
     sqlite3_stmt *stmt2;
-    sqlite3* mydb = create_db();
+    sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
     sqlite3_open("OrderBook.db",&mydb);
 
     if((rc=sqlite3_prepare_v2(mydb,order_to_sql,-1,&stmt2,NULL))!=SQLITE_OK)
@@ -65,6 +61,7 @@ int add_row(Order myorder){
     sqlite3_finalize(stmt2);
     sqlite3_close(mydb);
     free(order_to_sql);
+    free(mydb);
     return 0;
 };
 
@@ -78,7 +75,7 @@ list<Order> get_db(std::string dbname, std::string tablename){
   char* query1 = (char*) malloc (1024*sizeof(char));
   sprintf(query1,"SELECT * FROM  %s", "t1");
   sqlite3_stmt *stmt;
-  sqlite3* mydb = create_db();
+  sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char)); 
   sqlite3_open("OrderBook.db",&mydb);
   if ((rc=sqlite3_prepare_v2(mydb, query1,-1, &stmt, NULL )) != SQLITE_OK)
     cout << sqlite3_errmsg(mydb);
@@ -99,6 +96,7 @@ list<Order> get_db(std::string dbname, std::string tablename){
   sqlite3_finalize(stmt);
   sqlite3_close(mydb);
   free(query1);
+  free(mydb);
   return mylist;
 };
 
@@ -111,7 +109,7 @@ int delete_row(char* order_id){
           nnstring(order_id, ORDERID_SIZE).c_str());
 
   sqlite3_stmt *stmt2;
-  sqlite3* mydb = create_db();
+  sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char)); 
   sqlite3_open("OrderBook.db",&mydb);
 
   if ((rc=sqlite3_prepare_v2(mydb,order_to_sql,-1,&stmt2,NULL))!=SQLITE_OK)
@@ -122,6 +120,7 @@ int delete_row(char* order_id){
   sqlite3_finalize(stmt2);
   sqlite3_close(mydb);
   free(order_to_sql);
+  free(mydb);
   return 0;
 };
 
