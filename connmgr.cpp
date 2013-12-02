@@ -193,6 +193,7 @@ void readfrommatchingengine() {
             ordertimerresult = std::string(tmp2);
             total_milliseconds_latency += (int)msrun.count();
             orders_matched_latency++;
+            order_start_time.erase(it2);
         } else {
             sprintf(tmp2,"**warning: start time not found for incoming acknowledgement\n**");
             ordertimerresult = std::string(tmp2);
