@@ -1,0 +1,1368 @@
+@linux1:~/cspp51081/labs/ucee$ ./matcheng
+
+* blocking while we wait for bookpub to read database
+
+* ready to receive messages
+
+* matching engine: receiving order n. 1 from CM
+
+[2013-12-01 19:14:15.389784000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000000      
+  Timestamp: 2013-12-01 19:14:15.389349000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 2 from CM
+
+[2013-12-01 19:14:15.411424000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000000      
+  Timestamp: 2013-12-01 19:14:15.389323000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 3 from CM
+
+[2013-12-01 19:14:15.428806000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000000      
+  Timestamp: 2013-12-01 19:14:15.389342000
+  Side: Buy
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 4 from CM
+
+[2013-12-01 19:14:15.445858000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000000      
+  Timestamp: 2013-12-01 19:14:15.389421000
+  Side: Sell
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 5 from CM
+
+[2013-12-01 19:14:15.464818000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000000      
+  Timestamp: 2013-12-01 19:14:15.389598000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 6 from CM
+
+[2013-12-01 19:14:15.481894000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000000      
+  Timestamp: 2013-12-01 19:14:15.390210000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 7 from CM
+
+[2013-12-01 19:14:15.498292000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000000      
+  Timestamp: 2013-12-01 19:14:15.390374000
+  Side: Buy
+  Instrument: FB              
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 8 from CM
+
+[2013-12-01 19:14:15.515609000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000000      
+  Timestamp: 2013-12-01 19:14:15.390998000
+  Side: Sell
+  Instrument: FB              
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 9 from CM
+
+[2013-12-01 19:14:15.531409000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000000      
+  Timestamp: 2013-12-01 19:14:15.391387000
+  Side: Buy
+  Instrument: MSFT            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 10 from CM
+
+[2013-12-01 19:14:15.547508000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34D:00000000      
+  Timestamp: 2013-12-01 19:14:15.391803000
+  Side: Sell
+  Instrument: MFST            
+  Price: Market
+  Quantity: 87
+
+* matching engine: receiving order n. 11 from CM
+
+[2013-12-01 19:14:15.563614000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000001      
+  Timestamp: 2013-12-01 19:14:15.396281000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 12 from CM
+
+[2013-12-01 19:14:15.579437000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000001      
+  Timestamp: 2013-12-01 19:14:15.396471000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 13 from CM
+
+[2013-12-01 19:14:15.624950000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000001      
+  Timestamp: 2013-12-01 19:14:15.397691000
+  Side: Sell
+  Instrument: IBM             
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 14 from CM
+
+[2013-12-01 19:14:15.659070000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000001      
+  Timestamp: 2013-12-01 19:14:15.399340000
+  Side: Buy
+  Instrument: IBM             
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 15 from CM
+
+[2013-12-01 19:14:15.705456000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000001      
+  Timestamp: 2013-12-01 19:14:15.399878000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 16 from CM
+
+[2013-12-01 19:14:15.739200000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000001      
+  Timestamp: 2013-12-01 19:14:15.400548000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 17 from CM
+
+[2013-12-01 19:14:15.796011000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000002      
+  Timestamp: 2013-12-01 19:14:15.402719000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 18 from CM
+
+[2013-12-01 19:14:15.827323000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000002      
+  Timestamp: 2013-12-01 19:14:15.402948000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 19 from CM
+
+[2013-12-01 19:14:15.871618000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000002      
+  Timestamp: 2013-12-01 19:14:15.406023000
+  Side: Sell
+  Instrument: IBM             
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 20 from CM
+
+[2013-12-01 19:14:15.887198000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000001      
+  Timestamp: 2013-12-01 19:14:15.407678000
+  Side: Sell
+  Instrument: FB              
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 21 from CM
+
+[2013-12-01 19:14:15.918519000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000003      
+  Timestamp: 2013-12-01 19:14:15.408974000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 22 from CM
+
+[2013-12-01 19:14:15.935117000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000002      
+  Timestamp: 2013-12-01 19:14:15.409339000
+  Side: Buy
+  Instrument: IBM             
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 23 from CM
+
+[2013-12-01 19:14:15.982506000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000001      
+  Timestamp: 2013-12-01 19:14:15.409576000
+  Side: Buy
+  Instrument: MSFT            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 24 from CM
+
+[2013-12-01 19:14:16.013285000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000003      
+  Timestamp: 2013-12-01 19:14:15.409602000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 25 from CM
+
+[2013-12-01 19:14:16.030128000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000001      
+  Timestamp: 2013-12-01 19:14:15.410382000
+  Side: Buy
+  Instrument: FB              
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 26 from CM
+
+[2013-12-01 19:14:16.076914000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000002      
+  Timestamp: 2013-12-01 19:14:15.410407000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 27 from CM
+
+[2013-12-01 19:14:16.107804000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000002      
+  Timestamp: 2013-12-01 19:14:15.411656000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 28 from CM
+
+[2013-12-01 19:14:16.156442000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34D:00000001      
+  Timestamp: 2013-12-01 19:14:15.414033000
+  Side: Sell
+  Instrument: MFST            
+  Price: 142       
+  Quantity: 7
+
+* matching engine: receiving order n. 29 from CM
+
+[2013-12-01 19:14:16.192227000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000003      
+  Timestamp: 2013-12-01 19:14:15.414355000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 30 from CM
+
+[2013-12-01 19:14:16.207561000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000004      
+  Timestamp: 2013-12-01 19:14:15.415224000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 31 from CM
+
+[2013-12-01 19:14:16.222939000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000004      
+  Timestamp: 2013-12-01 19:14:15.416275000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 32 from CM
+
+[2013-12-01 19:14:16.239473000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000003      
+  Timestamp: 2013-12-01 19:14:15.419336000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 33 from CM
+
+[2013-12-01 19:14:16.257503000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000003      
+  Timestamp: 2013-12-01 19:14:15.420935000
+  Side: Buy
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 34 from CM
+
+[2013-12-01 19:14:16.272119000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000005      
+  Timestamp: 2013-12-01 19:14:15.421473000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 35 from CM
+
+[2013-12-01 19:14:16.300298000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000003      
+  Timestamp: 2013-12-01 19:14:15.422768000
+  Side: Sell
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 36 from CM
+
+[2013-12-01 19:14:16.320349000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000005      
+  Timestamp: 2013-12-01 19:14:15.422941000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 37 from CM
+
+[2013-12-01 19:14:16.367532000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000002      
+  Timestamp: 2013-12-01 19:14:15.424343000
+  Side: Sell
+  Instrument: FB              
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 38 from CM
+
+[2013-12-01 19:14:16.398477000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000006      
+  Timestamp: 2013-12-01 19:14:15.427723000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 39 from CM
+
+[2013-12-01 19:14:16.414240000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000002      
+  Timestamp: 2013-12-01 19:14:15.427768000
+  Side: Buy
+  Instrument: MSFT            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 40 from CM
+
+[2013-12-01 19:14:16.430953000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000004      
+  Timestamp: 2013-12-01 19:14:15.429328000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 41 from CM
+
+[2013-12-01 19:14:16.450654000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000006      
+  Timestamp: 2013-12-01 19:14:15.429599000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 42 from CM
+
+[2013-12-01 19:14:16.502836000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000002      
+  Timestamp: 2013-12-01 19:14:15.430389000
+  Side: Buy
+  Instrument: FB              
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 43 from CM
+
+[2013-12-01 19:14:16.571517000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000004      
+  Timestamp: 2013-12-01 19:14:15.431454000
+  Side: Buy
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 44 from CM
+
+[2013-12-01 19:14:16.604861000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000004      
+  Timestamp: 2013-12-01 19:14:15.433878000
+  Side: Sell
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 45 from CM
+
+[2013-12-01 19:14:16.620441000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000007      
+  Timestamp: 2013-12-01 19:14:15.433967000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 46 from CM
+
+[2013-12-01 19:14:16.635923000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34D:00000002      
+  Timestamp: 2013-12-01 19:14:15.436255000
+  Side: Sell
+  Instrument: MFST            
+  Price: 151       
+  Quantity: 33
+
+* matching engine: receiving order n. 47 from CM
+
+[2013-12-01 19:14:16.651637000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000007      
+  Timestamp: 2013-12-01 19:14:15.436280000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 48 from CM
+
+[2013-12-01 19:14:16.699715000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000008      
+  Timestamp: 2013-12-01 19:14:15.440224000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 157       
+  Quantity: 83
+
+* matching engine: receiving order n. 49 from CM
+
+[2013-12-01 19:14:16.730447000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000003      
+  Timestamp: 2013-12-01 19:14:15.441010000
+  Side: Sell
+  Instrument: FB              
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 50 from CM
+
+[2013-12-01 19:14:16.746197000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000005      
+  Timestamp: 2013-12-01 19:14:15.441979000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 51 from CM
+
+[2013-12-01 19:14:16.761376000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000008      
+  Timestamp: 2013-12-01 19:14:15.442940000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 157       
+  Quantity: 83
+
+* matching engine: receiving order n. 52 from CM
+
+[2013-12-01 19:14:16.807305000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000005      
+  Timestamp: 2013-12-01 19:14:15.444990000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 53 from CM
+
+[2013-12-01 19:14:16.867287000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000003      
+  Timestamp: 2013-12-01 19:14:15.445963000
+  Side: Buy
+  Instrument: MSFT            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 54 from CM
+
+[2013-12-01 19:14:16.898528000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000009      
+  Timestamp: 2013-12-01 19:14:15.446475000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 55 from CM
+
+[2013-12-01 19:14:16.916425000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000009      
+  Timestamp: 2013-12-01 19:14:15.449597000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 56 from CM
+
+[2013-12-01 19:14:16.933386000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000003      
+  Timestamp: 2013-12-01 19:14:15.450382000
+  Side: Buy
+  Instrument: FB              
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 57 from CM
+
+[2013-12-01 19:14:16.950218000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000006      
+  Timestamp: 2013-12-01 19:14:15.452508000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 58 from CM
+
+[2013-12-01 19:14:16.965991000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000A      
+  Timestamp: 2013-12-01 19:14:15.452717000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 59 from CM
+
+[2013-12-01 19:14:16.981241000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000004      
+  Timestamp: 2013-12-01 19:14:15.422694000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 60 from CM
+
+[2013-12-01 19:14:16.997991000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000005      
+  Timestamp: 2013-12-01 19:14:15.431020000
+  Side: Sell
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 61 from CM
+
+[2013-12-01 19:14:17.013500000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000006      
+  Timestamp: 2013-12-01 19:14:15.439362000
+  Side: Sell
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 62 from CM
+
+[2013-12-01 19:14:17.031738000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000007      
+  Timestamp: 2013-12-01 19:14:15.447694000
+  Side: Sell
+  Instrument: IBM             
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 63 from CM
+
+[2013-12-01 19:14:17.047984000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000008      
+  Timestamp: 2013-12-01 19:14:15.456027000
+  Side: Sell
+  Instrument: IBM             
+  Price: 157       
+  Quantity: 83
+
+* matching engine: receiving order n. 64 from CM
+
+[2013-12-01 19:14:17.064429000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000006      
+  Timestamp: 2013-12-01 19:14:15.456096000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 65 from CM
+
+[2013-12-01 19:14:17.111623000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000A      
+  Timestamp: 2013-12-01 19:14:15.456280000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 66 from CM
+
+[2013-12-01 19:14:17.142057000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000004      
+  Timestamp: 2013-12-01 19:14:15.457675000
+  Side: Sell
+  Instrument: FB              
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 67 from CM
+
+[2013-12-01 19:14:17.158059000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B34D:00000003      
+  Timestamp: 2013-12-01 19:14:15.458478000
+  Side: Sell
+  Instrument: MFST            
+  Price: Market
+  Quantity: 27
+
+* matching engine: receiving order n. 68 from CM
+
+[2013-12-01 19:14:17.176311000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000B      
+  Timestamp: 2013-12-01 19:14:15.458968000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 58
+
+* matching engine: receiving order n. 69 from CM
+
+[2013-12-01 19:14:17.192786000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000B      
+  Timestamp: 2013-12-01 19:14:15.462935000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 58
+
+* matching engine: receiving order n. 70 from CM
+
+[2013-12-01 19:14:17.207848000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000004      
+  Timestamp: 2013-12-01 19:14:15.464125000
+  Side: Buy
+  Instrument: MSFT            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 71 from CM
+
+[2013-12-01 19:14:17.223433000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000009      
+  Timestamp: 2013-12-01 19:14:15.464363000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 72 from CM
+
+[2013-12-01 19:14:17.240083000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000C      
+  Timestamp: 2013-12-01 19:14:15.465217000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 115       
+  Quantity: 93
+
+* matching engine: receiving order n. 73 from CM
+
+[2013-12-01 19:14:17.255663000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000005      
+  Timestamp: 2013-12-01 19:14:15.439336000
+  Side: Buy
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 74 from CM
+
+[2013-12-01 19:14:17.371727000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000006      
+  Timestamp: 2013-12-01 19:14:15.449331000
+  Side: Buy
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 75 from CM
+
+[2013-12-01 19:14:17.447494000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000007      
+  Timestamp: 2013-12-01 19:14:15.459337000
+  Side: Buy
+  Instrument: IBM             
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 76 from CM
+
+[2013-12-01 19:14:17.480105000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000007      
+  Timestamp: 2013-12-01 19:14:15.467217000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 77 from CM
+
+[2013-12-01 19:14:17.495793000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000008      
+  Timestamp: 2013-12-01 19:14:15.469337000
+  Side: Buy
+  Instrument: IBM             
+  Price: 157       
+  Quantity: 83
+
+* matching engine: receiving order n. 78 from CM
+
+[2013-12-01 19:14:17.543235000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000C      
+  Timestamp: 2013-12-01 19:14:15.469617000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 115       
+  Quantity: 93
+
+* matching engine: receiving order n. 79 from CM
+
+[2013-12-01 19:14:17.605151000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000004      
+  Timestamp: 2013-12-01 19:14:15.470388000
+  Side: Buy
+  Instrument: FB              
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 80 from CM
+
+[2013-12-01 19:14:17.644402000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000D      
+  Timestamp: 2013-12-01 19:14:15.471474000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 127       
+  Quantity: 57
+
+* matching engine: receiving order n. 81 from CM
+
+[2013-12-01 19:14:17.661905000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000A      
+  Timestamp: 2013-12-01 19:14:15.472685000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 82 from CM
+
+[2013-12-01 19:14:17.783605000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000005      
+  Timestamp: 2013-12-01 19:14:15.474334000
+  Side: Sell
+  Instrument: FB              
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 83 from CM
+
+[2013-12-01 19:14:17.814715000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000D      
+  Timestamp: 2013-12-01 19:14:15.476270000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 127       
+  Quantity: 57
+
+* matching engine: receiving order n. 84 from CM
+
+[2013-12-01 19:14:17.863274000] Order:
+  Order type: Market Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000E      
+  Timestamp: 2013-12-01 19:14:15.477724000
+  Side: Sell
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 49
+
+* matching engine: receiving order n. 85 from CM
+
+[2013-12-01 19:14:17.893101000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000009      
+  Timestamp: 2013-12-01 19:14:15.479336000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 86 from CM
+
+[2013-12-01 19:14:17.955493000] Order:
+  Order type: Market Order
+  Account: Mohammed                        
+  User: dansully                        
+  Order Id: 7F000001:0000B34D:00000004      
+  Timestamp: 2013-12-01 19:14:15.480705000
+  Side: Sell
+  Instrument: MFST            
+  Price: Market
+  Quantity: 26
+
+* matching engine: receiving order n. 87 from CM
+
+[2013-12-01 19:14:17.985456000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000B      
+  Timestamp: 2013-12-01 19:14:15.481019000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 58
+
+* matching engine: receiving order n. 88 from CM
+
+[2013-12-01 19:14:18.044497000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000005      
+  Timestamp: 2013-12-01 19:14:15.482308000
+  Side: Buy
+  Instrument: MSFT            
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 89 from CM
+
+[2013-12-01 19:14:18.091963000] Order:
+  Order type: Market Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000E      
+  Timestamp: 2013-12-01 19:14:15.482940000
+  Side: Buy
+  Instrument: AMZN            
+  Price: Market
+  Quantity: 49
+
+* matching engine: receiving order n. 90 from CM
+
+[2013-12-01 19:14:18.110056000] Order:
+  Order type: Limit Order
+  Account: Solomon                         
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000F      
+  Timestamp: 2013-12-01 19:14:15.483974000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 200       
+  Quantity: 32
+
+* matching engine: receiving order n. 91 from CM
+
+[2013-12-01 19:14:18.126203000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:0000000A      
+  Timestamp: 2013-12-01 19:14:15.489337000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 92 from CM
+
+[2013-12-01 19:14:18.174203000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000C      
+  Timestamp: 2013-12-01 19:14:15.489363000
+  Side: Sell
+  Instrument: IBM             
+  Price: 115       
+  Quantity: 93
+
+* matching engine: receiving order n. 93 from CM
+
+[2013-12-01 19:14:18.206603000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000007      
+  Timestamp: 2013-12-01 19:14:15.463032000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 134       
+  Quantity: 65
+
+* matching engine: receiving order n. 94 from CM
+
+[2013-12-01 19:14:18.252371000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000008      
+  Timestamp: 2013-12-01 19:14:15.473565000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 157       
+  Quantity: 83
+
+* matching engine: receiving order n. 95 from CM
+
+[2013-12-01 19:14:18.282925000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000009      
+  Timestamp: 2013-12-01 19:14:15.484091000
+  Side: Buy
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 96 from CM
+
+[2013-12-01 19:14:18.300226000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000010      
+  Timestamp: 2013-12-01 19:14:15.490217000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 150       
+  Quantity: 31
+
+* matching engine: receiving order n. 97 from CM
+
+[2013-12-01 19:14:18.328253000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000005      
+  Timestamp: 2013-12-01 19:14:15.490387000
+  Side: Buy
+  Instrument: FB              
+  Price: 169       
+  Quantity: 78
+
+* matching engine: receiving order n. 98 from CM
+
+[2013-12-01 19:14:18.379899000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000006      
+  Timestamp: 2013-12-01 19:14:15.491000000
+  Side: Sell
+  Instrument: FB              
+  Price: 149       
+  Quantity: 50
+
+* matching engine: receiving order n. 99 from CM
+
+[2013-12-01 19:14:18.412283000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:0000000A      
+  Timestamp: 2013-12-01 19:14:15.494616000
+  Side: Buy
+  Instrument: GOOG            
+  Price: Market
+  Quantity: 73
+
+* matching engine: receiving order n. 100 from CM
+
+[2013-12-01 19:14:18.436719000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000011      
+  Timestamp: 2013-12-01 19:14:15.496474000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 134       
+  Quantity: 61
+
+* matching engine: receiving order n. 101 from CM
+
+[2013-12-01 19:14:18.453440000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000D      
+  Timestamp: 2013-12-01 19:14:15.497688000
+  Side: Sell
+  Instrument: IBM             
+  Price: 127       
+  Quantity: 57
+
+* matching engine: receiving order n. 102 from CM
+
+[2013-12-01 19:14:18.469078000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:0000000B      
+  Timestamp: 2013-12-01 19:14:15.499337000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 58
+
+* matching engine: receiving order n. 103 from CM
+
+[2013-12-01 19:14:18.532237000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B34C:00000006      
+  Timestamp: 2013-12-01 19:14:15.500488000
+  Side: Buy
+  Instrument: MSFT            
+  Price: 149       
+  Quantity: 50
+
+===== matching engine stats =====
+
+* Aggregates: 
+Total running time in seconds: 45
+Total number of messages processed: 103
+ - Total number of new orders: 103
+ - Total number of cancels: 0
+ - Total number of modifies: 0
+Total number of acks sent: 103
+Total number of database adds: 112
+Total number of database removes: 56
+Total number of changes to book: 85
+Total number of trades: 28
+
+* Stats: 
+Processed messages per second: 2.28889
+Processed trades per second: 0.622222
+Processed trades per order: 0.271845
+Database operations per order: 1.63107
+Changes to book per order: 0.825243
+
+@linux1:~/cspp51081/labs/ucee$ 
+

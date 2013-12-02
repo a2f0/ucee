@@ -1,0 +1,1096 @@
+@linux1:~/cspp51081/labs/ucee$ ./rpteng
+starting reporting engine...
+shmget initialized with with shmid: 428376095* reporting engine: receiving reporting message n. 1 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946855000594621 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:15.625020000] TradeMessage:
+  Symbol: AMZN            
+  Price: 142       
+  Quantity: 7
+
+ * Order A: 
+
+[2013-12-01 19:14:15.625138000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000001      
+  Timestamp: 2013-12-01 19:14:15.396471000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 142       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:15.625163000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000001      
+  Timestamp: 2013-12-01 19:14:15.396281000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 142       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 2 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946855000674649 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:15.705399000] TradeMessage:
+  Symbol: IBM             
+  Price: 142       
+  Quantity: 7
+
+ * Order A: 
+
+[2013-12-01 19:14:15.705419000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000001      
+  Timestamp: 2013-12-01 19:14:15.397691000
+  Side: Sell
+  Instrument: IBM             
+  Price: 142       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:15.705447000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000001      
+  Timestamp: 2013-12-01 19:14:15.399340000
+  Side: Buy
+  Instrument: IBM             
+  Price: 142       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 3 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946855000757463 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:15.795965000] TradeMessage:
+  Symbol: GOOG            
+  Price: 142       
+  Quantity: 7
+
+ * Order A: 
+
+[2013-12-01 19:14:15.795988000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000001      
+  Timestamp: 2013-12-01 19:14:15.400548000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 142       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:15.796092000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000001      
+  Timestamp: 2013-12-01 19:14:15.399878000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 142       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 4 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946855000842909 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:15.871632000] TradeMessage:
+  Symbol: AMZN            
+  Price: 151       
+  Quantity: 33
+
+ * Order A: 
+
+[2013-12-01 19:14:15.871664000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000002      
+  Timestamp: 2013-12-01 19:14:15.402719000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 151       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:15.871724000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000002      
+  Timestamp: 2013-12-01 19:14:15.402948000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 151       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 5 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946855000951120 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:15.982452000] TradeMessage:
+  Symbol: IBM             
+  Price: 151       
+  Quantity: 33
+
+ * Order A: 
+
+[2013-12-01 19:14:15.982486000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000002      
+  Timestamp: 2013-12-01 19:14:15.406023000
+  Side: Sell
+  Instrument: IBM             
+  Price: 151       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:15.982526000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000002      
+  Timestamp: 2013-12-01 19:14:15.409339000
+  Side: Buy
+  Instrument: IBM             
+  Price: 151       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 6 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000047170 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.076856000] TradeMessage:
+  Symbol: FB              
+  Price: 142       
+  Quantity: 7
+
+ * Order A: 
+
+[2013-12-01 19:14:16.076892000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000001      
+  Timestamp: 2013-12-01 19:14:15.407678000
+  Side: Sell
+  Instrument: FB              
+  Price: 142       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.076945000] Order:
+  Order type: Limit Order
+  Account: Joe                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000001      
+  Timestamp: 2013-12-01 19:14:15.410382000
+  Side: Buy
+  Instrument: FB              
+  Price: 142       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 7 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000124478 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.156380000] TradeMessage:
+  Symbol: GOOG            
+  Price: 151       
+  Quantity: 33
+
+ * Order A: 
+
+[2013-12-01 19:14:16.156406000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000002      
+  Timestamp: 2013-12-01 19:14:15.411656000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 151       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.156432000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000002      
+  Timestamp: 2013-12-01 19:14:15.410407000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 151       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 8 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000338607 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.367480000] TradeMessage:
+  Symbol: AMZN            
+  Price: 169       
+  Quantity: 78
+
+ * Order A: 
+
+[2013-12-01 19:14:16.367511000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000005      
+  Timestamp: 2013-12-01 19:14:15.421473000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 169       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.367586000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000005      
+  Timestamp: 2013-12-01 19:14:15.422941000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 169       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 9 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000468225 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.502843000] TradeMessage:
+  Symbol: AMZN            
+  Price: 149       
+  Quantity: 50
+
+ * Order A: 
+
+[2013-12-01 19:14:16.502866000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000006      
+  Timestamp: 2013-12-01 19:14:15.427723000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 149       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.502917000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000006      
+  Timestamp: 2013-12-01 19:14:15.429599000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 149       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 10 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000537717 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.571475000] TradeMessage:
+  Symbol: FB              
+  Price: 151       
+  Quantity: 33
+
+ * Order A: 
+
+[2013-12-01 19:14:16.571503000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000002      
+  Timestamp: 2013-12-01 19:14:15.424343000
+  Side: Sell
+  Instrument: FB              
+  Price: 151       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.571631000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000002      
+  Timestamp: 2013-12-01 19:14:15.430389000
+  Side: Buy
+  Instrument: FB              
+  Price: 151       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 11 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000668365 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.699677000] TradeMessage:
+  Symbol: AMZN            
+  Price: 134       
+  Quantity: 65
+
+ * Order A: 
+
+[2013-12-01 19:14:16.699694000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000007      
+  Timestamp: 2013-12-01 19:14:15.433967000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 134       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.699757000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000007      
+  Timestamp: 2013-12-01 19:14:15.436280000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 134       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 12 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000777998 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.807229000] TradeMessage:
+  Symbol: AMZN            
+  Price: 157       
+  Quantity: 83
+
+ * Order A: 
+
+[2013-12-01 19:14:16.807256000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B349:00000008      
+  Timestamp: 2013-12-01 19:14:15.440224000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 157       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.807325000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B348:00000008      
+  Timestamp: 2013-12-01 19:14:15.442940000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 157       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 13 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946856000836626 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:16.867296000] TradeMessage:
+  Symbol: GOOG            
+  Price: 169       
+  Quantity: 78
+
+ * Order A: 
+
+[2013-12-01 19:14:16.867348000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000005      
+  Timestamp: 2013-12-01 19:14:15.444990000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 169       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:16.867378000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000005      
+  Timestamp: 2013-12-01 19:14:15.441979000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 169       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 14 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000082193 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.111572000] TradeMessage:
+  Symbol: GOOG            
+  Price: 149       
+  Quantity: 50
+
+ * Order A: 
+
+[2013-12-01 19:14:17.111600000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000006      
+  Timestamp: 2013-12-01 19:14:15.456096000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 149       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.111714000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000006      
+  Timestamp: 2013-12-01 19:14:15.452508000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 149       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 15 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000272491 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.324856000] TradeMessage:
+  Symbol: IBM             
+  Price: 169       
+  Quantity: 65
+
+ * Order A: 
+
+[2013-12-01 19:14:17.324952000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000007      
+  Timestamp: 2013-12-01 19:14:15.447694000
+  Side: Sell
+  Instrument: IBM             
+  Price: 134       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.324977000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000005      
+  Timestamp: 2013-12-01 19:14:15.439336000
+  Side: Buy
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 13
+
+* reporting engine: receiving reporting message n. 16 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000324823 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.371730000] TradeMessage:
+  Symbol: IBM             
+  Price: 169       
+  Quantity: 13
+
+ * Order A: 
+
+[2013-12-01 19:14:17.371753000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000006      
+  Timestamp: 2013-12-01 19:14:15.439362000
+  Side: Sell
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 37
+
+ * Order B: 
+
+[2013-12-01 19:14:17.371800000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000005      
+  Timestamp: 2013-12-01 19:14:15.439336000
+  Side: Buy
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 17 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000403105 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.447429000] TradeMessage:
+  Symbol: IBM             
+  Price: 149       
+  Quantity: 37
+
+ * Order A: 
+
+[2013-12-01 19:14:17.447450000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000006      
+  Timestamp: 2013-12-01 19:14:15.439362000
+  Side: Sell
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.447479000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000006      
+  Timestamp: 2013-12-01 19:14:15.449331000
+  Side: Buy
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 13
+
+* reporting engine: receiving reporting message n. 18 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000512214 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.543195000] TradeMessage:
+  Symbol: IBM             
+  Price: 157       
+  Quantity: 83
+
+ * Order A: 
+
+[2013-12-01 19:14:17.543216000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000008      
+  Timestamp: 2013-12-01 19:14:15.456027000
+  Side: Sell
+  Instrument: IBM             
+  Price: 157       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.543310000] Order:
+  Order type: Limit Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000008      
+  Timestamp: 2013-12-01 19:14:15.469337000
+  Side: Buy
+  Instrument: IBM             
+  Price: 157       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 19 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000574452 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.605078000] TradeMessage:
+  Symbol: AMZN            
+  Price: 115       
+  Quantity: 93
+
+ * Order A: 
+
+[2013-12-01 19:14:17.605100000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000C      
+  Timestamp: 2013-12-01 19:14:15.465217000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 115       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.605181000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000C      
+  Timestamp: 2013-12-01 19:14:15.469617000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 115       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 20 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000687252 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.728541000] TradeMessage:
+  Symbol: IBM             
+  Price: 149       
+  Quantity: 13
+
+ * Order A: 
+
+[2013-12-01 19:14:17.728556000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000A      
+  Timestamp: 2013-12-01 19:14:15.472685000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 60
+
+ * Order B: 
+
+[2013-12-01 19:14:17.728634000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000006      
+  Timestamp: 2013-12-01 19:14:15.449331000
+  Side: Buy
+  Instrument: IBM             
+  Price: 149       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 21 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000728510 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.783531000] TradeMessage:
+  Symbol: IBM             
+  Price: 134       
+  Quantity: 60
+
+ * Order A: 
+
+[2013-12-01 19:14:17.783564000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000A      
+  Timestamp: 2013-12-01 19:14:15.472685000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.783628000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000007      
+  Timestamp: 2013-12-01 19:14:15.459337000
+  Side: Buy
+  Instrument: IBM             
+  Price: 134       
+  Quantity: 5
+
+* reporting engine: receiving reporting message n. 22 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000834076 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.863215000] TradeMessage:
+  Symbol: AMZN            
+  Price: 127       
+  Quantity: 57
+
+ * Order A: 
+
+[2013-12-01 19:14:17.863232000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B349:0000000D      
+  Timestamp: 2013-12-01 19:14:15.471474000
+  Side: Sell
+  Instrument: AMZN            
+  Price: 127       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:17.863311000] Order:
+  Order type: Limit Order
+  Account: Sai                             
+  User: dansully                        
+  Order Id: 7F000001:0000B348:0000000D      
+  Timestamp: 2013-12-01 19:14:15.476270000
+  Side: Buy
+  Instrument: AMZN            
+  Price: 127       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 23 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946857000910977 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:17.955492000] TradeMessage:
+  Symbol: IBM             
+  Price: 169       
+  Quantity: 73
+
+ * Order A: 
+
+[2013-12-01 19:14:17.955586000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000005      
+  Timestamp: 2013-12-01 19:14:15.431020000
+  Side: Sell
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 5
+
+ * Order B: 
+
+[2013-12-01 19:14:17.955628000] Order:
+  Order type: Market Order
+  Account: Chip                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000009      
+  Timestamp: 2013-12-01 19:14:15.479336000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 24 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946858000003152 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:18.044416000] TradeMessage:
+  Symbol: IBM             
+  Price: 134       
+  Quantity: 5
+
+ * Order A: 
+
+[2013-12-01 19:14:18.044437000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000B      
+  Timestamp: 2013-12-01 19:14:15.481019000
+  Side: Sell
+  Instrument: IBM             
+  Price: Market
+  Quantity: 53
+
+ * Order B: 
+
+[2013-12-01 19:14:18.044547000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:00000007      
+  Timestamp: 2013-12-01 19:14:15.459337000
+  Side: Buy
+  Instrument: IBM             
+  Price: 134       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 25 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946858000143095 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:18.174151000] TradeMessage:
+  Symbol: IBM             
+  Price: 169       
+  Quantity: 5
+
+ * Order A: 
+
+[2013-12-01 19:14:18.174169000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B345:00000005      
+  Timestamp: 2013-12-01 19:14:15.431020000
+  Side: Sell
+  Instrument: IBM             
+  Price: 169       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:18.174228000] Order:
+  Order type: Market Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:0000000A      
+  Timestamp: 2013-12-01 19:14:15.489337000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 68
+
+* reporting engine: receiving reporting message n. 26 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946858000222490 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:18.252330000] TradeMessage:
+  Symbol: GOOG            
+  Price: 134       
+  Quantity: 65
+
+ * Order A: 
+
+[2013-12-01 19:14:18.252351000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B347:00000007      
+  Timestamp: 2013-12-01 19:14:15.467217000
+  Side: Sell
+  Instrument: GOOG            
+  Price: 134       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:18.252435000] Order:
+  Order type: Limit Order
+  Account: Mark                            
+  User: dansully                        
+  Order Id: 7F000001:0000B346:00000007      
+  Timestamp: 2013-12-01 19:14:15.463032000
+  Side: Buy
+  Instrument: GOOG            
+  Price: 134       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 27 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946858000348055 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:18.379863000] TradeMessage:
+  Symbol: FB              
+  Price: 169       
+  Quantity: 78
+
+ * Order A: 
+
+[2013-12-01 19:14:18.379884000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B34B:00000005      
+  Timestamp: 2013-12-01 19:14:15.474334000
+  Side: Sell
+  Instrument: FB              
+  Price: 169       
+  Quantity: 0
+
+ * Order B: 
+
+[2013-12-01 19:14:18.379912000] Order:
+  Order type: Limit Order
+  Account: Kathy                           
+  User: dansully                        
+  Order Id: 7F000001:0000B34A:00000005      
+  Timestamp: 2013-12-01 19:14:15.490387000
+  Side: Buy
+  Instrument: FB              
+  Price: 169       
+  Quantity: 0
+
+* reporting engine: receiving reporting message n. 28 from ME
+
+ ReportingMessage: 
+
+ * Timestamp: 1385946858000489082 
+
+ * TradeMessage: 
+
+[2013-12-01 19:14:18.532240000] TradeMessage:
+  Symbol: IBM             
+  Price: 115       
+  Quantity: 58
+
+ * Order A: 
+
+[2013-12-01 19:14:18.532266000] Order:
+  Order type: Limit Order
+  Account: Eugene                          
+  User: dansully                        
+  Order Id: 7F000001:0000B345:0000000C      
+  Timestamp: 2013-12-01 19:14:15.489363000
+  Side: Sell
+  Instrument: IBM             
+  Price: 115       
+  Quantity: 35
+
+ * Order B: 
+
+[2013-12-01 19:14:18.532409000] Order:
+  Order type: Market Order
+  Account: Mike                            
+  User: dansully                        
+  Order Id: 7F000001:0000B344:0000000B      
+  Timestamp: 2013-12-01 19:14:15.499337000
+  Side: Buy
+  Instrument: IBM             
+  Price: Market
+  Quantity: 0
+
+^C@linux1:~/cspp51081/labs/ucee$ 
+

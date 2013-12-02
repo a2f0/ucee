@@ -1,4 +1,2 @@
-mborosh@linux1:~/cspp51025/ucee/tradeBot$ ./md_receiver -a 239.192.07.07 -p 1234
-Listening for market data:
-Unknown message received.
-
+For results of a run of the UCEE system please see the individual files 
+contained in the RESULTS directory.

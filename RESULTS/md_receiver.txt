@@ -1,0 +1,1553 @@
+@linux1:~/cspp51081/labs/ucee$ ./tradeBot/md_receiver -a 239.192.07.07 -p 1234
+Listening for market data:
+Received book message:
+  Book for AMZN            :
+    Level 1 | 142       : 7 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 142       : 7 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 142       : 7 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 142       : 7 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 142       : 7 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 151       : 33 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 151       : 33 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 142       : 7 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 142       : 7 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 151       : 33 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 151       : 33 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 142       : 7
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 169       : 78 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 149       : 50
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 151       : 33 |           : 0
+    Level 2 | 142       : 7 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 149       : 50 | 149       : 50
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 151       : 33 | 151       : 33
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 130
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 65 | 134       : 130
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 65 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 157       : 83
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 157       : 83 | 157       : 83
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 169       : 78 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 149       : 50 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 134       : 130
+    Level 2 |           : 0 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 134       : 130
+    Level 2 |           : 0 | 157       : 83
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 149       : 50 | 149       : 50
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 169       : 78 | 134       : 130
+    Level 2 |           : 0 | 157       : 83
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 134       : 52
+    Level 2 |           : 0 | 157       : 83
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 134       : 52
+    Level 2 |           : 0 | 157       : 83
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 65 | 134       : 52
+    Level 2 |           : 0 | 157       : 83
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 13 | 157       : 83
+    Level 2 |           : 0 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 78 | 157       : 83
+    Level 2 |           : 0 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 157       : 83 | 157       : 83
+    Level 2 | 134       : 78 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 78 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 115       : 93 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 5 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 5 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 127       : 57 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 5 | 169       : 5
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 169       : 5
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 151       : 33 |           : 0
+    Level 3 | 142       : 7 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 200       : 32
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 134       : 65 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 157       : 83 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 150       : 31
+    Level 2 |           : 0 | 200       : 32
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 169       : 78 | 169       : 78
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 149       : 50
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 61
+    Level 2 |           : 0 | 150       : 31
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 | 127       : 57
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 |           : 0 | 115       : 35
+    Level 2 |           : 0 | 127       : 57
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 151       : 33 |           : 0
+    Level 3 | 149       : 50 |           : 0
+    Level 4 | 142       : 7 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 61
+    Level 2 |           : 0 | 150       : 31
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 142       : 7
+    Level 2 |           : 0 | 169       : 78
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 157       : 83 | 157       : 83
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 93 | 115       : 35
+    Level 2 |           : 0 | 127       : 57
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 127       : 57
+    Level 2 |           : 0 | 200       : 32
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 149       : 50 | 149       : 50
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 7 at 142       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 127       : 57 | 127       : 57
+    Level 2 | 115       : 58 | 200       : 32
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 200       : 32
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 7 at 142       
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 115       : 93 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 150       : 31
+    Level 2 |           : 0 | 200       : 32
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  GOOG             traded 7 at 142       
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 115       : 93 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 200       : 32 | 134       : 61
+    Level 2 |           : 0 | 150       : 31
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 134       : 29
+    Level 2 |           : 0 | 150       : 31
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 33 at 151       
+
+Received book message:
+  Book for FB              :
+    Level 1 | 134       : 65 | 134       : 65
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 157       : 83
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 151       : 33 |           : 0
+    Level 3 | 149       : 50 |           : 0
+    Level 4 | 142       : 7 |           : 0
+    Level 5 | 134       : 65 |           : 0
+
+Received trade message:
+  IBM              traded 33 at 151       
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 142       : 7
+    Level 2 |           : 0 | 149       : 50
+    Level 3 |           : 0 | 169       : 78
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 200       : 14
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 200       : 14
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 127       : 57 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  FB               traded 7 at 142       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 134       : 61
+    Level 2 |           : 0 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 127       : 57 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  GOOG             traded 33 at 151       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 150       : 31 | 134       : 29
+    Level 2 |           : 0 | 150       : 31
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 150       : 29
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 150       : 29
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 157       : 83 | 157       : 83
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 157       : 83 |           : 0
+    Level 3 | 151       : 33 |           : 0
+    Level 4 | 149       : 50 |           : 0
+    Level 5 | 142       : 7 |           : 0
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 | 142       : 7
+    Level 3 |           : 0 | 149       : 50
+    Level 4 |           : 0 | 169       : 78
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 200       : 32 | 134       : 61
+    Level 2 | 115       : 58 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 134       : 29
+    Level 2 |           : 0 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 58 | 134       : 29
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 14
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 78 at 169       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 61 | 150       : 29
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 40 | 150       : 29
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 50 at 149       
+
+Received trade message:
+  FB               traded 33 at 151       
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 134       : 65
+    Level 2 |           : 0 | 142       : 7
+    Level 3 |           : 0 | 149       : 50
+    Level 4 |           : 0 | 157       : 83
+    Level 5 |           : 0 | 169       : 78
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 150       : 31 | 134       : 29
+    Level 2 | 115       : 58 | 190       : 6
+    Level 3 |           : 0 | 200       : 14
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 150       : 2 | 190       : 6
+    Level 2 | 115       : 58 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 200       : 32 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 42 | 190       : 6
+    Level 2 |           : 0 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 115       : 42 | 190       : 6
+    Level 2 |           : 0 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 200       : 32 | 200       : 32
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 65 at 134       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 190       : 6 | 150       : 29
+    Level 2 | 134       : 40 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 40 | 150       : 23
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 150       : 23
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 83 at 157       
+
+Received trade message:
+  GOOG             traded 78 at 169       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 61 | 190       : 6
+    Level 2 | 115       : 42 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 150       : 31 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 60 | 190       : 6
+    Level 2 | 115       : 42 | 200       : 14
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 150       : 31 | 150       : 31
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 150       : 5
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 120       : 0
+    Level 2 |           : 0 | 150       : 5
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 190       : 6 | 190       : 6
+    Level 2 | 134       : 60 | 200       : 14
+    Level 3 | 115       : 42 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 60 | 200       : 14
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  GOOG             traded 50 at 149       
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 134       : 61 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 39 | 200       : 14
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 134       : 61 | 134       : 61
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 150       : 4
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 150       : 4
+    Level 2 |           : 0 | 168       : 65
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 115       : 93 | 115       : 93
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 157       : 83 |           : 0
+    Level 3 | 151       : 33 |           : 0
+    Level 4 | 149       : 50 |           : 0
+    Level 5 | 142       : 7 |           : 0
+
+Received trade message:
+  IBM              traded 65 at 169       
+
+Received trade message:
+  IBM              traded 13 at 169       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 39 |           : 0
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 37 at 149       
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 190       : 6 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 9 |           : 0
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 | 190       : 6 | 190       : 6
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for GOOG            :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 83 at 157       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 168       : 48
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 168       : 48
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  AMZN             traded 93 at 115       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 152       : 24
+    Level 2 |           : 0 | 168       : 48
+    Level 3 |           : 0 | 190       : 6
+    Level 4 |           : 0 | 200       : 32
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 127       : 57 | 127       : 57
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 13 at 149       
+
+Received trade message:
+  IBM              traded 60 at 134       
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 169       : 78 |           : 0
+    Level 2 | 157       : 83 |           : 0
+    Level 3 | 151       : 33 |           : 0
+    Level 4 | 149       : 50 |           : 0
+    Level 5 | 142       : 7 |           : 0
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 | 134       : 65
+    Level 3 |           : 0 | 142       : 7
+    Level 4 |           : 0 | 149       : 50
+    Level 5 |           : 0 | 157       : 83
+
+Received trade message:
+  AMZN             traded 57 at 127       
+
+Received trade message:
+  IBM              traded 73 at 169       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 9 | 120       : 0
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 5 at 134       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 168       : 42
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 134       : 10 | 168       : 42
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for AMZN            :
+    Level 1 |           : 0 | 168       : 42
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 200       : 32
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  IBM              traded 5 at 169       
+
+Received book message:
+  Book for MFST            :
+    Level 1 |           : 0 | 115       : 93
+    Level 2 |           : 0 | 127       : 57
+    Level 3 |           : 0 | 134       : 65
+    Level 4 |           : 0 | 142       : 7
+    Level 5 |           : 0 | 149       : 50
+
+Received trade message:
+  GOOG             traded 65 at 134       
+
+Received book message:
+  Book for IBM             :
+    Level 1 | 134       : 9 | 168       : 65
+    Level 2 | 115       : 42 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received trade message:
+  FB               traded 78 at 169       
+
+Received book message:
+  Book for AMZN            :
+    Level 1 | 120       : 0 | 168       : 42
+    Level 2 |           : 0 | 190       : 6
+    Level 3 |           : 0 | 200       : 32
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 | 200       : 32 | 200       : 32
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 |           : 0
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for FB              :
+    Level 1 |           : 0 | 150       : 31
+    Level 2 |           : 0 |           : 0
+    Level 3 |           : 0 |           : 0
+    Level 4 |           : 0 |           : 0
+    Level 5 |           : 0 |           : 0
+
+Received book message:
+  Book for MSFT            :
+    Level 1 | 200       : 32 |           : 0
+    Level 2 | 169       : 78 |           : 0
+    Level 3 | 157       : 83 |           : 0
+    Level 4 | 151       : 33 |           : 0
+    Level 5 | 149       : 50 |           : 0
+
+Received trade message:
+  IBM              traded 58 at 115       
+
+^C
+@linux1:~/cspp51081/labs/ucee$ 
+

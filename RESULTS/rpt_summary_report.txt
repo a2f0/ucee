@@ -1,0 +1,38 @@
+
+
+SUMMARY REPORT:
+
+Total Number of Orders: 103 
+Total Number of Trades: 28 
+Buy Side Volume: 2687 
+Sell Side Volume: 2654 
+Total Volume: 5341 
+ 
+AMZN            
+Min: 115.0
+Max: 169.0
+Close: 127.0
+Volume: 466
+
+
+FB              
+Min: 142.0
+Max: 169.0
+Close: 169.0
+Volume: 118
+
+
+GOOG            
+Min: 134.0
+Max: 169.0
+Close: 134.0
+Volume: 233
+
+
+IBM             
+Min: 115.0
+Max: 169.0
+Close: 115.0
+Volume: 452
+
+

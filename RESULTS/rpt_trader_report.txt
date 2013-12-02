@@ -1,0 +1,284 @@
+
+
+TRADER REPORT:
+
+
+
+Chip                            AMZN            Order:  2013-12-01 19:14:15.442940000|83|157       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.777998000|  |157.0     |Acct:     dansully                        
+
+
+
+Chip                            AMZN            Order:  2013-12-01 19:14:15.440224000|83|157       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.777998000|  |157.0     |Acct:     dansully                        
+
+
+
+Chip                            IBM             Order:  2013-12-01 19:14:15.469337000|83|157       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.512214000|  |157.0     |Acct:     dansully                        
+
+
+
+Chip                            IBM             Order:  2013-12-01 19:14:15.456027000|83|157       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.512214000|  |157.0     |Acct:     dansully                        
+
+
+
+Chip                            IBM             Order:  2013-12-01 19:14:15.479336000|73|          |Type:  0|Side:  0
+                                                Fill :  2013-12-01 19:14:17.910977000|  |169.0     |Acct:     dansully                        
+
+
+
+Eugene                          AMZN            Order:  2013-12-01 19:14:15.429599000|50|149       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.468225000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          AMZN            Order:  2013-12-01 19:14:15.427723000|50|149       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.468225000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          GOOG            Order:  2013-12-01 19:14:15.452508000|50|149       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.082193000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          GOOG            Order:  2013-12-01 19:14:15.456096000|50|149       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.082193000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          IBM             Order:  2013-12-01 19:14:15.439362000|50|149       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.324823000|  |169.0     |Acct:     dansully                        
+
+
+
+Eugene                          IBM             Order:  2013-12-01 19:14:15.449331000|50|149       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.403105000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          IBM             Order:  2013-12-01 19:14:15.439362000|50|149       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.403105000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          AMZN            Order:  2013-12-01 19:14:15.469617000|93|115       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.574452000|  |115.0     |Acct:     dansully                        
+
+
+
+Eugene                          AMZN            Order:  2013-12-01 19:14:15.465217000|93|115       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.574452000|  |115.0     |Acct:     dansully                        
+
+
+
+Eugene                          IBM             Order:  2013-12-01 19:14:15.449331000|50|149       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.687252000|  |149.0     |Acct:     dansully                        
+
+
+
+Eugene                          IBM             Order:  2013-12-01 19:14:15.489363000|93|115       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:18.489082000|  |115.0     |Acct:     dansully                        
+
+
+
+Joe                             AMZN            Order:  2013-12-01 19:14:15.396281000| 7|142       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:15.594621000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             AMZN            Order:  2013-12-01 19:14:15.396471000| 7|142       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:15.594621000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             IBM             Order:  2013-12-01 19:14:15.399340000| 7|142       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:15.674649000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             IBM             Order:  2013-12-01 19:14:15.397691000| 7|142       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:15.674649000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             GOOG            Order:  2013-12-01 19:14:15.399878000| 7|142       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:15.757463000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             GOOG            Order:  2013-12-01 19:14:15.400548000| 7|142       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:15.757463000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             FB              Order:  2013-12-01 19:14:15.410382000| 7|142       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.047170000|  |142.0     |Acct:     dansully                        
+
+
+
+Joe                             FB              Order:  2013-12-01 19:14:15.407678000| 7|142       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.047170000|  |142.0     |Acct:     dansully                        
+
+
+
+Kathy                           AMZN            Order:  2013-12-01 19:14:15.422941000|78|169       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.338607000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           AMZN            Order:  2013-12-01 19:14:15.421473000|78|169       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.338607000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           GOOG            Order:  2013-12-01 19:14:15.441979000|78|169       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.836626000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           GOOG            Order:  2013-12-01 19:14:15.444990000|78|169       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.836626000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           IBM             Order:  2013-12-01 19:14:15.439336000|78|169       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.272491000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           IBM             Order:  2013-12-01 19:14:15.439336000|78|169       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.324823000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           IBM             Order:  2013-12-01 19:14:15.431020000|78|169       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.910977000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           IBM             Order:  2013-12-01 19:14:15.431020000|78|169       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:18.143095000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           FB              Order:  2013-12-01 19:14:15.490387000|78|169       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:18.348055000|  |169.0     |Acct:     dansully                        
+
+
+
+Kathy                           FB              Order:  2013-12-01 19:14:15.474334000|78|169       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:18.348055000|  |169.0     |Acct:     dansully                        
+
+
+
+Mark                            AMZN            Order:  2013-12-01 19:14:15.436280000|65|134       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.668365000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            AMZN            Order:  2013-12-01 19:14:15.433967000|65|134       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.668365000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.447694000|65|134       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.272491000|  |169.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.472685000|73|          |Type:  0|Side:  1
+                                                Fill :  2013-12-01 19:14:17.687252000|  |149.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.459337000|65|134       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.728510000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.472685000|73|          |Type:  0|Side:  1
+                                                Fill :  2013-12-01 19:14:17.728510000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.459337000|65|134       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:18.003152000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            IBM             Order:  2013-12-01 19:14:15.489337000|73|          |Type:  0|Side:  0
+                                                Fill :  2013-12-01 19:14:18.143095000|  |169.0     |Acct:     dansully                        
+
+
+
+Mark                            GOOG            Order:  2013-12-01 19:14:15.463032000|65|134       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:18.222490000|  |134.0     |Acct:     dansully                        
+
+
+
+Mark                            GOOG            Order:  2013-12-01 19:14:15.467217000|65|134       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:18.222490000|  |134.0     |Acct:     dansully                        
+
+
+
+Mike                            IBM             Order:  2013-12-01 19:14:15.481019000|58|          |Type:  0|Side:  1
+                                                Fill :  2013-12-01 19:14:18.003152000|  |134.0     |Acct:     dansully                        
+
+
+
+Mike                            IBM             Order:  2013-12-01 19:14:15.499337000|58|          |Type:  0|Side:  0
+                                                Fill :  2013-12-01 19:14:18.489082000|  |115.0     |Acct:     dansully                        
+
+
+
+Sai                             AMZN            Order:  2013-12-01 19:14:15.402948000|33|151       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:15.842909000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             AMZN            Order:  2013-12-01 19:14:15.402719000|33|151       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:15.842909000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             IBM             Order:  2013-12-01 19:14:15.409339000|33|151       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:15.951120000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             IBM             Order:  2013-12-01 19:14:15.406023000|33|151       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:15.951120000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             GOOG            Order:  2013-12-01 19:14:15.410407000|33|151       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.124478000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             GOOG            Order:  2013-12-01 19:14:15.411656000|33|151       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.124478000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             FB              Order:  2013-12-01 19:14:15.430389000|33|151       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:16.537717000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             FB              Order:  2013-12-01 19:14:15.424343000|33|151       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:16.537717000|  |151.0     |Acct:     dansully                        
+
+
+
+Sai                             AMZN            Order:  2013-12-01 19:14:15.476270000|57|127       |Type:  1|Side:  0
+                                                Fill :  2013-12-01 19:14:17.834076000|  |127.0     |Acct:     dansully                        
+
+
+
+Sai                             AMZN            Order:  2013-12-01 19:14:15.471474000|57|127       |Type:  1|Side:  1
+                                                Fill :  2013-12-01 19:14:17.834076000|  |127.0     |Acct:     dansully                        
+
