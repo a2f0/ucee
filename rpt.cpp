@@ -6,7 +6,7 @@ int trader_rpt(char* tr){
     char* query3 = (char*) malloc (1024*sizeof(char));
     sprintf(query3,"%s","SELECT * FROM t3 b, t2 a WHERE (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.account,a.user;");
     sqlite3_stmt *stmt3;
-    sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
+    sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);
 
     char* space = (char*) malloc (150*sizeof(char));
@@ -31,7 +31,7 @@ int trader_rpt(char* tr){
         printTimestamp(strtoull((char*)sqlite3_column_text(stmt3,1),NULL,10));
         //fill timestamp
         printf("|");
-        printf("%2d|",atoi((char*)sqlite3_column_text(stmt3,3))); //fill quantity
+        printf("%2s|",(char*)sqlite3_column_text(stmt3,3)); //fill quantity
         printf("%2s     |",(char*)sqlite3_column_text(stmt3,2)); //fill price
         printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
         printf("\n\n");
@@ -41,7 +41,6 @@ int trader_rpt(char* tr){
     sqlite3_close(mydb);
     free(query3);
     free(space);
-//    free(mydb);
     return 0;
 };
 
@@ -53,7 +52,7 @@ int instrument_rpt(char* in){
     sprintf(query3,"%s",
     "SELECT * FROM t3 b INNER JOIN t2 a ON (b.orderid1 = a.t1key OR b.orderid2 = a.t1key) ORDER BY a.symbol,a.timestamp;");
     sqlite3_stmt *stmt3;
-    sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
+    sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);
 
     char* space = (char*) malloc (150*sizeof(char));
@@ -88,7 +87,6 @@ int instrument_rpt(char* in){
     sqlite3_close(mydb);
     free(query3);
     free(space);
-//    free(mydb);
     return 0;
 };
 
@@ -111,7 +109,7 @@ int trade_values(char* in){
     sqlite3_stmt *stmt2;
     sqlite3_stmt *stmt3;
     sqlite3_stmt *stmt4;
-    sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
+    sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);
     if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) 
     != SQLITE_OK)
@@ -147,7 +145,6 @@ int trade_values(char* in){
     free(query2);
     free(query3);
     free(query4);
- //   free(mydb);
     return 0;
 };
 
@@ -169,7 +166,7 @@ int summary_rpt(){
     sqlite3_stmt *stmt5;
     sqlite3_stmt *stmt6;
     sqlite3_stmt *stmt7;
-    sqlite3* mydb = (sqlite3*) malloc (1024*1000*10*sizeof(char));
+    sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);
 
     printf("%s: ","Total Number of Orders");
@@ -228,7 +225,6 @@ int summary_rpt(){
     free(query6);
     free(query7);
     free(myinst);
-//    free(mydb);
     return 0;
 };
 
