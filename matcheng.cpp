@@ -37,6 +37,10 @@ void intHandler(int dummy=0){
     printf("main: semctl() remove id failed\n");
     printf("%s",strerror(errno));
   };
+  if(semctl(semid5,0,IPC_RMID,NULL)==-1){
+    printf("main: semctl() remove id failed\n");
+    printf("%s",strerror(errno));
+  };
   if(shmctl(shmid6rp,IPC_RMID,NULL)==-1){
     printf("main: shmctl() remove id failed\n");
     printf("%s",strerror(errno));
@@ -54,7 +58,7 @@ void intHandler(int dummy=0){
     printf("%s",strerror(errno));
   };
   if(msgctl(msqid2,IPC_RMID,NULL)==-1){
-    printf("main: msqctl() remove id failed\n");
+    printf("main: msgctl() remove id failed\n");
     printf("%s",strerror(errno));
   };
   printStats();
