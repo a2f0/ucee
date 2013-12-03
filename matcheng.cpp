@@ -190,7 +190,7 @@ int main(){
     printOrderManagementMessage(&omm);
     myBooks.Process(omm);
   };
-  printStats();
+  intHandler(0);
   // myBooks.Print();
   return 0;
 };
