@@ -1,4 +1,4 @@
-fndef DB_H
+#ifndef DB_H
 #define DB_H
 #include <algorithm>
 #include "db.h"
