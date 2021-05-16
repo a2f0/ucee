@@ -10,7 +10,7 @@ INCLUDE=.
 
 # Options for development
 CXXFLAGS=-g -Wall -ansi -std=c++0x -I/usr/bin/
-CFLAGS=-Wall -g2 -std=c99 -Wunused
+CFLAGS=-Wall -g2 -std=c99 -Wunused -D_DEFAULT_SOURCE
 
 connmgr: connmgr.o
 	$(CXX) -o $@ $^ -lpthread
