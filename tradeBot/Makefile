@@ -6,4 +6,3 @@ clean:
 
 md_receiver: md_receiver.c
 tradeBot: tradeBot.c
-

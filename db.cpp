@@ -53,7 +53,7 @@ int add_row(Order myorder){
           (int)myorder.order_type,myorder.timestamp,myorder.buysell,
           nnstring(myorder.symbol,SYMBOL_SIZE).c_str(),
           nnstring(myorder.price,PRICE_SIZE).c_str(),myorder.quantity);
-  
+
     sqlite3_stmt *stmt2;
     sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);

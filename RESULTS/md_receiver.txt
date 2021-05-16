@@ -777,7 +777,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 7 at 142       
+  AMZN             traded 7 at 142
 
 Received book message:
   Book for IBM             :
@@ -796,7 +796,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 7 at 142       
+  IBM              traded 7 at 142
 
 Received book message:
   Book for GOOG            :
@@ -815,7 +815,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  GOOG             traded 7 at 142       
+  GOOG             traded 7 at 142
 
 Received book message:
   Book for GOOG            :
@@ -850,7 +850,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 33 at 151       
+  AMZN             traded 33 at 151
 
 Received book message:
   Book for FB              :
@@ -885,7 +885,7 @@ Received book message:
     Level 5 | 134       : 65 |           : 0
 
 Received trade message:
-  IBM              traded 33 at 151       
+  IBM              traded 33 at 151
 
 Received book message:
   Book for MFST            :
@@ -920,7 +920,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  FB               traded 7 at 142       
+  FB               traded 7 at 142
 
 Received book message:
   Book for IBM             :
@@ -947,7 +947,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  GOOG             traded 33 at 151       
+  GOOG             traded 33 at 151
 
 Received book message:
   Book for AMZN            :
@@ -1030,7 +1030,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 78 at 169       
+  AMZN             traded 78 at 169
 
 Received book message:
   Book for AMZN            :
@@ -1049,10 +1049,10 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 50 at 149       
+  AMZN             traded 50 at 149
 
 Received trade message:
-  FB               traded 33 at 151       
+  FB               traded 33 at 151
 
 Received book message:
   Book for MFST            :
@@ -1119,7 +1119,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 65 at 134       
+  AMZN             traded 65 at 134
 
 Received book message:
   Book for AMZN            :
@@ -1146,10 +1146,10 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 83 at 157       
+  AMZN             traded 83 at 157
 
 Received trade message:
-  GOOG             traded 78 at 169       
+  GOOG             traded 78 at 169
 
 Received book message:
   Book for IBM             :
@@ -1232,7 +1232,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  GOOG             traded 50 at 149       
+  GOOG             traded 50 at 149
 
 Received book message:
   Book for GOOG            :
@@ -1315,10 +1315,10 @@ Received book message:
     Level 5 | 142       : 7 |           : 0
 
 Received trade message:
-  IBM              traded 65 at 169       
+  IBM              traded 65 at 169
 
 Received trade message:
-  IBM              traded 13 at 169       
+  IBM              traded 13 at 169
 
 Received book message:
   Book for IBM             :
@@ -1329,7 +1329,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 37 at 149       
+  IBM              traded 37 at 149
 
 Received book message:
   Book for GOOG            :
@@ -1364,7 +1364,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 83 at 157       
+  IBM              traded 83 at 157
 
 Received book message:
   Book for AMZN            :
@@ -1383,7 +1383,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  AMZN             traded 93 at 115       
+  AMZN             traded 93 at 115
 
 Received book message:
   Book for AMZN            :
@@ -1410,10 +1410,10 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 13 at 149       
+  IBM              traded 13 at 149
 
 Received trade message:
-  IBM              traded 60 at 134       
+  IBM              traded 60 at 134
 
 Received book message:
   Book for MSFT            :
@@ -1432,10 +1432,10 @@ Received book message:
     Level 5 |           : 0 | 157       : 83
 
 Received trade message:
-  AMZN             traded 57 at 127       
+  AMZN             traded 57 at 127
 
 Received trade message:
-  IBM              traded 73 at 169       
+  IBM              traded 73 at 169
 
 Received book message:
   Book for IBM             :
@@ -1446,7 +1446,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 5 at 134       
+  IBM              traded 5 at 134
 
 Received book message:
   Book for AMZN            :
@@ -1481,7 +1481,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  IBM              traded 5 at 169       
+  IBM              traded 5 at 169
 
 Received book message:
   Book for MFST            :
@@ -1492,7 +1492,7 @@ Received book message:
     Level 5 |           : 0 | 149       : 50
 
 Received trade message:
-  GOOG             traded 65 at 134       
+  GOOG             traded 65 at 134
 
 Received book message:
   Book for IBM             :
@@ -1503,7 +1503,7 @@ Received book message:
     Level 5 |           : 0 |           : 0
 
 Received trade message:
-  FB               traded 78 at 169       
+  FB               traded 78 at 169
 
 Received book message:
   Book for AMZN            :
@@ -1546,8 +1546,7 @@ Received book message:
     Level 5 | 149       : 50 |           : 0
 
 Received trade message:
-  IBM              traded 58 at 115       
+  IBM              traded 58 at 115
 
 ^C
-@linux1:~/cspp51081/labs/ucee$ 
-
+@linux1:~/cspp51081/labs/ucee$

@@ -37,7 +37,7 @@ int trader_rpt(char* tr){
         printf("Acct:     %2s",(char*)sqlite3_column_text(stmt3,8)); //account
         printf("\n\n");
     };
-        
+
     sqlite3_finalize(stmt3);
     sqlite3_close(mydb);
     free(query3);
@@ -112,22 +112,22 @@ int trade_values(char* in){
     sqlite3_stmt *stmt4;
     sqlite3* mydb = create_db();
     sqlite3_open("OrderBook.db",&mydb);
-    if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query1,-1, &stmt1, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
-    if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query2,-1, &stmt2, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
-    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
-    if ( (rc = sqlite3_prepare_v2(mydb, query4,-1, &stmt4, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query4,-1, &stmt4, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
-    
-    while ( ((c=sqlite3_step(stmt1)) == 100 ) && 
-    ( (c=sqlite3_step(stmt2)) == 100 ) 
-    && ( (c=sqlite3_step(stmt3)) == 100 ) && 
+
+    while ( ((c=sqlite3_step(stmt1)) == 100 ) &&
+    ( (c=sqlite3_step(stmt2)) == 100 )
+    && ( (c=sqlite3_step(stmt3)) == 100 ) &&
     ( (c=sqlite3_step(stmt4)) == 100 )){
         printf("%s\n",(char*)sqlite3_column_text(stmt1,0));
         printf("Min: %s\n",(char*)sqlite3_column_text(stmt1,1));
@@ -171,7 +171,7 @@ int summary_rpt(){
     sqlite3_open("OrderBook.db",&mydb);
 
     printf("%s: ","Total Number of Orders");
-    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query3,-1, &stmt3, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt3)) == 100 ){
@@ -180,7 +180,7 @@ int summary_rpt(){
     sqlite3_finalize(stmt3);
 
     printf("%s: ","Total Number of Trades");
-    if ( (rc = sqlite3_prepare_v2(mydb, query4,-1, &stmt4, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query4,-1, &stmt4, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt4)) == 100 ){
@@ -189,7 +189,7 @@ int summary_rpt(){
     sqlite3_finalize(stmt4);
 
     printf("%s: ","Buy Side Volume");
-    if ( (rc = sqlite3_prepare_v2(mydb, query5,-1, &stmt5, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query5,-1, &stmt5, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt5)) == 100 ){
@@ -198,7 +198,7 @@ int summary_rpt(){
     sqlite3_finalize(stmt5);
 
     printf("%s: ","Sell Side Volume");
-    if ( (rc = sqlite3_prepare_v2(mydb, query6,-1, &stmt6, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query6,-1, &stmt6, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
     while ( (c=sqlite3_step(stmt6)) == 100 ){
@@ -207,10 +207,10 @@ int summary_rpt(){
     sqlite3_finalize(stmt6);
 
     printf("%s: ","Total Volume");
-    if ( (rc = sqlite3_prepare_v2(mydb, query7,-1, &stmt7, NULL )) 
+    if ( (rc = sqlite3_prepare_v2(mydb, query7,-1, &stmt7, NULL ))
     != SQLITE_OK)
             cout << sqlite3_errmsg(mydb);
-    while ( (c=sqlite3_step(stmt7)) == 100 ){	
+    while ( (c=sqlite3_step(stmt7)) == 100 ){
                     printf("%s \n ",(char*)sqlite3_column_text(stmt7,0));
     };
 

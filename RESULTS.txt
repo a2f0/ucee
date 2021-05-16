@@ -1,2 +1,2 @@
-For results of a run of the UCEE system please see the individual files 
+For results of a run of the UCEE system please see the individual files
 contained in the RESULTS directory.

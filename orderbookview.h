@@ -220,7 +220,7 @@ public:
   OrderBook(char* nm){nstrcpy(instr,nm,SYMBOL_SIZE);}; // constructor by symbol
   int AddOrder(Order); // returns 0 for failure, 1 for success
   int RemoveOrder(Order); // return 0 for failure, 1 for success
-  struct ReportingMessage  Match(); // matching algorithm  
+  struct ReportingMessage  Match(); // matching algorithm
   struct BookMessage TopBook(); // top of book
   void Print(); // prints the sellbook and buybook
 };
@@ -408,7 +408,7 @@ struct BookMessage OrderBook::TopBook(){
     bid[i].quantity = 0;
     i++;
   };
-  
+
   it = sellbook.begin();
   for (i =0;i < 5 && it != sellbook.end(); it++){
       nstrcpy(offer[i].price, it->orders.front().price, PRICE_SIZE);
@@ -639,4 +639,3 @@ void OrderBookView::Print()
 };
 
 #endif
-

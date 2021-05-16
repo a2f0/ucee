@@ -7,12 +7,12 @@ END;
 
 -- Original MySQL code commented out below (adapted for sqlite3 above, runs with no errors but not yet fully tested)
 -- DELIMITER |
--- 	  
+--
 -- CREATE TRIGGER PersistOrdersToT2
 -- BEFORE INSERT ON t1
 -- FOR EACH ROW
 --     BEGIN
 -- 	   INSERT IGNORE INTO t2 VALUES(NEW.x1,NEW.x2,NEW.x3);
 --     END; |
--- 				    
+--
 -- DELIMITER ;

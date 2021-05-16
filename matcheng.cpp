@@ -75,14 +75,14 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   key2 = ftok(METOCMKEY1, 'b'); // key to conn mgr with acks
   if((msqid2 = msgget(key2, 0666 | IPC_CREAT))<0){
     printf("main: msgget() failed\n");
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   key3 = ftok(METOTPKEY1,'b'); // shared memory with tradepub
   shmid3 = shmget(key3,sizeof(struct TradeMessage),0666|IPC_CREAT);
   shmctl(shmid3,IPC_RMID,NULL);
@@ -91,7 +91,7 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   key4 = ftok(SEMKEY1,'b'); // semaphore with tradepub
   semid4 = semget(key4,2,0666| IPC_CREAT);
   semctl(semid4,0,IPC_RMID,NULL);
@@ -100,7 +100,7 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   key6 = ftok(METOREKEY1,'b'); // shared memory with reporting engine
   shmid6rp = shmget(key6,sizeof(struct ReportingMessage),0666|IPC_CREAT);
   shmctl(shmid6rp,IPC_RMID,NULL);
@@ -129,7 +129,7 @@ int main(){
     exit(0);
   };
 
-  
+
   struct sembuf sops;
   sops.sem_num = 0;
   sops.sem_op = 1;
@@ -137,7 +137,7 @@ int main(){
   if(semop(semid4,&sops,1)<0){
     printf("main: semop() failed\n");
     printf("%s",strerror(errno));
-    exit(0);   
+    exit(0);
   };
   if(semop(semid6rp,&sops,1)<0){
     printf("main: semop() failed\n");
@@ -149,13 +149,13 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   myBooks.msqid = msqid2;
   myBooks.shmid = shmid3;
   myBooks.semid = semid4;
   myBooks.shmidrp = shmid6rp;
   myBooks.semidrp = semid6rp;
- 
+
   key5 = ftok(SEMKEY3,'b'); // semaphore with book publisher
   semid5 = semget(key5,1,0666| IPC_CREAT);
   semctl(semid5,0,IPC_RMID,NULL);
@@ -164,7 +164,7 @@ int main(){
     printf("%s",strerror(errno));
     exit(0);
   };
-  
+
   // loading database
   writetodatabase = 0;
   list<Order> mylist = list<Order>(get_db("OrderBook.db","t1"));

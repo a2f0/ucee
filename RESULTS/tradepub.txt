@@ -3,197 +3,196 @@
 * trade publisher: receiving trade n. 1 from ME
 
 [2013-12-01 19:14:15.624997000] TradeMessage:
-  Symbol: AMZN            
-  Price: 142       
+  Symbol: AMZN
+  Price: 142
   Quantity: 7
 
 * trade publisher: receiving trade n. 2 from ME
 
 [2013-12-01 19:14:15.705381000] TradeMessage:
-  Symbol: IBM             
-  Price: 142       
+  Symbol: IBM
+  Price: 142
   Quantity: 7
 
 * trade publisher: receiving trade n. 3 from ME
 
 [2013-12-01 19:14:15.795938000] TradeMessage:
-  Symbol: GOOG            
-  Price: 142       
+  Symbol: GOOG
+  Price: 142
   Quantity: 7
 
 * trade publisher: receiving trade n. 4 from ME
 
 [2013-12-01 19:14:15.871612000] TradeMessage:
-  Symbol: AMZN            
-  Price: 151       
+  Symbol: AMZN
+  Price: 151
   Quantity: 33
 
 * trade publisher: receiving trade n. 5 from ME
 
 [2013-12-01 19:14:15.982431000] TradeMessage:
-  Symbol: IBM             
-  Price: 151       
+  Symbol: IBM
+  Price: 151
   Quantity: 33
 
 * trade publisher: receiving trade n. 6 from ME
 
 [2013-12-01 19:14:16.076833000] TradeMessage:
-  Symbol: FB              
-  Price: 142       
+  Symbol: FB
+  Price: 142
   Quantity: 7
 
 * trade publisher: receiving trade n. 7 from ME
 
 [2013-12-01 19:14:16.156361000] TradeMessage:
-  Symbol: GOOG            
-  Price: 151       
+  Symbol: GOOG
+  Price: 151
   Quantity: 33
 
 * trade publisher: receiving trade n. 8 from ME
 
 [2013-12-01 19:14:16.367463000] TradeMessage:
-  Symbol: AMZN            
-  Price: 169       
+  Symbol: AMZN
+  Price: 169
   Quantity: 78
 
 * trade publisher: receiving trade n. 9 from ME
 
 [2013-12-01 19:14:16.502820000] TradeMessage:
-  Symbol: AMZN            
-  Price: 149       
+  Symbol: AMZN
+  Price: 149
   Quantity: 50
 
 * trade publisher: receiving trade n. 10 from ME
 
 [2013-12-01 19:14:16.571445000] TradeMessage:
-  Symbol: FB              
-  Price: 151       
+  Symbol: FB
+  Price: 151
   Quantity: 33
 
 * trade publisher: receiving trade n. 11 from ME
 
 [2013-12-01 19:14:16.699654000] TradeMessage:
-  Symbol: AMZN            
-  Price: 134       
+  Symbol: AMZN
+  Price: 134
   Quantity: 65
 
 * trade publisher: receiving trade n. 12 from ME
 
 [2013-12-01 19:14:16.807207000] TradeMessage:
-  Symbol: AMZN            
-  Price: 157       
+  Symbol: AMZN
+  Price: 157
   Quantity: 83
 
 * trade publisher: receiving trade n. 13 from ME
 
 [2013-12-01 19:14:16.867216000] TradeMessage:
-  Symbol: GOOG            
-  Price: 169       
+  Symbol: GOOG
+  Price: 169
   Quantity: 78
 
 * trade publisher: receiving trade n. 14 from ME
 
 [2013-12-01 19:14:17.111550000] TradeMessage:
-  Symbol: GOOG            
-  Price: 149       
+  Symbol: GOOG
+  Price: 149
   Quantity: 50
 
 * trade publisher: receiving trade n. 15 from ME
 
 [2013-12-01 19:14:17.324832000] TradeMessage:
-  Symbol: IBM             
-  Price: 169       
+  Symbol: IBM
+  Price: 169
   Quantity: 65
 
 * trade publisher: receiving trade n. 16 from ME
 
 [2013-12-01 19:14:17.371697000] TradeMessage:
-  Symbol: IBM             
-  Price: 169       
+  Symbol: IBM
+  Price: 169
   Quantity: 13
 
 * trade publisher: receiving trade n. 17 from ME
 
 [2013-12-01 19:14:17.447395000] TradeMessage:
-  Symbol: IBM             
-  Price: 149       
+  Symbol: IBM
+  Price: 149
   Quantity: 37
 
 * trade publisher: receiving trade n. 18 from ME
 
 [2013-12-01 19:14:17.543169000] TradeMessage:
-  Symbol: IBM             
-  Price: 157       
+  Symbol: IBM
+  Price: 157
   Quantity: 83
 
 * trade publisher: receiving trade n. 19 from ME
 
 [2013-12-01 19:14:17.605054000] TradeMessage:
-  Symbol: AMZN            
-  Price: 115       
+  Symbol: AMZN
+  Price: 115
   Quantity: 93
 
 * trade publisher: receiving trade n. 20 from ME
 
 [2013-12-01 19:14:17.728521000] TradeMessage:
-  Symbol: IBM             
-  Price: 149       
+  Symbol: IBM
+  Price: 149
   Quantity: 13
 
 * trade publisher: receiving trade n. 21 from ME
 
 [2013-12-01 19:14:17.783500000] TradeMessage:
-  Symbol: IBM             
-  Price: 134       
+  Symbol: IBM
+  Price: 134
   Quantity: 60
 
 * trade publisher: receiving trade n. 22 from ME
 
 [2013-12-01 19:14:17.863190000] TradeMessage:
-  Symbol: AMZN            
-  Price: 127       
+  Symbol: AMZN
+  Price: 127
   Quantity: 57
 
 * trade publisher: receiving trade n. 23 from ME
 
 [2013-12-01 19:14:17.955466000] TradeMessage:
-  Symbol: IBM             
-  Price: 169       
+  Symbol: IBM
+  Price: 169
   Quantity: 73
 
 * trade publisher: receiving trade n. 24 from ME
 
 [2013-12-01 19:14:18.044391000] TradeMessage:
-  Symbol: IBM             
-  Price: 134       
+  Symbol: IBM
+  Price: 134
   Quantity: 5
 
 * trade publisher: receiving trade n. 25 from ME
 
 [2013-12-01 19:14:18.174127000] TradeMessage:
-  Symbol: IBM             
-  Price: 169       
+  Symbol: IBM
+  Price: 169
   Quantity: 5
 
 * trade publisher: receiving trade n. 26 from ME
 
 [2013-12-01 19:14:18.252306000] TradeMessage:
-  Symbol: GOOG            
-  Price: 134       
+  Symbol: GOOG
+  Price: 134
   Quantity: 65
 
 * trade publisher: receiving trade n. 27 from ME
 
 [2013-12-01 19:14:18.379843000] TradeMessage:
-  Symbol: FB              
-  Price: 169       
+  Symbol: FB
+  Price: 169
   Quantity: 78
 
 * trade publisher: receiving trade n. 28 from ME
 
 [2013-12-01 19:14:18.532214000] TradeMessage:
-  Symbol: IBM             
-  Price: 115       
+  Symbol: IBM
+  Price: 115
   Quantity: 58
-^C@linux1:~/cspp51081/labs/ucee$ 
-
+^C@linux1:~/cspp51081/labs/ucee$

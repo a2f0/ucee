@@ -117,7 +117,7 @@ int main(){
   sops.sem_flg = 0;
 
   signal(SIGINT,intHandler);
-  
+
   int j =1;
   while(semop(sem_id, &sops, 1)!=-1){ //reserve shm semaphore
     cout << "* reporting engine: receiving reporting message n. "<< j++;

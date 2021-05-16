@@ -366,6 +366,6 @@ void printReportingMsg(const struct ReportingMessage *rp_msg)
   printOrder(&orderB);
   printf("\n");
 };
-  
+
 
 #endif
