@@ -1,0 +1,107 @@
+- name: Create /ucee
+  file:
+    path: /ucee
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0700
+
+- name: /ucee/CMTOMEKEY1
+  file:
+    path: /ucee/CMTOMEKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/METOCMKEY1
+  file:
+    path: /ucee/METOCMKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/METOTPKEY1
+  file:
+    path: /ucee/METOTPKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/CMTOBPKEY1
+  file:
+    path: /ucee/CMTOBPKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/METOREKEY1
+  file:
+    path: /ucee/METOREKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/SEMKEY1
+  file:
+    path: /ucee/SEMKEY1
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/SEMKEY2
+  file:
+    path: /ucee/SEMKEY2
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/SEMKEY3
+  file:
+    path: /ucee/SEMKEY3
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/SEMDB
+  file:
+    path: /ucee/SEMDB
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve
+
+- name: /ucee/METORESEM
+  file:
+    path: /ucee/METORESEM
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0660
+    modification_time: preserve
+    access_time: preserve

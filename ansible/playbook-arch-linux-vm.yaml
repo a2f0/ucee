@@ -2,3 +2,5 @@
   tasks:
     - include: tasks/configure.yaml
       become: yes
+    - include: tasks/create-files.yaml
+      become: yes
