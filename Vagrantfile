@@ -16,4 +16,3 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "ansible/playbook-arch-linux-vm.yaml"
       end
   end
-  

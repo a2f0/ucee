@@ -1,4 +1,4 @@
-@linux1:~/cspp51081/labs/ucee$ make clean; make; ./database.sh; ./connmgr 
+@linux1:~/cspp51081/labs/ucee$ make clean; make; ./database.sh; ./connmgr
 rm -f *.o connmgr *~ bookpub matcheng tradeBot/tradeBot tradeBot/md_receiver tradeBot/*.o tradepub rpteng rpt
 g++ -g -Wall -ansi -std=c++0x -I/usr/bin/   -c -o connmgr.o connmgr.cpp
 g++ -o connmgr connmgr.o -lpthread
@@ -6440,5 +6440,4 @@ messages processed per second: 32.463399
 sum of latency for 102 orders: 142618ms
 average per order latency 1398.215686ms
 ******** end connection manager performance summary ********
-@linux1:~/cspp51081/labs/ucee$ 
-
+@linux1:~/cspp51081/labs/ucee$

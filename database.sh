@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 
+#
 # First  Table (t1): Reflects State of the Order Book at any given time (orders will be deleted when filled, modified if appropriate)
 # Second Table (t2): Records All Orders (orders are never removed)
 # Third  Table (t3): Records All Trades (trades are never removed)

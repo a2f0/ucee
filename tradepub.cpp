@@ -70,7 +70,7 @@ int main(){
   if( (shmid = shmget(mykey, mysize, 0666 | IPC_CREAT)) < 0)
     cout << "Error: shmget" << ' ' << strerror(errno) << endl;
   struct TradeMessage* tm = (struct TradeMessage*) shmat(shmid, NULL, 0);
-  
+
   //semaphore setup
   struct sembuf sops;
   // semaphore with matcheng

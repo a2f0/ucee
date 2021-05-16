@@ -1,7 +1,7 @@
 - name: Run the equivalent of "pacman -Sy" as a separate step
   community.general.pacman:
     update_cache: yes
-  
+
 - name: reflector - install
   community.general.pacman:
     name: reflector
