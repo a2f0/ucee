@@ -1,0 +1,24 @@
+- name: Run the equivalent of "pacman -Sy" as a separate step
+  community.general.pacman:
+    update_cache: yes
+  
+- name: reflector - install
+  community.general.pacman:
+    name: reflector
+    state: present
+
+- name: reflector - run
+  ansible.builtin.command:  reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+
+- name: Run the equivalent of "pacman -Syu" as a separate step
+  community.general.pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: Reboot the machine with all defaults options
+  reboot:
+
+- name: base-devel
+  community.general.pacman:
+    name: base-devel
+    state: present

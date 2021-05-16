@@ -21,6 +21,7 @@
 #include "keys.h"
 #include "messages.h"
 #include "printing.h"
+#include <unistd.h>
 
 #define PORT             1338
 #define SOCKET_ERROR     -1
