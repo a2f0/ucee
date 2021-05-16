@@ -23,6 +23,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <endian.h>
+#include <unistd.h>
+
 using namespace std;
 
 // setting up socket variables

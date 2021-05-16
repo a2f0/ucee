@@ -1,4 +1,5 @@
 #include "db.cpp"
+#include <unistd.h>
 
 int trader_rpt(char* tr){
     printf("\n\nTRADER REPORT:\n\n");
